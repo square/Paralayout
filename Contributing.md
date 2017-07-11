@@ -4,7 +4,7 @@ All contributors to your PR must sign our [Individual Contributor License Agreem
 
 ### Issues before features
 
-If you want to add a feature, please file an [Issue](issues) first. An Issue gives us the opportunity to discuss the requirements and implications of a feature with you before you start writing code.
+If you want to add a feature, please file an [Issue](../../issues) first. An Issue gives us the opportunity to discuss the requirements and implications of a feature with you before you start writing code.
 
 ### One issue or bug per Pull Request
 
