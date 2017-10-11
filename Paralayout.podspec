@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Paralayout'
-  s.version  = '0.8'
+  s.version  = '0.9'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Paralayout is a simple set of assistive UI layout utilities. Size and position your UI with pixel-perfect precision. Design will love you!'
   s.homepage = 'https://github.com/square/Paralayout'
