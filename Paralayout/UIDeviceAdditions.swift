@@ -23,6 +23,7 @@ public enum ScreenSize {
     static let fourInchPhone            = CGSize(width: 320, height: 568)
     static let fourPointSevenInchPhone  = CGSize(width: 375, height: 667)
     static let fivePointFiveInchPhone   = CGSize(width: 414, height: 736)
+    static let fivePointEightInchPhone  = CGSize(width: 375, height: 812)
 }
 
 
@@ -42,6 +43,8 @@ public extension UIDevice {
             boundsDescription = "4.7\""
         case ScreenSize.fivePointFiveInchPhone:
             boundsDescription = "5.5\""
+        case ScreenSize.fivePointEightInchPhone:
+            boundsDescription = "5.8\""
         default:
             boundsDescription = String(format: "Unknown (%.0fx%.0f)", screenSize.width, screenSize.height)
         }
@@ -84,14 +87,19 @@ public extension UIDevice {
         return (isPhone && UIScreen.main.bounds.size == ScreenSize.fourInchPhone)
     }
     
-    /// Whether or not this screen is as large or larger than a 4.7" phone (e.g. an iPhone 6/7 or 6/7 Plus).
+    /// Whether or not this screen is as tall or taller than a 4.7" phone (e.g. an iPhone 6/7 or 6/7 Plus).
     public var isFourPointSevenInchOrLargerPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.width >= ScreenSize.fourPointSevenInchPhone.width)
+        return (isPhone && UIScreen.main.bounds.height >= ScreenSize.fourPointSevenInchPhone.height)
     }
     
-    /// Whether or not this screen is as large or larger than a 5.5" phone (e.g. an iPhone 6/7 Plus or newer/larger device).
+    /// Whether or not this screen is as tall or taller than a 5.5" phone (e.g. an iPhone 6/7 Plus or newer/larger device).
     public var isFivePointFiveInchOrLargerPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.width >= ScreenSize.fivePointFiveInchPhone.width)
+        return (isPhone && UIScreen.main.bounds.height >= ScreenSize.fivePointFiveInchPhone.height)
+    }
+    
+    /// Whether or not this screen is as tall or taller than a 5.8" phone (e.g. an iPhone X or newer/larger device).
+    public var isFivePointEightInchOrLargerPhone: Bool {
+        return (isPhone && UIScreen.main.bounds.height >= ScreenSize.fivePointEightInchPhone.height)
     }
     
 }
