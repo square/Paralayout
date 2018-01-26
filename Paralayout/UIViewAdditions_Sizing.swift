@@ -120,8 +120,10 @@ public extension UIView {
     
     /// Resize the view to a set width, and unlimited height (e.g. when in a scroll view).
     /// - parameter width: the width to set.
-    public func wrap(toFitWidth width: CGFloat) {
-        resize(toFit: CGSize(width: width, height: .greatestFiniteMagnitude), constraints: .wrap)
+    /// - parameter height: the height to fit (optional, defaults to `greatestFiniteMagnitude`).
+    /// - parameter margins: An inset from the supplied width to use (optional, defaults to `0`).
+    public func wrap(toFitWidth width: CGFloat, height: CGFloat = .greatestFiniteMagnitude, margins: CGFloat = 0) {
+        resize(toFit: CGSize(width: max(0, width - 2 * margins), height: max(0, height - 2 * margins)), constraints: .wrap)
     }
     
 }

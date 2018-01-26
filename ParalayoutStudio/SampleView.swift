@@ -21,11 +21,10 @@ import UIKit
 class SampleView: UIView {
     
     enum Metrics {
-        static let contentMargin: CGFloat = 8
+        static let contentMargin: CGFloat = 16
         static let iconSize: CGFloat = 40
         static let iconMargin: CGFloat = 16
-        static let titleTextMargin: CGFloat = 12
-        static let subtextMargin: CGFloat = 8
+        static let textMargin: CGFloat = 12
         
         static let minSubtextAspectRatio: CGFloat = 2
         static let maxSubtextAspectRatio: CGFloat = 20
@@ -102,42 +101,44 @@ class SampleView: UIView {
     // MARK: - UIView
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        /// Determine the best size that fits the container based on content (e.g. with methods in UIViewAdditions_Sizing).
+        let (titleSize, subtextSize) = labelSizesThatFit(size)
+        let heightThatFits = heightForContentExcludingAllText + (titleSize.height - titleLabel.verticalAlignmentInset) + (subtextSize.height - subtextLabel.verticalAlignmentInset)
         
-        return CGSize(width: size.width, height: layoutInfo(for: size).totalHeight)
+        return CGSize(width: size.width, height: heightThatFits)
     }
     
     override func layoutSubviews() {
-        /// Lay out subviews (e.g. with methods in UIViewAdditions_Alignment, _Distribution, and Interpolation).
+        (titleLabel.frame.size, subtextLabel.frame.size) = labelSizesThatFit(bounds.size)
         
-        titleLabel.wrap(toFit: bounds.size, margins: Metrics.contentMargin)
-        let (distribution, _, subtextLabelSize) = layoutInfo(for: bounds.size)
-        
-        subtextLabel.frame.size = subtextLabelSize
-        applySubviewDistribution(distribution)
-    }
-    
-    // MARK: - Private Methods
-    
-    private func layoutInfo(for boundsSize: CGSize) -> (distribution: [ViewDistributionItem], totalHeight: CGFloat, subtextSizeThatFits: CGSize) {
-        let distribution = ViewDistributionItem.collapsing(
+        applySubviewDistribution(ViewDistributionItem.collapsing(
             iconFPOView,
             Metrics.iconMargin.fixed,
-            
-            Metrics.titleTextMargin.fixed,
             titleLabel,
-            Metrics.titleTextMargin.fixed,
-            
-            Metrics.subtextMargin.fixed,
+            Metrics.textMargin.fixed,
             subtextLabel
-        )
+        ))
+    }
+    
+    // MARK: Private Methods
+    
+    private var heightForContentExcludingAllText: CGFloat {
+        return (Metrics.contentMargin +
+            (iconFPOView.isHidden ? 0 : (Metrics.iconSize + Metrics.iconMargin)) +
+            Metrics.textMargin +
+            Metrics.contentMargin)
+    }
+    
+    private func labelSizesThatFit(_ size: CGSize) -> (CGSize, CGSize) {
+        // The title is vertically unconstrained.
+        let textWidth = max(0, size.width - 2 * Metrics.contentMargin)
+        let titleLabelSize = titleLabel.frameSize(thatFitsWidth: textWidth, height: size.height, constraints: .wrap)
         
-        // Subtract the subtextLabel's actual height from the layout.
-        let layoutHeightExcludingSubtext = ViewDistributionItem.layoutSize(of: distribution, axis: .vertical, flexibleSpaceMultiplier: Metrics.contentMargin) - subtextLabel.frameContentSize.height
+        // The subtext needs to fit in the space that remains. Take into account text heights.
+        let titleLabelLayoutHeight = titleLabelSize.height - titleLabel.verticalAlignmentInset
+        let verticalSpaceForSubtextLabel = size.height - heightForContentExcludingAllText - titleLabelLayoutHeight + subtextLabel.verticalAlignmentInset
+        let subtextLabelSize = subtextLabel.frameSize(thatFitsWidth: textWidth, height: verticalSpaceForSubtextLabel, constraints: .wrap)
         
-        let subtextSizeThatFits = subtextLabel.frameSize(thatFitsWidth: boundsSize.width - Metrics.contentMargin * 2, height: boundsSize.height - layoutHeightExcludingSubtext, constraints: .wrap)
-        
-        return (distribution, layoutHeightExcludingSubtext + subtextSizeThatFits.height, subtextSizeThatFits)
+        return (titleLabelSize, subtextLabelSize)
     }
     
 }

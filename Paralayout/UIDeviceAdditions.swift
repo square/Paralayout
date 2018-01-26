@@ -23,6 +23,7 @@ public enum ScreenSize {
     static let fourInchPhone            = CGSize(width: 320, height: 568)
     static let fourPointSevenInchPhone  = CGSize(width: 375, height: 667)
     static let fivePointFiveInchPhone   = CGSize(width: 414, height: 736)
+    static let fivePointEightInchPhone  = CGSize(width: 375, height: 812)
 }
 
 
@@ -42,6 +43,8 @@ public extension UIDevice {
             boundsDescription = "4.7\""
         case ScreenSize.fivePointFiveInchPhone:
             boundsDescription = "5.5\""
+        case ScreenSize.fivePointEightInchPhone:
+            boundsDescription = "5.8\""
         default:
             boundsDescription = String(format: "Unknown (%.0fx%.0f)", screenSize.width, screenSize.height)
         }
@@ -67,31 +70,6 @@ public extension UIDevice {
         case .phone, .tv, .carPlay, .unspecified:
             return false
         }
-    }
-    
-    /// Whether or not this screen is shorter than a 4" phone's (e.g. an iPhone 4).
-    public var isShortPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.height < ScreenSize.fourInchPhone.height)
-    }
-    
-    /// Whether or not this screen is narrower than a 4.7" phone's (e.g. an iPhone 4 or 5).
-    public var isNarrowPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.width < ScreenSize.fourPointSevenInchPhone.width)
-    }
-    
-    /// Whether or not this screen is the same size as a 4" phone's (e.g. an iPhone 5).
-    public var isFourInchPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.size == ScreenSize.fourInchPhone)
-    }
-    
-    /// Whether or not this screen is as large or larger than a 4.7" phone (e.g. an iPhone 6/7 or 6/7 Plus).
-    public var isFourPointSevenInchOrLargerPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.width >= ScreenSize.fourPointSevenInchPhone.width)
-    }
-    
-    /// Whether or not this screen is as large or larger than a 5.5" phone (e.g. an iPhone 6/7 Plus or newer/larger device).
-    public var isFivePointFiveInchOrLargerPhone: Bool {
-        return (isPhone && UIScreen.main.bounds.width >= ScreenSize.fivePointFiveInchPhone.width)
     }
     
 }

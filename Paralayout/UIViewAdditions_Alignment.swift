@@ -124,8 +124,8 @@ public extension UIView {
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
     public func point(at position: Position) -> CGPoint {
-        if let contentPositionInsets = (self as? ContentPositionInset)?.contentPositionInsets {
-            return position.point(in: UIEdgeInsetsInsetRect(bounds, contentPositionInsets))
+        if let alignmentPositionInsets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
+            return position.point(in: UIEdgeInsetsInsetRect(bounds, alignmentPositionInsets))
         } else {
             return point(inBoundsAt: position)
         }
@@ -158,7 +158,7 @@ public extension UIView {
         let totalOffset = frameOffset(from: position, to: otherView, otherPosition) + offset
         
         // Apply the offset and round to the nearest pixel.
-        frame.origin = (frame.origin + totalOffset).roundToPixel(self)
+        frame.origin = (frame.origin + totalOffset).roundToPixel(in: self)
     }
     
     // MARK: - View Alignment - Convenience
@@ -257,25 +257,40 @@ public extension UIView {
 // MARK: -
 
 
-/// A protocol to be adopted by views that should be aligned based on content inset from their `bounds`.
-public protocol ContentPositionInset {
+/// A protocol to be adopted by views that should be aligned based on positions inset from their `bounds`.
+public protocol AlignmentPositionAdjusting {
     
     /// An inset from the view's `bounds` for alignment.
-    var contentPositionInsets: UIEdgeInsets { get }
+    var alignmentPositionInsets: UIEdgeInsets { get }
+    
+}
+
+
+public extension AlignmentPositionAdjusting {
+    
+    /// The total vertical inset of the view's positioning bounds.
+    public var verticalAlignmentInset: CGFloat {
+        return alignmentPositionInsets.verticalAmount
+    }
+    
+    /// The total horizontal inset of the view's positioning bounds.
+    public var horizontalAlignmentInset: CGFloat {
+        return alignmentPositionInsets.horizontalAmount
+    }
     
 }
 
 
 public extension UIView {
     
-    /// The hypothetical size that fits the view's content (inset from `bounds` if it conforms to `ContentPositionInset`).
+    /// The hypothetical size that fits the view's content (inset from `bounds` if it conforms to `AlignmentPositionAdjusting`).
     /// - parameter size: the size within which to fit, passed through to `frameSize(thatFits:)`.
     /// - parameter constraints: Limits on the returned size (optional, defaults to `.none`).
     /// - returns: A size for the view's *alignment* bounds, suitable for use in a superview's `sizeThatFits()` implementation.
     public func contentSize(thatFits size: CGSize, constraints: SizingConstraints = .none) -> CGSize {
         let sizeThatFits = frameSize(thatFits: size, constraints: constraints)
         
-        if let insets = (self as? ContentPositionInset)?.contentPositionInsets {
+        if let insets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
             return CGSize(width: sizeThatFits.width - (insets.left + insets.right),
                           height: sizeThatFits.height - (insets.top + insets.bottom))
             
@@ -284,9 +299,9 @@ public extension UIView {
         }
     }
     
-    /// The size that fits the view's current content (inset from `frame` if it conforms to `ContentPositionInset`).
+    /// The size that fits the view's current content (inset from `frame` if it conforms to `AlignmentPositionAdjusting`).
     public var frameContentSize: CGSize {
-        if let insets = (self as? ContentPositionInset)?.contentPositionInsets {
+        if let insets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
             return frame.inset(by: insets).size
         } else {
             return frame.size
@@ -296,21 +311,22 @@ public extension UIView {
 }
 
 
-extension UILabel: ContentPositionInset {
+extension UILabel: AlignmentPositionAdjusting {
     
     /// Adoption of the `CustomPosition` protocol for UILabels, insetting the top and bottom coordinates based on the label's font metrics.
-    public var contentPositionInsets: UIEdgeInsets {
+    public var alignmentPositionInsets: UIEdgeInsets {
         let capInsets = font.labelCapInsets(in: self)
         return UIEdgeInsets(top: capInsets.top, left: 0, bottom: capInsets.bottom, right: 0)
     }
     
     /// The size that fits the label's text in `.wrap` mode,
     /// - parameter width: the width to fit the text, passed through to `frameSize(thatFits:)`.
+    /// - parameter margins: An additional inset from the supplied width to use (optional, defaults to `0`).
     /// - parameter height: the maximum height for the text, passed through to `frameSize(thatFits:)` (optional, defaults to `greatestFiniteMagnitude`).
     /// - parameter constraints: Limits on the returned size (optional, defaults to `.wrap`).
     /// - returns: A size for the label's *alignment* bounds, suitable for use in a superview's `sizeThatFits()` implementation.
-    public func textSize(thatFitsWidth width: CGFloat, height: CGFloat = .greatestFiniteMagnitude) -> CGSize {
-        return contentSize(thatFits: CGSize(width: width, height: height), constraints: .wrap)
+    public func textSize(thatFitsWidth width: CGFloat, margins: CGFloat = 0, height: CGFloat = .greatestFiniteMagnitude) -> CGSize {
+        return contentSize(thatFits: CGSize(width: max(0, width - 2 * margins), height: height), constraints: .wrap)
     }
     
 }

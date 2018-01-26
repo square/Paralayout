@@ -51,36 +51,46 @@ public func -(lhs: CGPoint, rhs: CGPoint) -> UIOffset {
 }
 
 
-// MARK: - ScaleFactor Protocol
+// MARK: - ScaleFactorProviding Protocol
 
 
 /// The ratio of pixels to points, either of a UIScreen, a UIView's screen, or an explicit value.
-public protocol ScaleFactor {
+public protocol ScaleFactorProviding {
+    
     var pixelsPerPoint: CGFloat { get }
+    
 }
 
-extension UIScreen: ScaleFactor {
+extension UIScreen: ScaleFactorProviding {
+    
     public var pixelsPerPoint: CGFloat {
         return scale
     }
+    
 }
 
-extension UIView: ScaleFactor {
+extension UIView: ScaleFactorProviding {
+    
     public var pixelsPerPoint: CGFloat {
         return (window?.screen ?? UIScreen.main).pixelsPerPoint
     }
+    
 }
 
-extension CGFloat: ScaleFactor {
+extension CGFloat: ScaleFactorProviding {
+    
     public var pixelsPerPoint: CGFloat {
         return self
     }
+    
 }
 
-extension Int: ScaleFactor {
+extension Int: ScaleFactorProviding {
+    
     public var pixelsPerPoint: CGFloat {
         return CGFloat(self)
     }
+    
 }
 
 
@@ -89,7 +99,7 @@ extension Int: ScaleFactor {
 
 public extension CGFloat {
     
-    private func adjustToPixel(_ scaleFactor: ScaleFactor, _ adjustment: (CGFloat) -> CGFloat) -> CGFloat {
+    private func adjustToPixel(_ scaleFactor: ScaleFactorProviding, _ adjustment: (CGFloat) -> CGFloat) -> CGFloat {
         let scale = scaleFactor.pixelsPerPoint
         return (scale > 0.0) ? (adjustment(self * scale) / scale) : self
     }
@@ -97,21 +107,21 @@ public extension CGFloat {
     /// Floor a coordinate value (in points) to the nearest pixel, e.g. 0.6 @2x -> 0.5, not 0.0).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func floorToPixel(_ scaleFactor: ScaleFactor) -> CGFloat {
+    public func floorToPixel(in scaleFactor: ScaleFactorProviding) -> CGFloat {
         return adjustToPixel(scaleFactor) { floor($0) }
     }
     
     /// Ceiling a coordinate value (in points) to the nearest pixel, e.g. 0.4 @2x -> 0.5, not 1.0).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func ceilToPixel(_ scaleFactor: ScaleFactor) -> CGFloat {
+    public func ceilToPixel(in scaleFactor: ScaleFactorProviding) -> CGFloat {
         return adjustToPixel(scaleFactor) { ceil($0) }
     }
     
     /// Round a coordinate value (in points) to the nearest pixel, e.g. 0.4 @2x -> 0.5, not 0.0).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func roundToPixel(_ scaleFactor: ScaleFactor) -> CGFloat {
+    public func roundToPixel(in scaleFactor: ScaleFactorProviding) -> CGFloat {
         // Invoke the namespaced Darwin.round() function since round() is ambiguous (it's also a mutating instance method).
         return adjustToPixel(scaleFactor) { Darwin.round($0) }
     }
@@ -124,22 +134,22 @@ public extension CGPoint {
     /// Floor a coordinate (in points) to the nearest pixel, e.g. (0.6, 1.1) @2x -> (0.5, 1.0), not (0.0, 1.0)).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func floorToPixel(_ scaleFactor: ScaleFactor) -> CGPoint {
-        return CGPoint(x: x.floorToPixel(scaleFactor), y: y.floorToPixel(scaleFactor))
+    public func floorToPixel(in scaleFactor: ScaleFactorProviding) -> CGPoint {
+        return CGPoint(x: x.floorToPixel(in: scaleFactor), y: y.floorToPixel(in: scaleFactor))
     }
     
     /// Ceiling a coordinate (in points) to the nearest pixel, e.g. (0.4, 1.1) @2x -> (0.5, 1.5), not (1.0, 2.0)).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func ceilToPixel(_ scaleFactor: ScaleFactor) -> CGPoint {
-        return CGPoint(x: x.ceilToPixel(scaleFactor), y: y.ceilToPixel(scaleFactor))
+    public func ceilToPixel(in scaleFactor: ScaleFactorProviding) -> CGPoint {
+        return CGPoint(x: x.ceilToPixel(in: scaleFactor), y: y.ceilToPixel(in: scaleFactor))
     }
     
     /// Round a coordinate (in points) to the nearest pixel, e.g. (0.4, 0.5) @2x -> (0.5, 0.5), not (0.0, 1.0)).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func roundToPixel(_ scaleFactor: ScaleFactor) -> CGPoint {
-        return CGPoint(x: x.roundToPixel(scaleFactor), y: y.roundToPixel(scaleFactor))
+    public func roundToPixel(in scaleFactor: ScaleFactorProviding) -> CGPoint {
+        return CGPoint(x: x.roundToPixel(in: scaleFactor), y: y.roundToPixel(in: scaleFactor))
     }
     
 }
@@ -150,22 +160,22 @@ public extension CGSize {
     /// Floor a size (in points) to the nearest pixel, e.g. (0.6, 1.1) @2x -> (0.5, 1.0), not (0.0, 1.0)).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func floorToPixel(_ scaleFactor: ScaleFactor) -> CGSize {
-        return CGSize(width: width.floorToPixel(scaleFactor), height: height.floorToPixel(scaleFactor))
+    public func floorToPixel(in scaleFactor: ScaleFactorProviding) -> CGSize {
+        return CGSize(width: width.floorToPixel(in: scaleFactor), height: height.floorToPixel(in: scaleFactor))
     }
     
     /// Ceiling a size (in points) to the nearest pixel, e.g. (0.4, 1.1) @2x -> (0.5, 1.5), not (1.0, 2.0)).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func ceilToPixel(_ scaleFactor: ScaleFactor) -> CGSize {
-        return CGSize(width: width.ceilToPixel(scaleFactor), height: height.ceilToPixel(scaleFactor))
+    public func ceilToPixel(in scaleFactor: ScaleFactorProviding) -> CGSize {
+        return CGSize(width: width.ceilToPixel(in: scaleFactor), height: height.ceilToPixel(in: scaleFactor))
     }
     
     /// Round a size (in points) to the nearest pixel, e.g. (0.4, 0.5) @2x -> (0.5, 0.5), not (0.0, 1.0)).
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: The adjusted coordinate.
-    public func roundToPixel(_ scaleFactor: ScaleFactor) -> CGSize {
-        return CGSize(width: width.roundToPixel(scaleFactor), height: height.roundToPixel(scaleFactor))
+    public func roundToPixel(in scaleFactor: ScaleFactorProviding) -> CGSize {
+        return CGSize(width: width.roundToPixel(in: scaleFactor), height: height.roundToPixel(in: scaleFactor))
     }
     
 }
@@ -205,21 +215,21 @@ public extension CGRect {
     /// Outsets the rect, if necessary, to snap to the nearest pixel at the specified scale.
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosing the original rect.
-    public func expandToPixel(_ scaleFactor: ScaleFactor) -> CGRect {
-        return CGRect(left: minX.floorToPixel(scaleFactor),
-                      top: minY.floorToPixel(scaleFactor),
-                      right: maxX.ceilToPixel(scaleFactor),
-                      bottom: maxY.ceilToPixel(scaleFactor))
+    public func expandToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
+        return CGRect(left: minX.floorToPixel(in: scaleFactor),
+                      top: minY.floorToPixel(in: scaleFactor),
+                      right: maxX.ceilToPixel(in: scaleFactor),
+                      bottom: maxY.ceilToPixel(in: scaleFactor))
     }
     
     /// Insets the rect, if necessary, to snap to the nearest pixel at the specified scale.
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosed by the original rect.
-    public func contractToPixel(_ scaleFactor: ScaleFactor) -> CGRect {
-        return CGRect(left: minX.ceilToPixel(scaleFactor),
-                      top: minY.ceilToPixel(scaleFactor),
-                      right: maxX.floorToPixel(scaleFactor),
-                      bottom: maxY.floorToPixel(scaleFactor))
+    public func contractToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
+        return CGRect(left: minX.ceilToPixel(in: scaleFactor),
+                      top: minY.ceilToPixel(in: scaleFactor),
+                      right: maxX.floorToPixel(in: scaleFactor),
+                      bottom: maxY.floorToPixel(in: scaleFactor))
     }
     
     /// Divides the receiver in two.
@@ -254,4 +264,21 @@ public extension CGRect {
         }
     }
 
+}
+
+
+// MARK: - UIEdgeInsets Convenience Methods
+
+
+public extension UIEdgeInsets {
+    
+    /// The combined top and bottom insets.
+    var verticalAmount: CGFloat {
+        return top + bottom
+    }
+    
+    /// The combined left and right insets.
+    var horizontalAmount: CGFloat {
+        return left + right
+    }
 }
