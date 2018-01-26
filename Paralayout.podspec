@@ -8,4 +8,8 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/square/Paralayout.git', :tag => s.version }
   s.source_files = 'Paralayout/*.{swift}'
   s.ios.deployment_target = '9.0'
+
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'ParalayoutTests/*{.swift}'
+  end
 end
