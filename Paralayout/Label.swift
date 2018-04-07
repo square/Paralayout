@@ -391,10 +391,24 @@ public final class Label : UILabel {
         }
         
         // Align the text rect within the bounds based on the text alignment.
-        if textAlignment == .center {
+        switch textAlignment {
+        case .left:
+            break // No-op. Text bounds are already left-alignment.
+            
+        case .center:
             textBounds.origin.x = textBounds.minX + floor((textBounds.width - bestWidth) / 2.0)
-        } else if textAlignment == .right {
+            
+        case .right:
             textBounds.origin.x = textBounds.maxX - bestWidth
+            
+        case .natural, .justified:
+            switch UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) {
+            case .leftToRight:
+                break // No-op. Text bounds are already left-alignment.
+                
+            case .rightToLeft:
+                textBounds.origin.x = textBounds.maxX - bestWidth
+            }
         }
         
         textBounds.size.width = bestWidth

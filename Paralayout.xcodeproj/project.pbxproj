@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5EE80620701F2300B767FA /* LabelTests.swift */; };
 		D031F4781EDE066F008EC23D /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D031F4771EDE066F008EC23D /* SampleView.swift */; };
 		D049FD841ECA7BC4009BEF98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */; };
 		D049FD861ECA7BC4009BEF98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD851ECA7BC4009BEF98 /* ViewController.swift */; };
@@ -65,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D5EE80620701F2300B767FA /* LabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTests.swift; sourceTree = "<group>"; };
 		D031F4771EDE066F008EC23D /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SampleView.swift; path = ../ParalayoutStudio/SampleView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D049FD801ECA7BC4009BEF98 /* ParalayoutStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParalayoutStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = AppDelegate.swift; path = ../ParalayoutStudio/AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -197,6 +199,7 @@
 				D0624FCF1EE1D47500076663 /* AspectRatioTests.swift */,
 				D0624FD11EE2146500076663 /* HairlineTests.swift */,
 				D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */,
+				3D5EE80620701F2300B767FA /* LabelTests.swift */,
 				D0624FD31EE214DA00076663 /* TestSamples.swift */,
 				D0624FC81EDFA1AE00076663 /* Info.plist */,
 			);
@@ -378,6 +381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0624FC71EDFA1AE00076663 /* GeometryAdditionsTests.swift in Sources */,
+				3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */,
 				D0624FD41EE214DA00076663 /* TestSamples.swift in Sources */,
 				D0624FD01EE1D47500076663 /* AspectRatioTests.swift in Sources */,
 				D0624FD21EE2146500076663 /* HairlineTests.swift in Sources */,
