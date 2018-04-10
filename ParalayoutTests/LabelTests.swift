@@ -25,24 +25,25 @@ class LabelTests: XCTestCase {
         label.text = "This is some sample text that wraps to two lines"
         label.lineWrapBehavior = .compact
         label.numberOfLines = 0
+        label.font = UIFont(name: "Helvetica", size: 17)
         
         let boundsThatFits = CGRect(origin: .zero, size: label.sizeThatFits(CGSize(width: 300, height: 200)))
         
         label.textAlignment = .left
-        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 0, y: 0, width: 189, height: boundsThatFits.height))
+        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 0, y: 0, width: 188, height: boundsThatFits.height))
         
         label.textAlignment = .center
-        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 55, y: 0, width: 189, height: boundsThatFits.height))
+        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 56, y: 0, width: 188, height: boundsThatFits.height))
         
         label.textAlignment = .right
-        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 111, y: 0, width: 189, height: boundsThatFits.height))
+        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 112, y: 0, width: 188, height: boundsThatFits.height))
         
         label.textAlignment = .natural
         label.semanticContentAttribute = .forceLeftToRight
-        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 0, y: 0, width: 189, height: boundsThatFits.height))
+        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 0, y: 0, width: 188, height: boundsThatFits.height))
         
         label.textAlignment = .natural
         label.semanticContentAttribute = .forceRightToLeft
-        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 111, y: 0, width: 189, height: boundsThatFits.height))
+        XCTAssertEqual(label.compactTextRect(forBounds: boundsThatFits), CGRect(x: 112, y: 0, width: 188, height: boundsThatFits.height))
     }
 }
