@@ -47,23 +47,23 @@ class GeometryAdditionsTests: XCTestCase {
     }
     
     func testPixelRounding() {
-        XCTAssert(CGFloat(1.75).floorToPixel(0) == 1.75)
-        XCTAssert(CGFloat(1.75).floorToPixel(TestScreen.at1x) == 1)
-        XCTAssert(CGFloat(1.75).floorToPixel(TestScreen.at2x) == 1.5)
-        XCTAssert(CGFloat(1.75).floorToPixel(TestScreen.at3x) == CGFloat(2) - 1 / 3)
-        XCTAssert(CGFloat(-1.6).floorToPixel(TestScreen.at2x) == -2)
+        XCTAssert(CGFloat(1.75).floorToPixel(in: 0) == 1.75)
+        XCTAssert(CGFloat(1.75).floorToPixel(in: TestScreen.at1x) == 1)
+        XCTAssert(CGFloat(1.75).floorToPixel(in: TestScreen.at2x) == 1.5)
+        XCTAssert(CGFloat(1.75).floorToPixel(in: TestScreen.at3x) == CGFloat(2) - 1 / 3)
+        XCTAssert(CGFloat(-1.6).floorToPixel(in: TestScreen.at2x) == -2)
         
-        XCTAssert(CGFloat(1.75).roundToPixel(0) == 1.75)
-        XCTAssert(CGFloat(1.75).roundToPixel(TestScreen.at1x) == 2)
-        XCTAssert(CGFloat(1.75).roundToPixel(TestScreen.at2x) == 2)
-        XCTAssert(CGFloat(1.75).roundToPixel(TestScreen.at3x) == CGFloat(2) - 1 / 3)
-        XCTAssert(CGFloat(-1.6).roundToPixel(TestScreen.at3x) == CGFloat(-2) + 1 / 3)
+        XCTAssert(CGFloat(1.75).roundToPixel(in: 0) == 1.75)
+        XCTAssert(CGFloat(1.75).roundToPixel(in: TestScreen.at1x) == 2)
+        XCTAssert(CGFloat(1.75).roundToPixel(in: TestScreen.at2x) == 2)
+        XCTAssert(CGFloat(1.75).roundToPixel(in: TestScreen.at3x) == CGFloat(2) - 1 / 3)
+        XCTAssert(CGFloat(-1.6).roundToPixel(in: TestScreen.at3x) == CGFloat(-2) + 1 / 3)
         
-        XCTAssert(CGFloat(1.25).ceilToPixel(0) == 1.25)
-        XCTAssert(CGFloat(1.25).ceilToPixel(TestScreen.at1x) == 2)
-        XCTAssert(CGFloat(1.25).ceilToPixel(TestScreen.at2x) == 1.5)
-        XCTAssert(CGFloat(1.25).ceilToPixel(TestScreen.at3x) == CGFloat(1) + 1 / 3)
-        XCTAssert(CGFloat(-1.75).ceilToPixel(TestScreen.at2x) == -1.5)
+        XCTAssert(CGFloat(1.25).ceilToPixel(in: 0) == 1.25)
+        XCTAssert(CGFloat(1.25).ceilToPixel(in: TestScreen.at1x) == 2)
+        XCTAssert(CGFloat(1.25).ceilToPixel(in: TestScreen.at2x) == 1.5)
+        XCTAssert(CGFloat(1.25).ceilToPixel(in: TestScreen.at3x) == CGFloat(1) + 1 / 3)
+        XCTAssert(CGFloat(-1.75).ceilToPixel(in: TestScreen.at2x) == -1.5)
     }
     
     func testViewPixelRounding() {

@@ -86,20 +86,20 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     
     // MARK: - Public Methods
     
-    public func height(forWidth width: CGFloat, in scaleFactor: ScaleFactor) -> CGFloat {
-        return (ratioHeight * width / ratioWidth).roundToPixel(scaleFactor)
+    public func height(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
+        return (ratioHeight * width / ratioWidth).roundToPixel(in: scaleFactor)
     }
     
-    public func width(forHeight height: CGFloat, in scaleFactor: ScaleFactor) -> CGFloat {
-        return (ratioWidth * height / ratioHeight).roundToPixel(scaleFactor)
+    public func width(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
+        return (ratioWidth * height / ratioHeight).roundToPixel(in: scaleFactor)
     }
     
-    public func size(forWidth width: CGFloat, in scaleFactor: ScaleFactor) -> CGSize {
+    public func size(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(width: width,
                       height: height(forWidth: width, in: scaleFactor))
     }
     
-    public func size(forHeight height: CGFloat, in scaleFactor: ScaleFactor) -> CGSize {
+    public func size(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(width: width(forHeight: height, in: scaleFactor),
                       height: height)
     }
@@ -108,7 +108,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter size: the bounding size.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A size with the receiver's aspect ratio, no larger than the bounding size.
-    public func size(toFit size: CGSize, in scaleFactor: ScaleFactor) -> CGSize {
+    public func size(toFit size: CGSize, in scaleFactor: ScaleFactorProviding) -> CGSize {
         if size.aspectRatio <= self {
             // Match width, narrow the height.
             let fitHeight = min(size.height, height(forWidth: size.width, in: scaleFactor))
@@ -126,7 +126,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
-    public func rect(toFit rect: CGRect, at position: Position, in scaleFactor: ScaleFactor) -> CGRect {
+    public func rect(toFit rect: CGRect, at position: Position, in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(size: size(toFit: rect.size, in: scaleFactor), at: position, of: rect, in: scaleFactor)
     }
     
@@ -134,7 +134,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter size: the bounding size.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A size with the receiver's aspect ratio, at least as large as the bounding size.
-    public func size(toFill size: CGSize, in scaleFactor: ScaleFactor) -> CGSize {
+    public func size(toFill size: CGSize, in scaleFactor: ScaleFactorProviding) -> CGSize {
         if size.aspectRatio <= self {
             // Match height, expand the width.
             let fillWidth = width(forHeight: size.height, in: scaleFactor)
@@ -152,7 +152,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
-    public func rect(toFill rect: CGRect, at position: Position, in scaleFactor: ScaleFactor) -> CGRect {
+    public func rect(toFill rect: CGRect, at position: Position, in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(size: size(toFill: rect.size, in: scaleFactor), at: position, of: rect, in: scaleFactor)
     }
     
@@ -174,7 +174,7 @@ public extension CGSize {
 
 public extension CGRect {
     
-    fileprivate init(size newSize: CGSize, at position: Position, of alignmentRect: CGRect, in scaleFactor: ScaleFactor) {
+    fileprivate init(size newSize: CGSize, at position: Position, of alignmentRect: CGRect, in scaleFactor: ScaleFactorProviding) {
         let newOrigin: CGPoint
         
         if newSize.width == alignmentRect.width {
@@ -184,7 +184,7 @@ public extension CGRect {
             case .topLeft, .topCenter, .topRight:
                 newMinY = alignmentRect.minY
             case .leftCenter, .center, .rightCenter:
-                newMinY = (alignmentRect.midY - newSize.height / 2).roundToPixel(scaleFactor)
+                newMinY = (alignmentRect.midY - newSize.height / 2).roundToPixel(in: scaleFactor)
             case .bottomLeft, .bottomCenter, .bottomRight:
                 newMinY = alignmentRect.maxY - newSize.height
             }
@@ -198,7 +198,7 @@ public extension CGRect {
             case .topLeft, .leftCenter, .bottomLeft:
                 newMinX = alignmentRect.minX
             case .topCenter, .center, .bottomCenter:
-                newMinX = (alignmentRect.midX - newSize.width / 2).roundToPixel(scaleFactor)
+                newMinX = (alignmentRect.midX - newSize.width / 2).roundToPixel(in: scaleFactor)
             case .topRight, .rightCenter, .bottomRight:
                 newMinX = alignmentRect.maxX - newSize.width
             }

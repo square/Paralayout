@@ -151,10 +151,10 @@ public extension UIScreen {
     /// Returns the width of a hairline (in points) for a given scale factor.
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` for the theoretical "real" size).
     /// - returns: The width, in points, of a hairline.
-    public static func hairlineWidth(for scaleFactor: ScaleFactor) -> CGFloat {
+    public static func hairlineWidth(for scaleFactor: ScaleFactorProviding) -> CGFloat {
         // A hairline is 1/2 pt thick, rounded down to the nearest whole (non-zero) pixel.
-        let hairline = CGFloat(0.5).floorToPixel(scaleFactor)
-        return (hairline > 0.0) ? hairline : CGFloat(0.5).ceilToPixel(scaleFactor)
+        let hairline = CGFloat(0.5).floorToPixel(in: scaleFactor)
+        return (hairline > 0.0) ? hairline : CGFloat(0.5).ceilToPixel(in: scaleFactor)
     }
     
     /// The width of a hairline (in points) for the receiver's scale factor.
