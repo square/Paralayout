@@ -125,7 +125,7 @@ public extension UIView {
     /// - returns: The point at the specified position.
     public func point(at position: Position) -> CGPoint {
         if let alignmentPositionInsets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
-            return position.point(in: UIEdgeInsetsInsetRect(bounds, alignmentPositionInsets))
+            return position.point(in: bounds.inset(by: alignmentPositionInsets))
         } else {
             return point(inBoundsAt: position)
         }

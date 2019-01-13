@@ -29,7 +29,7 @@ public protocol LabelDelegate: class {
  This class exists purely to create a valid signature for `openURL` that can be used with #selector.
  */
 private class FakeApplication: NSObject {
-    func openURL(_ url: URL) -> Bool { return true }
+    @objc func openURL(_ url: URL) -> Bool { return true }
 }
 
 
@@ -83,7 +83,7 @@ public final class Label : UILabel {
     
     public var kerning: Double = 0 {
         didSet {
-            setBaseAttributedTextAttribute(NSKernAttributeName, value: NSNumber(value: kerning))
+            setBaseAttributedTextAttribute(NSAttributedString.Key.kern, value: NSNumber(value: kerning))
             updateAttributedText()
         }
     }
@@ -104,21 +104,21 @@ public final class Label : UILabel {
     }
     
     private static let defaultLinkTextAttributes = [
-        NSUnderlineStyleAttributeName: NSNumber(value: NSUnderlineStyle.styleSingle.rawValue)
+        NSAttributedString.Key.underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
     ]
     
-    public var linkTextAttributes: [String : Any] = Label.defaultLinkTextAttributes {
+    public var linkTextAttributes: [NSAttributedString.Key : Any] = Label.defaultLinkTextAttributes {
         didSet {
             updateAttributedText()
         }
     }
     
     private static let defaultActiveLinkTextAttributes = [
-        NSUnderlineStyleAttributeName: NSNumber(value: NSUnderlineStyle.styleSingle.rawValue),
-        NSBackgroundColorAttributeName: UIColor.black.withAlphaComponent(0.1)
+        NSAttributedString.Key.underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue),
+        NSAttributedString.Key.backgroundColor: UIColor.black.withAlphaComponent(0.1)
     ]
     
-    public var activeLinkTextAttributes: [String : Any] = Label.defaultActiveLinkTextAttributes {
+    public var activeLinkTextAttributes: [NSAttributedString.Key : Any] = Label.defaultActiveLinkTextAttributes {
         didSet {
             updateAttributedText()
         }
@@ -196,7 +196,7 @@ public final class Label : UILabel {
             internalFont = newValue ?? Label.defaultLabel.font
         }
         didSet {
-            setBaseAttributedTextAttribute(NSFontAttributeName, value: font)
+            setBaseAttributedTextAttribute(NSAttributedString.Key.font, value: font)
             updateAttributedText()
         }
     }
@@ -206,7 +206,7 @@ public final class Label : UILabel {
             internalTextColor = newValue ?? Label.defaultLabel.textColor
         }
         didSet {
-            setBaseAttributedTextAttribute(NSForegroundColorAttributeName, value: textColor)
+            setBaseAttributedTextAttribute(NSAttributedString.Key.foregroundColor, value: textColor)
             updateAttributedText()
         }
     }
@@ -430,8 +430,8 @@ public final class Label : UILabel {
             // Apply the link (or active link) attributes if this is a link area.
             // We'll apply the link attributes first so that the other label-level attributes don't override them.
             // If the attributed string already includes an explicit attribute (font, underline, etc) we won't override them. This allows for customization of a single link within the label if so desired.
-            if attributes[NSLinkAttributeName] != nil {
-                var linkAttributes: [String : Any]
+            if attributes[NSAttributedString.Key.link] != nil {
+                var linkAttributes: [NSAttributedString.Key : Any]
                 let overrideUserAttributes: Bool
                 if let activeLink = self.activeLink, NSEqualRanges(activeLink.range, range) {
                     linkAttributes = linkTextAttributes
@@ -453,21 +453,21 @@ public final class Label : UILabel {
             }
             
             // Apply label's font if this section of the string doesn't have an explicit font.
-            if attributes[NSFontAttributeName] == nil {
-                attributedString.addAttribute(NSFontAttributeName, value: internalFont, range: range)
+            if attributes[NSAttributedString.Key.font] == nil {
+                attributedString.addAttribute(NSAttributedString.Key.font, value: internalFont, range: range)
             }
             
-            if attributes[NSForegroundColorAttributeName] == nil {
-                attributedString.addAttribute(NSForegroundColorAttributeName, value: internalTextColor, range: range)
+            if attributes[NSAttributedString.Key.foregroundColor] == nil {
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: internalTextColor, range: range)
             }
             
             // Apply label's kerning if this section of the string doesn't have an explicit kerning.
-            if attributes[NSKernAttributeName] == nil {
-                attributedString.addAttribute(NSKernAttributeName, value: NSNumber(value: kerning as Double), range: range)
+            if attributes[NSAttributedString.Key.kern] == nil {
+                attributedString.addAttribute(NSAttributedString.Key.kern, value: NSNumber(value: kerning as Double), range: range)
             }
             
             // Apply attributes within the paragraph style. We can't detect whether or not individual attributes of the paragraph style were explicitly set, so only set any of them if the incoming string has no paragraph style at all. This matches the behavior used by `UILabel` for things like `textAlignment`.
-            if attributes[NSParagraphStyleAttributeName] == nil {
+            if attributes[NSAttributedString.Key.paragraphStyle] == nil {
                 let paragraphStyle = NSMutableParagraphStyle()
                 
                 // Because we're setting a paragraph style, the base class won't be able to tell if we tried to explicitly set a text alignment or line break mode. As such, we need to set it ourselves on the paragraph style we created.
@@ -475,7 +475,7 @@ public final class Label : UILabel {
                 paragraphStyle.lineBreakMode = lineBreakMode
                 paragraphStyle.lineSpacing = lineSpacingDistance
                 
-                attributedString.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: range)
+                attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: range)
             }
             
             // Convert the characters' case if appropriate.
@@ -506,7 +506,7 @@ public final class Label : UILabel {
         }
     }
     
-    private func setBaseAttributedTextAttribute(_ attribute: String, value: AnyObject) {
+    private func setBaseAttributedTextAttribute(_ attribute: NSAttributedString.Key, value: AnyObject) {
         guard let attributedString = internalAttributedText else {
             return
         }
@@ -520,13 +520,13 @@ public final class Label : UILabel {
         }
         
         attributedString.enumerateAttributes(in: NSMakeRange(0, attributedString.length), options: []) { (attributes, range, stop) -> Void in
-            guard let attribute = attributes[NSParagraphStyleAttributeName] as? NSParagraphStyle else {
+            guard let attribute = attributes[NSAttributedString.Key.paragraphStyle] as? NSParagraphStyle else {
                 return
             }
             let paragraphStyle = attribute.mutableCopy() as! NSMutableParagraphStyle
             updateBlock(paragraphStyle)
             
-            attributedString.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: range)
+            attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: range)
         }
     }
     
@@ -613,7 +613,7 @@ public final class Label : UILabel {
         
         var links = [Link]()
         
-        string.enumerateAttribute(NSLinkAttributeName, in: NSMakeRange(0, string.length), options: []) { value, range, stop in
+        string.enumerateAttribute(NSAttributedString.Key.link, in: NSMakeRange(0, string.length), options: []) { value, range, stop in
             let url: URL
             if let val = value as? String {
                 if let urlValue = URL(string: val) {
@@ -755,16 +755,16 @@ public final class Label : UILabel {
         
         if let string = internalAttributedText {
             string.enumerateAttributes(in: NSMakeRange(0, string.length), options: []) { (attributes, range, stop) in
-                guard attributes[NSLinkAttributeName] != nil else {
+                guard attributes[NSAttributedString.Key.link] != nil else {
                     return
                 }
                 
                 let linkElement = UIAccessibilityElement(accessibilityContainer: self)
                 linkElement.accessibilityLabel = string.attributedSubstring(from: range).string
-                linkElement.accessibilityTraits = UIAccessibilityTraitLink
-                linkElement.accessibilityFrame = UIAccessibilityConvertFrameToScreenCoordinates(boundingRectForText(in: range), self)
+                linkElement.accessibilityTraits = UIAccessibilityTraits.link
+                linkElement.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(boundingRectForText(in: range), in: self)
                 if let path = accessibilityPathForLink(in: range) {
-                    linkElement.accessibilityPath = UIAccessibilityConvertPathToScreenCoordinates(path, self)
+                    linkElement.accessibilityPath = UIAccessibility.convertToScreenCoordinates(path, in: self)
                 } else {
                     linkElement.accessibilityPath = nil
                 }
@@ -831,7 +831,7 @@ public final class Label : UILabel {
         
         let firstLetterFrame = boundingRectForText(in: NSMakeRange(range.location, 1))
         let lastLetterFrame = boundingRectForText(in: NSMakeRange(range.location + range.length - 1, 1))
-        let font: UIFont = string.attribute(NSFontAttributeName, at: range.location, effectiveRange: nil) as? UIFont ?? self.font
+        let font: UIFont = string.attribute(NSAttributedString.Key.font, at: range.location, effectiveRange: nil) as? UIFont ?? self.font
         let lineHeight = font.lineHeight
         
         // Individual letter frames can have some vertical variation because of ascenders and descenders, but shouldn't differ by more than half the leading size.

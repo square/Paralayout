@@ -136,12 +136,12 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     
-    public func toggleDidChange(_ sender: Any?) {
+    @objc public func toggleDidChange(_ sender: Any?) {
         sampleView.isOptionOn = toggle.isOn
         view.setNeedsLayout()
     }
     
-    public func sliderDidChange(_ sender: Any?) {
+    @objc public func sliderDidChange(_ sender: Any?) {
         sampleView.optionSliderValue = CGFloat(slider.value)
         view.setNeedsLayout()
     }
