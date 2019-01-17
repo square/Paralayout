@@ -95,7 +95,7 @@ videoPlayer.frame = AspectRatio.widescreen.rect(toFit: bounds, at: .topCenter, i
 
 #### CGGeometry Extensions
 
-These extensions provide numerous conveniences for computing rectangles and snapping coordinates to pixel dimensions. The `ScaleFactor` protocol encapsulates the latter, allowing a view to provide the context necessary to align its subviews to pixels. One benefit of this approach is that unit tests can cover both 2x and 3x scale factors regardless of the simulator used to run the test.
+These extensions provide numerous conveniences for computing rectangles and snapping coordinates to pixel dimensions. The `ScaleFactorProviding` protocol encapsulates the latter, allowing a view to provide the context necessary to align its subviews to pixels. One benefit of this approach is that unit tests can cover both 2x and 3x scale factors regardless of the simulator used to run the test.
 
 #### UIDevice Extensions
 
@@ -149,7 +149,7 @@ let distribution = ViewDistributionItem.collapsing(
     1.flexible)
 
 /// Equally size a pair of buttons with a hairline divider between them, and size/position them at the bottom of the alert.
-alert.spreadOutSubviews([ cancelButton, acceptButton ], axis: .horizontal, margin: alert.hairlineWidth, inRect: alert.bounds.slice(fromEdge: .maxYEdge, amount: buttonHeight))
+alert.spreadOutSubviews([ cancelButton, acceptButton ], axis: .horizontal, margin: alert.hairlineWidth, inRect: alert.bounds.slice(from: .maxYEdge, amount: buttonHeight))
 ```
 
 #### Debugging
@@ -160,7 +160,7 @@ Fixing layout issues is as simple as using the Xcode debugger. Remember that on 
 
 ## Requirements
 
-* Xcode 8 / Swift 3.0
+* Xcode 10 / Swift 4.2
 * iOS 9.0 or later
 
 
