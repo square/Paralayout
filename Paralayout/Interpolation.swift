@@ -113,7 +113,7 @@ public struct Interpolation: Comparable {
         case easeInOut
         
         /// Interpolation based on a provided function operating on unit values `[0...1]`
-        case custom(curveFunction: (CGFloat) -> CGFloat, approximateUIViewAnimationCurve: UIViewAnimationOptions)
+        case custom(curveFunction: (CGFloat) -> CGFloat, approximateUIViewAnimationCurve: UIView.AnimationOptions)
         
         /// Initialize a Curve with optional ease in and out.
         public init(easeIn: Bool, easeOut: Bool) {
@@ -125,7 +125,7 @@ public struct Interpolation: Comparable {
         }
         
         /// The equivalent UIViewAnimationOptions represented by the receiver.
-        public var animationCurveOptions: UIViewAnimationOptions {
+        public var animationCurveOptions: UIView.AnimationOptions {
             switch self {
             case .linear:
                 return .curveLinear

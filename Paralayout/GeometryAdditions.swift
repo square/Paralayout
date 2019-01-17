@@ -205,13 +205,6 @@ public extension CGRect {
         return inset(by: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
     
-    /// Insets the rect.
-    /// - parameter by insets: The UIEdgeInsets to apply.
-    /// - returns: A new rect adjusted by the specified insets.
-    public func inset(by insets: UIEdgeInsets) -> CGRect {
-        return UIEdgeInsetsInsetRect(self, insets)
-    }
-    
     /// Outsets the rect, if necessary, to snap to the nearest pixel at the specified scale.
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not* snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosing the original rect.
