@@ -16,13 +16,14 @@
 
 import UIKit
 
-
 /// Locations within a rectangle.
 public enum Position {
     
     case topLeft, topCenter, topRight
     case leftCenter, center, rightCenter
     case bottomLeft, bottomCenter, bottomRight
+
+    // MARK: - Public Methods
     
     /// The "opposite" position.
     /// - parameter horizontally: Whether to reflect left and right positions (optional, defaults to `true`).
@@ -105,22 +106,22 @@ public enum Position {
     
 }
 
-
 // MARK: -
 
-
-public extension UIView {
+extension UIView {
     
     // MARK: - View Alignment - Core
     
-    /// The location of a position in the view's `bounds` (regardless of whether or not it conforms to `CustomPositionBounds`).
+    /// The location of a position in the view's `bounds` (regardless of whether or not it conforms to
+    /// `CustomPositionBounds`).
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
     public func point(inBoundsAt position: Position) -> CGPoint {
         return position.point(in: bounds)
     }
     
-    /// The location of a position in the view, either in `bounds`, or `customPositionBounds` if it conforms to `CustomPositionBounds`.
+    /// The location of a position in the view, either in `bounds`, or `customPositionBounds` if it conforms to
+    /// `CustomPositionBounds`.
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
     public func point(at position: Position) -> CGPoint {
@@ -173,10 +174,12 @@ public extension UIView {
         let leadingOffset = frameOffset(from: .topLeft, to: superview, .topLeft)
         let trailingOffset = frameOffset(from: .bottomRight, to: superview, .bottomRight)
         
-        return UIEdgeInsets(top: -leadingOffset.vertical,
-                            left: -leadingOffset.horizontal,
-                            bottom: trailingOffset.vertical,
-                            right: trailingOffset.horizontal)
+        return UIEdgeInsets(
+            top: -leadingOffset.vertical,
+            left: -leadingOffset.horizontal,
+            bottom: trailingOffset.vertical,
+            right: trailingOffset.horizontal
+        )
     }
     
     /// Move the view to align it with another view.
@@ -185,8 +188,19 @@ public extension UIView {
     /// - parameter otherPosition: The position within `otherView` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    public func align(_ position: Position, with otherView: UIView, _ otherPosition: Position, horizontalOffset: CGFloat = 0, verticalOffset: CGFloat = 0) {
-        align(position, with: otherView, otherPosition, offset: UIOffset(horizontal: horizontalOffset, vertical: verticalOffset))
+    public func align(
+        _ position: Position,
+        with otherView: UIView,
+        _ otherPosition: Position,
+        horizontalOffset: CGFloat = 0,
+        verticalOffset: CGFloat = 0
+    ) {
+        align(
+            position,
+            with: otherView,
+            otherPosition,
+            offset: UIOffset(horizontal: horizontalOffset, vertical: verticalOffset)
+        )
     }
     
     /// Move the view to align it within its superview, based on position.
@@ -194,13 +208,23 @@ public extension UIView {
     /// - parameter superviewPosition: The position within the view's `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    public func align(_ position: Position, withSuperviewPosition superviewPosition: Position, horizontalOffset: CGFloat = 0, verticalOffset: CGFloat = 0) {
+    public func align(
+        _ position: Position,
+        withSuperviewPosition superviewPosition: Position,
+        horizontalOffset: CGFloat = 0,
+        verticalOffset: CGFloat = 0
+    ) {
         guard let superview = superview else {
             assertionFailure("Can't align view without a superview!")
             return
         }
         
-        align(position, with: superview, superviewPosition, offset: UIOffset(horizontal: horizontalOffset, vertical: verticalOffset))
+        align(
+            position,
+            with: superview,
+            superviewPosition,
+            offset: .init(horizontal: horizontalOffset, vertical: verticalOffset)
+        )
     }
     
     /// Move the view to align it within its superview, based on coordinate.
@@ -208,19 +232,30 @@ public extension UIView {
     /// - parameter superviewPoint: The coordinate within the view's `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    public func align(_ position: Position, withSuperviewPoint superviewPoint: CGPoint, horizontalOffset: CGFloat = 0, verticalOffset: CGFloat = 0) {
+    public func align(
+        _ position: Position,
+        withSuperviewPoint superviewPoint: CGPoint,
+        horizontalOffset: CGFloat = 0,
+        verticalOffset: CGFloat = 0
+    ) {
         guard let superview = superview else {
             assertionFailure("Can't align view without a superview!")
             return
         }
         
-        align(position, with: superview, .topLeft, offset: UIOffset(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.x + verticalOffset))
+        align(
+            position,
+            with: superview,
+            .topLeft,
+            offset: .init(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.x + verticalOffset)
+        )
     }
     
     /// Move the view to align it with another view.
     /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
-    /// - parameter inset: An optional inset (horizontal, vertical, or diagonal based on the position) to apply. An inset on .center is interpreted as a vertical offset.
-    func alignToSuperview(_ position: Position, inset: CGFloat = 0.0) {
+    /// - parameter inset: An optional inset (horizontal, vertical, or diagonal based on the position) to apply. An
+    /// inset on .center is interpreted as a vertical offset.
+    public func alignToSuperview(_ position: Position, inset: CGFloat = 0.0) {
         guard let superview = self.superview else {
             assertionFailure("Can't align view without a superview!")
             return
@@ -253,9 +288,7 @@ public extension UIView {
     
 }
 
-
 // MARK: -
-
 
 /// A protocol to be adopted by views that should be aligned based on positions inset from their `bounds`.
 public protocol AlignmentPositionAdjusting {
@@ -265,8 +298,7 @@ public protocol AlignmentPositionAdjusting {
     
 }
 
-
-public extension AlignmentPositionAdjusting {
+extension AlignmentPositionAdjusting {
     
     /// The total vertical inset of the view's positioning bounds.
     public var verticalAlignmentInset: CGFloat {
@@ -280,26 +312,30 @@ public extension AlignmentPositionAdjusting {
     
 }
 
-
-public extension UIView {
+extension UIView {
     
-    /// The hypothetical size that fits the view's content (inset from `bounds` if it conforms to `AlignmentPositionAdjusting`).
+    /// The hypothetical size that fits the view's content (inset from `bounds` if it conforms to
+    /// `AlignmentPositionAdjusting`).
     /// - parameter size: the size within which to fit, passed through to `frameSize(thatFits:)`.
     /// - parameter constraints: Limits on the returned size (optional, defaults to `.none`).
-    /// - returns: A size for the view's *alignment* bounds, suitable for use in a superview's `sizeThatFits()` implementation.
+    /// - returns: A size for the view's *alignment* bounds, suitable for use in a superview's `sizeThatFits()`
+    /// implementation.
     public func contentSize(thatFits size: CGSize, constraints: SizingConstraints = .none) -> CGSize {
         let sizeThatFits = frameSize(thatFits: size, constraints: constraints)
         
         if let insets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
-            return CGSize(width: sizeThatFits.width - (insets.left + insets.right),
-                          height: sizeThatFits.height - (insets.top + insets.bottom))
+            return CGSize(
+                width: sizeThatFits.width - (insets.left + insets.right),
+                height: sizeThatFits.height - (insets.top + insets.bottom)
+            )
             
         } else {
             return sizeThatFits
         }
     }
     
-    /// The size that fits the view's current content (inset from `frame` if it conforms to `AlignmentPositionAdjusting`).
+    /// The size that fits the view's current content (inset from `frame` if it conforms to
+    /// `AlignmentPositionAdjusting`).
     public var frameContentSize: CGSize {
         if let insets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
             return frame.inset(by: insets).size
@@ -310,10 +346,10 @@ public extension UIView {
     
 }
 
-
 extension UILabel: AlignmentPositionAdjusting {
     
-    /// Adoption of the `CustomPosition` protocol for UILabels, insetting the top and bottom coordinates based on the label's font metrics.
+    /// Adoption of the `CustomPosition` protocol for UILabels, insetting the top and bottom coordinates based on the
+    /// label's font metrics.
     public var alignmentPositionInsets: UIEdgeInsets {
         let capInsets = font.labelCapInsets(in: self)
         return UIEdgeInsets(top: capInsets.top, left: 0, bottom: capInsets.bottom, right: 0)
@@ -322,10 +358,16 @@ extension UILabel: AlignmentPositionAdjusting {
     /// The size that fits the label's text in `.wrap` mode,
     /// - parameter width: the width to fit the text, passed through to `frameSize(thatFits:)`.
     /// - parameter margins: An additional inset from the supplied width to use (optional, defaults to `0`).
-    /// - parameter height: the maximum height for the text, passed through to `frameSize(thatFits:)` (optional, defaults to `greatestFiniteMagnitude`).
+    /// - parameter height: the maximum height for the text, passed through to `frameSize(thatFits:)` (optional,
+    /// defaults to `greatestFiniteMagnitude`).
     /// - parameter constraints: Limits on the returned size (optional, defaults to `.wrap`).
-    /// - returns: A size for the label's *alignment* bounds, suitable for use in a superview's `sizeThatFits()` implementation.
-    public func textSize(thatFitsWidth width: CGFloat, margins: CGFloat = 0, height: CGFloat = .greatestFiniteMagnitude) -> CGSize {
+    /// - returns: A size for the label's *alignment* bounds, suitable for use in a superview's `sizeThatFits()`
+    /// implementation.
+    public func textSize(
+        thatFitsWidth width: CGFloat,
+        margins: CGFloat = 0,
+        height: CGFloat = .greatestFiniteMagnitude
+    ) -> CGSize {
         return contentSize(thatFits: CGSize(width: max(0, width - 2 * margins), height: height), constraints: .wrap)
     }
     

@@ -16,10 +16,6 @@
 
 import UIKit
 
-
-// MARK: - Protocol
-
-
 /// A means of getting a `SubviewDistributionItem`: either a UIView, or a number as `.fixed` or `.flexible`.
 public protocol ViewDistributionSpecifying {
     
@@ -27,16 +23,18 @@ public protocol ViewDistributionSpecifying {
     
 }
 
-
-// MARK: - Types
-
+// MARK: -
 
 /// A direction for subview distribution.
-/// - `horizontal`: The horizontal direction, meaning views will be distributed left-to-right.
-/// - `vertical`: The vertical direction, meaning views will be distributed top-to-bottom.
 public enum ViewDistributionAxis {
+
+    /// The horizontal direction, meaning views will be distributed left-to-right.
     case horizontal
+
+    /// The vertical direction, meaning views will be distributed top-to-bottom.
     case vertical
+
+    // MARK: - Private Methods
     
     fileprivate func select<T>(horizontal: @autoclosure () -> T, vertical: @autoclosure () -> T) -> T {
         switch self {
@@ -84,30 +82,38 @@ public enum ViewDistributionAxis {
 }
 
 /// Orthogonal alignment options for view distribution.
-/// - `leading`: Align to the left (for vertical distribution) or top (for horizontal).
-/// - `centered`: Center-align along the distribution axis.
-/// - `trailing`: Align to the right (for vertical distribution) or bottom (for horizontal).
 public enum ViewDistributionAlignment {
+
+    /// Align to the left (for vertical distribution) or top (for horizontal).
     case leading(inset: CGFloat)
+
+    /// Center-align along the distribution axis.
     case centered(offset: CGFloat)
+
+    /// Align to the right (for vertical distribution) or bottom (for horizontal).
     case trailing(inset: CGFloat)
 }
 
 /// An element of a horizontal or vertical distribution.
-/// - `view`: A UIView (with adjustments to how much space it should take up)
-/// - `fixed`: A constant spacer between two other elements.
-/// - `flexible`: Proportional space, a fraction of the space not taken up by UIViews or fixed spacers.
 public enum ViewDistributionItem: ViewDistributionSpecifying {
-    
+
+    /// A UIView, with adjustments to how much space it should take up.
     case view(UIView, UIEdgeInsets)
+
+    /// A constant spacer between two other elements.
     case fixed(CGFloat)
+
+    /// Proportional spacer, a fraction of the space not taken up by UIViews or fixed spacers.
     case flexible(CGFloat)
     
-    // MARK: - Static Methods
+    // MARK: - Public Static Methods
     
-    /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent spacers (preferring larger ones).
-    /// - parameter distribution: An array of optional distribution specifiers: either a UIView, or a number as `.fixed` or `.flexible`.
-    /// - returns: An array of DistributionItems, without any invisible views, or sequential `.fixed` or `.flexible` spacers.
+    /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent
+    /// spacers (preferring larger ones).
+    /// - parameter distribution: An array of optional distribution specifiers: either a UIView, or a number as `.fixed`
+    /// or `.flexible`.
+    /// - returns: An array of DistributionItems, without any invisible views, or sequential `.fixed` or `.flexible`
+    /// spacers.
     public static func collapsing(_ distribution: [ViewDistributionSpecifying?]) -> [ViewDistributionItem] {
         var collapsedItems = [ViewDistributionItem]()
         
@@ -217,9 +223,12 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
         return collapsedItems
     }
     
-    /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent spacers (preferring larger ones).
-    /// - parameter distribution: An series of optional distribution specifiers: either a UIView, or a number as `.fixed` or `.flexible`.
-    /// - returns: An array of DistributionItems, without any invisible views, or sequential `.fixed` or `.flexible` spacers.
+    /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent
+    /// spacers (preferring larger ones).
+    /// - parameter distribution: An series of optional distribution specifiers: either a UIView, or a number as
+    /// `.fixed` or `.flexible`.
+    /// - returns: An array of DistributionItems, without any invisible views, or sequential `.fixed` or `.flexible`
+    /// spacers.
     public static func collapsing(_ distribution: ViewDistributionSpecifying? ...) -> [ViewDistributionItem] {
         return collapsing(distribution)
     }
@@ -244,10 +253,16 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     // MARK: - Private Methods
     
     /// Maps the specifiers to their provided items, and adds implied flexible spacers as necessary.
-    /// If no spacers are included, equal flexible spacers are inserted between all views; if no `.flexible` spacers are included, two equal ones are added to the beginning and end.
-    /// - returns: An array of DistributionItems suitable for layout and/or measurement, and tallies of all fixed and flexible space. If the distribution is invalid (no views, any view not a subview of the superview, or any view repeated in the distribution), returns an empty array.
-    fileprivate static func items(impliedIn distribution: [ViewDistributionSpecifying], axis: ViewDistributionAxis, superview: UIView?)
-        -> (items: [ViewDistributionItem], totalFixedSpace: CGFloat, flexibleSpaceDenominator: CGFloat)
+    /// If no spacers are included, equal flexible spacers are inserted between all views; if no `.flexible` spacers are
+    /// included, two equal ones are added to the beginning and end.
+    /// - returns: An array of DistributionItems suitable for layout and/or measurement, and tallies of all fixed and
+    /// flexible space. If the distribution is invalid (no views, any view not a subview of the superview, or any view
+    /// repeated in the distribution), returns an empty array.
+    fileprivate static func items(
+        impliedIn distribution: [ViewDistributionSpecifying],
+        axis: ViewDistributionAxis,
+        superview: UIView?
+    ) -> (items: [ViewDistributionItem], totalFixedSpace: CGFloat, flexibleSpaceDenominator: CGFloat)
     {
         var distributionItems = [ViewDistributionItem]()
         var totalViewSize: CGFloat = 0
@@ -313,7 +328,8 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
         return (distributionItems, totalFixedSpace + totalViewSize, totalFlexibleSpace)
     }
     
-    /// Returns the length of the DistributionItem (`axis` and `multiplier` are relevant only for `.view` and `.flexible` items, respectively).
+    /// Returns the length of the DistributionItem (`axis` and `multiplier` are relevant only for `.view` and
+    /// `.flexible` items, respectively).
     fileprivate func layoutSize(along axis: ViewDistributionAxis, multiplier: CGFloat = 1) -> CGFloat {
         switch self {
         case .view(let view, let insets):
@@ -329,11 +345,9 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     
 }
 
+// MARK: -
 
-// MARK: - Extensions
-
-
-public extension CGFloat {
+extension CGFloat {
     
     /// Use the value as a fixed spacer in a distribution.
     public var fixed: ViewDistributionItem {
@@ -347,8 +361,7 @@ public extension CGFloat {
     
 }
 
-
-public extension Double {
+extension Double {
     
     /// Use the value as a fixed spacer in a distribution.
     public var fixed: ViewDistributionItem {
@@ -362,8 +375,7 @@ public extension Double {
     
 }
 
-
-public extension Int {
+extension Int {
     
     /// Use the value as a fixed spacer in a distribution.
     public var fixed: ViewDistributionItem {
@@ -376,11 +388,11 @@ public extension Int {
     }
     
 }
-
 
 extension UIView : ViewDistributionSpecifying {
     
-    /// Adopt `ViewDistributionSpecifying`, making it possible to include UIView instances directly in distributions passed to `apply[Vertical,Horizontal]Distribution()`.
+    /// Adopt `ViewDistributionSpecifying`, making it possible to include UIView instances directly in distributions
+    /// passed to `apply[Vertical,Horizontal]Distribution()`.
     public var distributionItem: ViewDistributionItem {
         return .view(self, (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets ?? .zero)
     }
@@ -397,25 +409,40 @@ extension UIView : ViewDistributionSpecifying {
     /// `applySubviewDistribution([ 2.flexible, label, 12.fixed, textField, 3.flexible ])`
     ///
     /// To arrange a pair of buttons on the left and right edges of a view, with a label centered between them:
-    /// `applySubviewDistribution([ 8.fixed, backButton, 1.flexible, titleLabel, 1.flexible, nextButton, 8.fixed ], axis: .horizontal)`
+    /// ```
+    /// applySubviewDistribution(
+    ///     [ 8.fixed, backButton, 1.flexible, titleLabel, 1.flexible, nextButton, 8.fixed ],
+    ///     axis: .horizontal
+    /// )
+    /// ```
     ///
     /// To arrange UI in a view with an interior margin.
     /// `applySubviewDistribution([ icon, 10.fixed, label ], inRect: bounds.insetBy(dx: 20, dy: 40))`
     ///
-    /// To arrange UI vertically without simultaneously centering it horizontally (the `icon` would need independent horizontal positioning).
+    /// To arrange UI vertically without simultaneously centering it horizontally (the `icon` would need independent
+    /// horizontal positioning).
     /// `applySubviewDistribution([ 1.flexible, icon, 2.flexible ], orthogonalOffset: nil)`
     ///
-    /// - parameter distribution: An array of distribution specifiers: either a UIView, or a number as `.fixed` or `.flexible`.
+    /// - parameter distribution: An array of distribution specifiers: either a UIView, or a number as `.fixed` or
+    /// `.flexible`.
     /// - parameter axis: The direction of layout (optional, defaults to `.vertical`).
-    /// - parameter layoutBounds: The region in the view for the layout, or `nil` to indicate the view's bounds (optional, defaults to `nil`).
-    /// - parameter orthogonalAlignment: The alignment (orthogonal to the distribution axis) to apply to the views (optional, defaults to `.centered`). If `nil`, views are not moved orthogonally.
-    public func applySubviewDistribution(_ distribution: [ViewDistributionSpecifying],
-                                         axis: ViewDistributionAxis = .vertical,
-                                         inRect layoutBounds: CGRect? = nil,
-                                         alignment orthogonalAlignment: ViewDistributionAlignment? = .centered(offset: 0))
-    {
+    /// - parameter layoutBounds: The region in the view for the layout, or `nil` to indicate the view's bounds
+    /// (optional, defaults to `nil`).
+    /// - parameter orthogonalAlignment: The alignment (orthogonal to the distribution axis) to apply to the views
+    /// (optional, defaults to `.centered`). If `nil`, views are not moved orthogonally.
+    public func applySubviewDistribution(
+        _ distribution: [ViewDistributionSpecifying],
+        axis: ViewDistributionAxis = .vertical,
+        inRect layoutBounds: CGRect? = nil,
+        alignment orthogonalAlignment: ViewDistributionAlignment? = .centered(offset: 0)
+    ) {
         // Process and validate the distribution.
-        let (items, totalFixedSpace, flexibleSpaceDenominator) = ViewDistributionItem.items(impliedIn: distribution, axis: axis, superview: self)
+        let (items, totalFixedSpace, flexibleSpaceDenominator) = ViewDistributionItem.items(
+            impliedIn: distribution,
+            axis: axis,
+            superview: self
+        )
+
         guard items.count > 0 else {
             return
         }
@@ -468,7 +495,8 @@ extension UIView : ViewDistributionSpecifying {
             }
             
             if item.isFlexible {
-                // Note that we don't round/floor here, but rather when setting the position of each subview individually, so that rounding error is not accumulated.
+                // Note that we don't round/floor here, but rather when setting the position of each subview
+                // individually, so that rounding error is not accumulated.
                 viewOrigin += item.layoutSize(along: axis, multiplier: flexibleSpaceMultiplier)
                 
             } else {
@@ -481,9 +509,17 @@ extension UIView : ViewDistributionSpecifying {
     /// - parameter subviews: The subviews to lay out.
     /// - parameter axis: The direction of layout.
     /// - parameter margin: The space between each subview, e.g. the receiving view's `.hairlineWidth`.
-    /// - parameter bounds: A custom area within which to layout the subviews, or `nil` to use the receiver's `bounds` (optional, defaults to `nil`).
-    /// - parameter sizeToBounds: If `true`, also set the size of the subviews orthogonal to `axis` to match the size of the `bounds` (optional, defaults to `false`).
-    public func spreadOutSubviews(_ subviews: [UIView], axis: ViewDistributionAxis = .horizontal, margin: CGFloat, inRect bounds: CGRect? = nil, sizeToBounds: Bool = false) {
+    /// - parameter bounds: A custom area within which to layout the subviews, or `nil` to use the receiver's `bounds`
+    /// (optional, defaults to `nil`).
+    /// - parameter sizeToBounds: If `true`, also set the size of the subviews orthogonal to `axis` to match the size of
+    /// the `bounds` (optional, defaults to `false`).
+    public func spreadOutSubviews(
+        _ subviews: [UIView],
+        axis: ViewDistributionAxis = .horizontal,
+        margin: CGFloat,
+        inRect bounds: CGRect? = nil,
+        sizeToBounds: Bool = false
+    ) {
         let subviewsCount = subviews.count
         guard subviewsCount > 0 else {
             assertionFailure("Cannot arrange zero subviews!")
@@ -496,7 +532,9 @@ extension UIView : ViewDistributionSpecifying {
         let totalSubviewSpace = axis.size(of: subviewBounds) - totalMarginSpace
         
         guard totalSubviewSpace >= CGFloat(subviewsCount) else {
-            assertionFailure("Cannot arrange \(subviewsCount) subviews with \(margin)-pt margins in \(subviewBounds.width) points of space!")
+            assertionFailure(
+                "Cannot arrange \(subviewsCount) subviews with \(margin)-pt margins in \(subviewBounds.width) points "
+                    + "of space!")
             return
         }
         
@@ -509,7 +547,8 @@ extension UIView : ViewDistributionSpecifying {
                 // Make sure the last subview precisely lands on the far edge.
                 subviewTrailingEdge = axis.trailingEdge(of: subviewBounds)
             } else {
-                // Compute the trailing edge of the *unrounded* frame, not the size, to avoid accumulation of rounding error.
+                // Compute the trailing edge of the *unrounded* frame, not the size, to avoid accumulation of rounding
+                // error.
                 subviewTrailingEdge = axis.trailingEdge(of: unroundedFrame).roundToPixel(in: subview)
             }
             

@@ -16,8 +16,9 @@
 
 import UIKit
 
+extension UIView {
 
-public extension UIView {
+    // MARK: - Public Types
     
     /// Constraints on the result of a call to `sizeThatFits(:)` or `sizeToFit()`.
     /// - `default`: no adjustment.
@@ -30,11 +31,19 @@ public extension UIView {
     /// - `minSize`: Use the supplied size or larger.
     /// - `maxSize`: Use the supplied size or smaller.
     /// - `wrap`: Use the supplied width regardless, and the supplied height or smaller.
-    struct SizingConstraints: OptionSet {
-        public let rawValue: UInt
+    public struct SizingConstraints: OptionSet {
+
+        // MARK: - Life Cycle
+
         public init(rawValue: UInt) {
             self.rawValue = rawValue
         }
+
+        // MARK: - Public Properties
+
+        public let rawValue: UInt
+
+        // MARK: - Public Static Properties
         
         public static let minWidth = SizingConstraints(rawValue: 1 << 0)
         public static let maxWidth = SizingConstraints(rawValue: 1 << 1)
@@ -49,6 +58,8 @@ public extension UIView {
         public static let minSize: SizingConstraints = [ minWidth, minHeight ]
         public static let maxSize: SizingConstraints = [ maxWidth, maxHeight ]
         public static let wrap: SizingConstraints = [ fixedWidth, maxHeight ]
+
+        // MARK: - Public Methods
         
         /// Apply the constraints to a given size.
         /// - parameter size: The size to constrain.
@@ -78,6 +89,8 @@ public extension UIView {
         }
         
     }
+
+    // MARK: - Public Methods
     
     /// The frame size that "best" fits the supplied bounding size, with constraints applied.
     /// - parameter size: A bounding size within which the view should fit. Not a strict maximum.
@@ -88,11 +101,17 @@ public extension UIView {
     }
     
     /// The frame size that "best" fits the supplied bounding size, with constraints applied.
-    /// - parameter width: A bounding width within which the view should fit (optional, defaults to `.greatestFiniteMagnitude`).
-    /// - parameter height: A bounding height within which the view should fit (optional, defaults to `.greatestFiniteMagnitude`).
+    /// - parameter width: A bounding width within which the view should fit (optional, defaults to
+    /// `.greatestFiniteMagnitude`).
+    /// - parameter height: A bounding height within which the view should fit (optional, defaults to
+    /// `.greatestFiniteMagnitude`).
     /// - parameter constraints: Limits on the returned size (optional, defaults to `.none`).
     /// - returns: A size for the receiver's `frame` that best fits its content.
-    public func frameSize(thatFitsWidth width: CGFloat = .greatestFiniteMagnitude, height: CGFloat = .greatestFiniteMagnitude, constraints: SizingConstraints = .none) -> CGSize {
+    public func frameSize(
+        thatFitsWidth width: CGFloat = .greatestFiniteMagnitude,
+        height: CGFloat = .greatestFiniteMagnitude,
+        constraints: SizingConstraints = .none
+    ) -> CGSize {
         return frameSize(thatFits: CGSize(width: width, height: height), constraints: constraints)
     }
     
@@ -105,9 +124,14 @@ public extension UIView {
     
     /// Resize the view to fit a given width.
     /// - parameter width: the width to fit, passed through to `frameSize(thatFits:)`.
-    /// - parameter height: the height to fit, passed through to `frameSize(thatFits:)` (optional, defaults to `greatestFiniteMagnitude`).
+    /// - parameter height: the height to fit, passed through to `frameSize(thatFits:)` (optional, defaults to
+    /// `greatestFiniteMagnitude`).
     /// - parameter constraints: Limits on the size to actually set (optional, defaults to `.none`).
-    public func resize(toFitWidth width: CGFloat, height: CGFloat = .greatestFiniteMagnitude, constraints: SizingConstraints = .none) {
+    public func resize(
+        toFitWidth width: CGFloat,
+        height: CGFloat = .greatestFiniteMagnitude,
+        constraints: SizingConstraints = .none
+    ) {
         resize(toFit: CGSize(width: width, height: height), constraints: constraints)
     }
     
@@ -115,7 +139,10 @@ public extension UIView {
     /// - parameter size: The size to fit, typically the `superview.bounds`.
     /// - parameter margins: An inset from the supplied size to use (optional, defaults to `0`).
     public func wrap(toFit size: CGSize, margins: CGFloat = 0) {
-        resize(toFit: CGSize(width: max(0, size.width - 2 * margins), height: max(0, size.height - 2 * margins)), constraints: .wrap)
+        resize(
+            toFit: CGSize(width: max(0, size.width - 2 * margins), height: max(0, size.height - 2 * margins)),
+            constraints: .wrap
+        )
     }
     
     /// Resize the view to a set width, and unlimited height (e.g. when in a scroll view).
@@ -123,7 +150,10 @@ public extension UIView {
     /// - parameter height: the height to fit (optional, defaults to `greatestFiniteMagnitude`).
     /// - parameter margins: An inset from the supplied width to use (optional, defaults to `0`).
     public func wrap(toFitWidth width: CGFloat, height: CGFloat = .greatestFiniteMagnitude, margins: CGFloat = 0) {
-        resize(toFit: CGSize(width: max(0, width - 2 * margins), height: max(0, height - 2 * margins)), constraints: .wrap)
+        resize(
+            toFit: CGSize(width: max(0, width - 2 * margins), height: max(0, height - 2 * margins)),
+            constraints: .wrap
+        )
     }
     
 }

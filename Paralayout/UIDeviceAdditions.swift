@@ -16,7 +16,6 @@
 
 import UIKit
 
-
 /// Screen sizes of known devices.
 public enum ScreenSize {
     static let threePointFiveInchPhone  = CGSize(width: 320, height: 480)
@@ -26,14 +25,13 @@ public enum ScreenSize {
     static let fivePointEightInchPhone  = CGSize(width: 375, height: 812)
 }
 
+extension UIDevice {
 
-public extension UIDevice {
-    
     /// The physical size of the screen, and scale factor, e.g. '4.7" (2x)' or '5.5" (3x)'.
     public var screenSizeDescription: String {
         let screenSize = UIScreen.main.bounds.size
         let boundsDescription: String
-        
+
         switch screenSize {
         case ScreenSize.threePointFiveInchPhone:
             boundsDescription = "3.5\""
@@ -48,10 +46,10 @@ public extension UIDevice {
         default:
             boundsDescription = String(format: "Unknown (%.0fx%.0f)", screenSize.width, screenSize.height)
         }
-        
+
         return String(format: "%@ (%.0fx)", boundsDescription, UIScreen.main.scale)
     }
-    
+
     /// Whether or not this device is a phone.
     public var isPhone: Bool {
         switch userInterfaceIdiom {
@@ -61,7 +59,7 @@ public extension UIDevice {
             return false
         }
     }
-    
+
     /// Whether or not this device is an iPad.
     public var isPad: Bool {
         switch userInterfaceIdiom {
@@ -71,7 +69,5 @@ public extension UIDevice {
             return false
         }
     }
-    
+
 }
-
-

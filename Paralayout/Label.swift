@@ -16,29 +16,25 @@
 
 import UIKit
 
-
 public protocol LabelDelegate: class {
-    /**
-     Called when the user taps a link in the label. This method should handle opening the link in the appropriate manner.
-     */
+
+    /// Called when the user taps a link in the label. This method should handle opening the link in the appropriate
+    /// manner.
     func label(_ label: Label, didTapLink url: URL, in range: NSRange)
 }
 
-
-/**
- This class exists purely to create a valid signature for `openURL` that can be used with #selector.
- */
+/// This class exists purely to create a valid signature for `openURL` that can be used with #selector.
 private class FakeApplication: NSObject {
     @objc func openURL(_ url: URL) -> Bool { return true }
 }
 
-
-/**
- A UILabel subclass which adds additional functionality. Notably, it adds additional attributes, such as `kerning` and `lineSpacing`, that can tailor the appearance of the label without needing to compose a new `attributedText` each time. It also adds the `lineWrapBehavior` attribute which allows tailoring of the wrapping behavior for the text for improved asthetics.
- */
+/// A UILabel subclass which adds additional functionality. Notably, it adds additional attributes, such as `kerning`
+/// and `lineSpacing`, that can tailor the appearance of the label without needing to compose a new `attributedText`
+/// each time. It also adds the `lineWrapBehavior` attribute which allows tailoring of the wrapping behavior for the
+/// text for improved asthetics.
 public final class Label : UILabel {
     
-    // MARK: -
+    // MARK: - Public Types
     
     /// A letter case modification (always applied in the current locale).
     /// - Uppercase: make all characters uppercase.
@@ -50,17 +46,17 @@ public final class Label : UILabel {
         case capitalized
     }
     
-    // MARK: -
-    
     public enum LineWrapBehavior {
+
         /// Text wrapping is not customized, i.e. lazy word-by-word line wrapping provided by the OS.
         case standard
         
         /// Text wraps to its narrowest width without increasing the height. Newlines in the text are respected.
         case compact
+
     }
     
-    // MARK: -
+    // MARK: - Private Types
     
     private struct Link: Equatable {
         let url: URL
@@ -95,7 +91,8 @@ public final class Label : UILabel {
         }
     }
     
-    // Unfortunately this can't be named `lineSpacing` because `UILabel` has a hidden property of the same name (but an `int`), and overriding it causes issues.
+    // Unfortunately this can't be named `lineSpacing` because `UILabel` has a hidden property of the same name (but an
+    // `int`), and overriding it causes issues.
     public var lineSpacingDistance: CGFloat = 0 {
         didSet {
             updateExistingParagraphStyle { $0.lineSpacing = self.lineSpacingDistance }
@@ -250,19 +247,26 @@ public final class Label : UILabel {
         if shouldWrapCompact && numberOfLines != 1 {
             let maximumAspectRatio = preferredMaximumAspectRatio
             // Make sure the text doesn't wrap to too wide an aspect ratio
-            let maxHeight = (size.height == CGFloat.greatestFiniteMagnitude) ? sizeThatFits.height : max(sizeThatFits.height, size.height)
+            let maxHeight = (size.height == CGFloat.greatestFiniteMagnitude)
+                ? sizeThatFits.height
+                : max(sizeThatFits.height, size.height)
             var textRectForBounds = compactTextRect(forBounds: CGRect(origin: CGPoint.zero, size: sizeThatFits))
             
             while (textRectForBounds.height <= maxHeight) && (textRectForBounds.height > 0.0 && (textRectForBounds.width / textRectForBounds.height) > maximumAspectRatio) {
                 // See how we'd have to wrap at a width just narrower than the width we'd wrap to.
-                let narrowerBounds = CGSize(width: textRectForBounds.width - 2.0, height: CGFloat.greatestFiniteMagnitude)
+                let narrowerBounds = CGSize(
+                    width: textRectForBounds.width - 2.0,
+                    height: CGFloat.greatestFiniteMagnitude
+                )
                 let sizeThatFitsNarrowerBounds = super.sizeThatFits(narrowerBounds)
                 
                 if sizeThatFitsNarrowerBounds.width > narrowerBounds.width || sizeThatFitsNarrowerBounds.height > maxHeight {
                     break
                 }
                 
-                textRectForBounds = compactTextRect(forBounds: CGRect(origin: CGPoint.zero, size: sizeThatFitsNarrowerBounds))
+                textRectForBounds = compactTextRect(
+                    forBounds: CGRect(origin: CGPoint.zero, size: sizeThatFitsNarrowerBounds)
+                )
             }
             
             // Cache for use during draw time.
@@ -360,7 +364,8 @@ public final class Label : UILabel {
             return textBounds
         }
         
-        // The minWidth is the longest word that's narrower than the originalWidth (to avoid forced line breaks mid-word).
+        // The minWidth is the longest word that's narrower than the originalWidth (to avoid forced line breaks
+        // mid-word).
         let originalWidth = bounds.width
         var minWidth: CGFloat = 0.0
         let words = text.nonEmptyComponentsSeparated(by: CharacterSet.whitespacesAndNewlines)
@@ -417,19 +422,22 @@ public final class Label : UILabel {
     
     // MARK: - Private Methods - Text Attributes
     
-    /// Apply the attributes of the receiver to an attributed string, preserving attributes already specified in the string.
+    /// Apply the attributes of the receiver to an attributed string, preserving attributes already specified in the
+    /// string.
     /// - parameter string: The original attributed string.
     /// - returns: A new attributed string, with individual and paragraph-style attributes configured as appropriate.
     private func applyAttributes(to string: NSAttributedString) -> NSAttributedString {
         let attributedString = string.mutableCopy() as! NSMutableAttributedString
-        
-        attributedString.enumerateAttributes(in: NSMakeRange(0, attributedString.length), options: []) { attributes, range, stop in
+
+        let fullRange = NSMakeRange(0, attributedString.length)
+        attributedString.enumerateAttributes(in: fullRange, options: []) { attributes, range, stop in
             
             var attributes = attributes
             
-            // Apply the link (or active link) attributes if this is a link area.
-            // We'll apply the link attributes first so that the other label-level attributes don't override them.
-            // If the attributed string already includes an explicit attribute (font, underline, etc) we won't override them. This allows for customization of a single link within the label if so desired.
+            // Apply the link (or active link) attributes if this is a link area. We'll apply the link attributes first
+            // so that the other label-level attributes don't override them. If the attributed string already includes
+            // an explicit attribute (font, underline, etc) we won't override them. This allows for customization of a
+            // single link within the label if so desired.
             if attributes[NSAttributedString.Key.link] != nil {
                 var linkAttributes: [NSAttributedString.Key : Any]
                 let overrideUserAttributes: Bool
@@ -458,24 +466,40 @@ public final class Label : UILabel {
             }
             
             if attributes[NSAttributedString.Key.foregroundColor] == nil {
-                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: internalTextColor, range: range)
+                attributedString.addAttribute(
+                    NSAttributedString.Key.foregroundColor,
+                    value: internalTextColor,
+                    range: range
+                )
             }
             
             // Apply label's kerning if this section of the string doesn't have an explicit kerning.
             if attributes[NSAttributedString.Key.kern] == nil {
-                attributedString.addAttribute(NSAttributedString.Key.kern, value: NSNumber(value: kerning as Double), range: range)
+                attributedString.addAttribute(
+                    NSAttributedString.Key.kern,
+                    value: NSNumber(value: kerning as Double),
+                    range: range
+                )
             }
             
-            // Apply attributes within the paragraph style. We can't detect whether or not individual attributes of the paragraph style were explicitly set, so only set any of them if the incoming string has no paragraph style at all. This matches the behavior used by `UILabel` for things like `textAlignment`.
+            // Apply attributes within the paragraph style. We can't detect whether or not individual attributes of the
+            // paragraph style were explicitly set, so only set any of them if the incoming string has no paragraph
+            // style at all. This matches the behavior used by `UILabel` for things like `textAlignment`.
             if attributes[NSAttributedString.Key.paragraphStyle] == nil {
                 let paragraphStyle = NSMutableParagraphStyle()
                 
-                // Because we're setting a paragraph style, the base class won't be able to tell if we tried to explicitly set a text alignment or line break mode. As such, we need to set it ourselves on the paragraph style we created.
+                // Because we're setting a paragraph style, the base class won't be able to tell if we tried to
+                // explicitly set a text alignment or line break mode. As such, we need to set it ourselves on the
+                // paragraph style we created.
                 paragraphStyle.alignment = textAlignment
                 paragraphStyle.lineBreakMode = lineBreakMode
                 paragraphStyle.lineSpacing = lineSpacingDistance
                 
-                attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: range)
+                attributedString.addAttribute(
+                    NSAttributedString.Key.paragraphStyle,
+                    value: paragraphStyle,
+                    range: range
+                )
             }
             
             // Convert the characters' case if appropriate.
@@ -513,13 +537,16 @@ public final class Label : UILabel {
         attributedString.addAttribute(attribute, value: value, range: NSMakeRange(0, attributedString.length))
     }
     
-    // If all or part of the attribute string have an explicit paragraph style defined, then change one of the attributes to be the newly set value. The parts of the string that don't have a paragraph style will have it filled in as part of `applyAttributes`.
+    // If all or part of the attribute string have an explicit paragraph style defined, then change one of the
+    // attributes to be the newly set value. The parts of the string that don't have a paragraph style will have it
+    // filled in as part of `applyAttributes`.
     private func updateExistingParagraphStyle(updateBlock: @escaping (NSMutableParagraphStyle) -> Void) {
         guard let attributedString = internalAttributedText else {
             return
         }
-        
-        attributedString.enumerateAttributes(in: NSMakeRange(0, attributedString.length), options: []) { (attributes, range, stop) -> Void in
+
+        let fullRange = NSMakeRange(0, attributedString.length)
+        attributedString.enumerateAttributes(in: fullRange, options: []) { (attributes, range, stop) -> Void in
             guard let attribute = attributes[NSAttributedString.Key.paragraphStyle] as? NSParagraphStyle else {
                 return
             }
@@ -541,14 +568,19 @@ public final class Label : UILabel {
         let layoutManager = NSLayoutManager()
         textStorage.addLayoutManager(layoutManager)
         
-        let textContainer = NSTextContainer(size: bounds.insetBy(dx: 0, dy: Label.magicTextContainerHorizontalOffset).size)
+        let textContainer = NSTextContainer(
+            size: bounds.insetBy(dx: 0, dy: Label.magicTextContainerHorizontalOffset).size
+        )
         textContainer.lineFragmentPadding = 0
         textContainer.lineBreakMode = lineBreakMode
         layoutManager.addTextContainer(textContainer)
         
         let linkGlyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
 
-        let entireRange = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, string.length), actualCharacterRange: nil)
+        let entireRange = layoutManager.glyphRange(
+            forCharacterRange: NSMakeRange(0, string.length),
+            actualCharacterRange: nil
+        )
         
         let entireRect = layoutManager.boundingRect(forGlyphRange: entireRange, in: textContainer)
         var linkRect = layoutManager.boundingRect(forGlyphRange: linkGlyphRange, in: textContainer)
@@ -565,7 +597,11 @@ public final class Label : UILabel {
     
     private func link(at point: CGPoint) -> Link? {
         // Stop quickly if none of the points to be tested are in the bounds.
-        guard let string = internalAttributedText, bounds.insetBy(dx: -15, dy: -15).contains(point), !links.isEmpty else {
+        guard
+            let string = internalAttributedText,
+            bounds.insetBy(dx: -15, dy: -15).contains(point),
+            !links.isEmpty
+        else {
             return nil;
         }
         
@@ -573,7 +609,9 @@ public final class Label : UILabel {
         let layoutManager = NSLayoutManager()
         textStorage.addLayoutManager(layoutManager)
         
-        let textContainer = NSTextContainer(size: bounds.insetBy(dx: 0, dy: Label.magicTextContainerHorizontalOffset).size)
+        let textContainer = NSTextContainer(
+            size: bounds.insetBy(dx: 0, dy: Label.magicTextContainerHorizontalOffset).size
+        )
         textContainer.lineFragmentPadding = 0
         textContainer.lineBreakMode = lineBreakMode
         layoutManager.addTextContainer(textContainer)
@@ -612,8 +650,9 @@ public final class Label : UILabel {
         }
         
         var links = [Link]()
-        
-        string.enumerateAttribute(NSAttributedString.Key.link, in: NSMakeRange(0, string.length), options: []) { value, range, stop in
+
+        let fullRange = NSMakeRange(0, string.length)
+        string.enumerateAttribute(NSAttributedString.Key.link, in: fullRange, options: []) { value, range, stop in
             let url: URL
             if let val = value as? String {
                 if let urlValue = URL(string: val) {
@@ -679,7 +718,9 @@ public final class Label : UILabel {
             }
             
             let firstLineFrame = boundingRectForText(in: NSMakeRange(range.location, lineBreakIndex))
-            let secondLineFrame = boundingRectForText(in: NSMakeRange(range.location + lineBreakIndex, range.length - lineBreakIndex))
+            let secondLineFrame = boundingRectForText(
+                in: NSMakeRange(range.location + lineBreakIndex, range.length - lineBreakIndex)
+            )
             
             let path = UIBezierPath()
             path.append(UIBezierPath(roundedRect: firstLineFrame, cornerRadius: 4))
@@ -762,7 +803,10 @@ public final class Label : UILabel {
                 let linkElement = UIAccessibilityElement(accessibilityContainer: self)
                 linkElement.accessibilityLabel = string.attributedSubstring(from: range).string
                 linkElement.accessibilityTraits = UIAccessibilityTraits.link
-                linkElement.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(boundingRectForText(in: range), in: self)
+                linkElement.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(
+                    boundingRectForText(in: range),
+                    in: self
+                )
                 if let path = accessibilityPathForLink(in: range) {
                     linkElement.accessibilityPath = UIAccessibility.convertToScreenCoordinates(path, in: self)
                 } else {
@@ -831,10 +875,15 @@ public final class Label : UILabel {
         
         let firstLetterFrame = boundingRectForText(in: NSMakeRange(range.location, 1))
         let lastLetterFrame = boundingRectForText(in: NSMakeRange(range.location + range.length - 1, 1))
-        let font: UIFont = string.attribute(NSAttributedString.Key.font, at: range.location, effectiveRange: nil) as? UIFont ?? self.font
+        let font: UIFont = string.attribute(
+            NSAttributedString.Key.font,
+            at: range.location,
+            effectiveRange: nil
+        ) as? UIFont ?? self.font
         let lineHeight = font.lineHeight
         
-        // Individual letter frames can have some vertical variation because of ascenders and descenders, but shouldn't differ by more than half the leading size.
+        // Individual letter frames can have some vertical variation because of ascenders and descenders, but shouldn't
+        // differ by more than half the leading size.
         let lineOriginDifference = lastLetterFrame.minY - firstLetterFrame.minY
         let acceptableVariation = lineHeight / 2
         
@@ -881,7 +930,10 @@ private extension NSAttributedString {
                 
             } else if rangeOfNextSeparator.location > searchRange.location {
                 // A separator is futher ahead. Add the substring up to that point.
-                let rangeToNextSeparator = NSRange(location: searchRange.location, length: rangeOfNextSeparator.location - searchRange.location)
+                let rangeToNextSeparator = NSRange(
+                    location: searchRange.location,
+                    length: rangeOfNextSeparator.location - searchRange.location
+                )
                 components.append((attributedSubstring(from: rangeToNextSeparator)))
             }
             
@@ -892,4 +944,5 @@ private extension NSAttributedString {
         
         return components
     }
+
 }
