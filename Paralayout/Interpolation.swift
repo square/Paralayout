@@ -16,18 +16,22 @@
 
 import UIKit
 
-
 /// A method for constraining a value.
-/// - none: No adjustment.
-/// - minimum: Clamp values below the minimum.
-/// - maximum: Clamp values above the maximum.
-/// - both: Clamp values between minimum and maximum.
 public enum Clamp {
-    
+
+    /// No adjustment.
     case none
+
+    /// Clamp values below the minimum.
     case minimum
+
+    /// Clamp values above the maximum.
     case maximum
+
+    /// Clamp values between minimum and maximum.
     case both
+
+    // MARK: - Life Cycle
     
     /// Initialize a Clamp with optional min and max.
     public init(min: Bool, max: Bool) {
@@ -37,6 +41,8 @@ public enum Clamp {
             self = max ? .maximum : .none
         }
     }
+
+    // MARK: - Public Properties
     
     /// Whether or not the receiver clamps values above the minimum.
     public var clampsMinimum: Bool {
@@ -57,6 +63,8 @@ public enum Clamp {
             return true
         }
     }
+
+    // MARK: - Public Methods
     
     /// Clamps the provided value between min/max.
     /// - parameter value: The value to clamp.
@@ -92,11 +100,11 @@ public enum Clamp {
     
 }
 
-
 // MARK: -
 
-
 public struct Interpolation: Comparable {
+
+    // MARK: - Public Types
     
     public enum Curve {
         
@@ -114,7 +122,9 @@ public struct Interpolation: Comparable {
         
         /// Interpolation based on a provided function operating on unit values `[0...1]`
         case custom(curveFunction: (CGFloat) -> CGFloat, approximateUIViewAnimationCurve: UIView.AnimationOptions)
-        
+
+        // MARK: - Life Cycle
+
         /// Initialize a Curve with optional ease in and out.
         public init(easeIn: Bool, easeOut: Bool) {
             if easeIn {
@@ -123,6 +133,8 @@ public struct Interpolation: Comparable {
                 self = easeOut ? .easeOut : .linear
             }
         }
+
+        // MARK: - Public Properties
         
         /// The equivalent UIViewAnimationOptions represented by the receiver.
         public var animationCurveOptions: UIView.AnimationOptions {
@@ -139,6 +151,8 @@ public struct Interpolation: Comparable {
                 return approximateUIViewAnimationCurve
             }
         }
+
+        // MARK: - Public Methods
         
         /// Re-normalize the provided progress based on the receiver's represented animation curve.
         /// - parameter progress: The progress to base the animation on.
@@ -165,7 +179,7 @@ public struct Interpolation: Comparable {
         
     }
     
-    // MARK: - Public Static Values
+    // MARK: - Public Static Properties
     
     /// A Interpolation value representing the start of a progression.
     public static let start = Interpolation(rawValue: startRawValue)
@@ -176,22 +190,25 @@ public struct Interpolation: Comparable {
     /// A Interpolation value representing the end of a progression.
     public static let end = Interpolation(rawValue: endRawValue)
     
-    // MARK: - Private Static Values
+    // MARK: - Private Static Properties
     
     private static let startRawValue: CGFloat = 0.0
     private static let endRawValue: CGFloat = 1.0
     
-    // MARK: - Properties
-    
-    // This is private to ensure rigorous use of `interpolate()` to get values out, e.g. `progress.interpolate(from: 0, to: 1)`
-    private let rawValue: CGFloat
-    
+    // MARK: - Public Properties
+
     /// The inverse progress, interpolated in [end...start].
     public var inverse: Interpolation {
         return Interpolation(rawValue: Interpolation.endRawValue - rawValue, clamp: .none)
     }
+
+    // MARK: - Private Properties
     
-    // MARK: - Initializers
+    // This is private to ensure rigorous use of `interpolate()` to get values out, e.g.
+    // `progress.interpolate(from: 0, to: 1)`
+    private let rawValue: CGFloat
+    
+    // MARK: - Life Cycle
     
     // This is private since `rawValue` is private.
     private init(rawValue: CGFloat, clamp: Clamp = .both) {
@@ -218,9 +235,12 @@ public struct Interpolation: Comparable {
     /// Initialize an Interpolation with an elapsed time.
     /// - parameter startDate: The start date from which to determine progress.
     /// - parameter duration: The duration of the progress.
-    /// - parameter clamp: The clamp options to use for values outside `[startDate...startDate + duration]` (optional, defaults to `.both`).
+    /// - parameter clamp: The clamp options to use for values outside `[startDate...startDate + duration]` (optional,
+    /// defaults to `.both`).
     public init(since startDate: NSDate, duration: TimeInterval, clamp: Clamp = .both) {
-        let rawValue = (duration == 0.0) ? Interpolation.endRawValue : CGFloat(startDate.timeIntervalSinceNow / -duration)
+        let rawValue = (duration == 0.0)
+            ? Interpolation.endRawValue
+            : CGFloat(startDate.timeIntervalSinceNow / -duration)
         self.init(rawValue: rawValue, clamp: clamp)
     }
     
@@ -229,33 +249,38 @@ public struct Interpolation: Comparable {
     /// - parameter start: The alternate Interpolation corresponding to `.start`.
     /// - parameter end: The alternate Interpolation corresponding to `.end`.
     /// - parameter clamp: The clamp options to use for values outside `[start...end]` (optional, defaults to `.both`).
-    public init(of interpolation: Interpolation, from start: Interpolation, to end: Interpolation, clamp: Clamp = .both) {
+    public init(
+        of interpolation: Interpolation,
+        from start: Interpolation,
+        to end: Interpolation,
+        clamp: Clamp = .both
+    ) {
         self = Interpolation(of: interpolation.rawValue, from: start.rawValue, to: end.rawValue, clamp: clamp)
     }
     
     // MARK: - Comparable
     
-    static public func ==(lhs: Interpolation, rhs: Interpolation) -> Bool {
+    public static func ==(lhs: Interpolation, rhs: Interpolation) -> Bool {
         return (lhs.rawValue == rhs.rawValue)
     }
     
-    static public func <(lhs: Interpolation, rhs: Interpolation) -> Bool {
+    public static func <(lhs: Interpolation, rhs: Interpolation) -> Bool {
         return (lhs.rawValue < rhs.rawValue)
     }
     
-    static public func <=(lhs: Interpolation, rhs: Interpolation) -> Bool {
+    public static func <=(lhs: Interpolation, rhs: Interpolation) -> Bool {
         return (lhs.rawValue <= rhs.rawValue)
     }
     
-    static public func >=(lhs: Interpolation, rhs: Interpolation) -> Bool {
+    public static func >=(lhs: Interpolation, rhs: Interpolation) -> Bool {
         return (lhs.rawValue >= rhs.rawValue)
     }
     
-    static public func >(lhs: Interpolation, rhs: Interpolation) -> Bool {
+    public static func >(lhs: Interpolation, rhs: Interpolation) -> Bool {
         return (lhs.rawValue > rhs.rawValue)
     }
 
-    // MARK: - Functions
+    // MARK: - Public Methods
     
     /// Compute an interpolated value based on the Interpolation.
     /// - parameter min: The minimum value, corresponding to `.start`.
@@ -274,7 +299,14 @@ public struct Interpolation: Comparable {
     /// - parameter endCurve: The curve to apply between `mid` and `max` (optional, defaults to `.linear`).
     /// - parameter to: The maximum value, corresponding to `.end`.
     /// - returns: The interpolated value.
-    public func interpolate(from min: CGFloat, startCurve: Curve = .linear, through mid: CGFloat, at midInterpolation: Interpolation = .middle, endCurve: Curve = .linear, to max: CGFloat) -> CGFloat {
+    public func interpolate(
+        from min: CGFloat,
+        startCurve: Curve = .linear,
+        through mid: CGFloat,
+        at midInterpolation: Interpolation = .middle,
+        endCurve: Curve = .linear,
+        to max: CGFloat
+    ) -> CGFloat {
         if self < midInterpolation {
             return renormalizing(from: .start, to: midInterpolation).interpolate(from: min, to: mid, curve: startCurve)
         } else {
@@ -288,8 +320,10 @@ public struct Interpolation: Comparable {
     /// - parameter curve: A curve to apply to the interpolation (optional, defaults to `.linear`).
     /// - returns: The interpolated coordinate.
     public func interpolate(from start: CGPoint, to end: CGPoint, curve: Curve = .linear) -> CGPoint {
-        return CGPoint(x: interpolate(from: start.x, to: end.x, curve: curve),
-                       y: interpolate(from: start.y, to: end.y, curve: curve))
+        return CGPoint(
+            x: interpolate(from: start.x, to: end.x, curve: curve),
+            y: interpolate(from: start.y, to: end.y, curve: curve)
+        )
     }
     
     /// Compute an interpolated size based on the Interpolation.
@@ -298,8 +332,10 @@ public struct Interpolation: Comparable {
     /// - parameter curve: A curve to apply to the interpolation (optional, defaults to `.linear`).
     /// - returns: The interpolated size.
     public func interpolate(from start: CGSize, to end: CGSize, curve: Curve = .linear) -> CGSize {
-        return CGSize(width: interpolate(from: start.width, to: end.width, curve: curve),
-                      height: interpolate(from: start.height, to: end.height, curve: curve))
+        return CGSize(
+            width: interpolate(from: start.width, to: end.width, curve: curve),
+            height: interpolate(from: start.height, to: end.height, curve: curve)
+        )
     }
     
     /// Clamps the receiver to `[start...end]`.
@@ -319,5 +355,3 @@ public struct Interpolation: Comparable {
     }
 
 }
-
-

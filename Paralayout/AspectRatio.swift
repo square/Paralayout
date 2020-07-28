@@ -16,9 +16,10 @@
 
 import UIKit
 
-
 /// A value type representing the ratio between a width and a height.
 public struct AspectRatio: Comparable, CustomDebugStringConvertible {
+
+    // MARK: - Public Static Properties
     
     /// The aspect ratio of a square (1:1).
     public static let square = AspectRatio(width: 1, height: 1)
@@ -29,12 +30,12 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// The aspect ratio of HD video, typical for device displays and video (16:9).
     public static let widescreen = AspectRatio(width: 16, height: 9)
     
-    // MARK: - Stored Properties
+    // MARK: - Private Properties
     
     private let ratioWidth: CGFloat
     private let ratioHeight: CGFloat
     
-    // MARK: - Derived Properties
+    // MARK: - Public Properties
     
     public var inverted: AspectRatio {
         return AspectRatio(width: ratioHeight, height: ratioWidth)
@@ -95,16 +96,21 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     }
     
     public func size(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
-        return CGSize(width: width,
-                      height: height(forWidth: width, in: scaleFactor))
+        return CGSize(
+            width: width,
+            height: height(forWidth: width, in: scaleFactor)
+        )
     }
     
     public func size(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
-        return CGSize(width: width(forHeight: height, in: scaleFactor),
-                      height: height)
+        return CGSize(
+            width: width(forHeight: height, in: scaleFactor),
+            height: height
+        )
     }
     
-    /// An "aspect-fit" function that determines the largest size of the receiver's aspect ratio that fits within a size.
+    /// An "aspect-fit" function that determines the largest size of the receiver's aspect ratio that fits within a
+    /// size.
     /// - parameter size: the bounding size.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A size with the receiver's aspect ratio, no larger than the bounding size.
@@ -121,16 +127,19 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
         }
     }
     
-    /// An "aspect-fit" function that determines the largest rect of the receiver's aspect ratio that fits within a rect.
+    /// An "aspect-fit" function that determines the largest rect of the receiver's aspect ratio that fits within a
+    /// rect.
     /// - parameter rect: the bounding rect.
-    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will be if the aspect ratios do not match perfectly.
+    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
+    /// be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
     public func rect(toFit rect: CGRect, at position: Position, in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(size: size(toFit: rect.size, in: scaleFactor), at: position, of: rect, in: scaleFactor)
     }
     
-    /// An "aspect-fill" function that determines the smallest size of the receiver's aspect ratio that fits a size within it.
+    /// An "aspect-fill" function that determines the smallest size of the receiver's aspect ratio that fits a size
+    /// within it.
     /// - parameter size: the bounding size.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A size with the receiver's aspect ratio, at least as large as the bounding size.
@@ -147,9 +156,11 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
         }
     }
     
-    /// An "aspect-fill" function that determines the smallest rect of the receiver's aspect ratio that fits a rect within it.
+    /// An "aspect-fill" function that determines the smallest rect of the receiver's aspect ratio that fits a rect
+    /// within it.
     /// - parameter rect: the bounding rect.
-    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will be if the aspect ratios do not match perfectly.
+    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
+    /// be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
     public func rect(toFill rect: CGRect, at position: Position, in scaleFactor: ScaleFactorProviding) -> CGRect {
@@ -158,23 +169,34 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     
 }
 
+// MARK: -
 
-// MARK: - Extensions
+extension CGSize {
 
-
-public extension CGSize {
-    
     /// The aspect ratio of this size.
     public var aspectRatio: AspectRatio {
         return AspectRatio(size: self)
     }
-    
+
 }
 
+extension CGRect {
 
-public extension CGRect {
-    
-    fileprivate init(size newSize: CGSize, at position: Position, of alignmentRect: CGRect, in scaleFactor: ScaleFactorProviding) {
+    // MARK: - Public Properties
+
+    /// The aspect ratio of this rect's size.
+    public var aspectRatio: AspectRatio {
+        return AspectRatio(size: size)
+    }
+
+    // MARK: - Private Properties
+
+    fileprivate init(
+        size newSize: CGSize,
+        at position: Position,
+        of alignmentRect: CGRect,
+        in scaleFactor: ScaleFactorProviding
+    ) {
         let newOrigin: CGPoint
         
         if newSize.width == alignmentRect.width {
@@ -207,11 +229,6 @@ public extension CGRect {
         }
         
         self.init(origin: newOrigin, size: newSize)
-    }
-    
-    /// The aspect ratio of this rect's size.
-    public var aspectRatio: AspectRatio {
-        return AspectRatio(size: size)
     }
         
 }

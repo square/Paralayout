@@ -16,22 +16,30 @@
 
 import UIKit
 
+extension UIFont {
 
-public extension UIFont {
+    // MARK: - Public Types
     
-    /// The insets, in points, from the top of a UILabel to its font's capHeight, and from the font's baseline to the label's bottom.
+    /// The insets, in points, from the top of a UILabel to its font's capHeight, and from the font's baseline to the
+    /// label's bottom.
     public struct LabelCapInsets {
+
+        // MARK: - Internal Properties
         
         /// The amount of extra space above a font's cap height, as displayed in a UILabel.
         var top: CGFloat
         
         /// The amount of extra space below a font's baseline, as displayed in a UILabel.
         var bottom: CGFloat
+
+        // MARK: - Public Properties
         
         /// The total amount of extra space above and below a font's cap height and baseline, as displayed in a UILabel.
         public var totalInset: CGFloat {
             return top + bottom
         }
+
+        // MARK: - Public Methods
         
         /// Inset a rect by the extra space above and below a font's cap height and baseline, as displayed in a UILabel.
         /// - parameter rect: The rect to inset (typically a UILabel's `bounds` or `frame`).
@@ -40,19 +48,24 @@ public extension UIFont {
             return CGRect(x: rect.minX, y: rect.minY + top, width: rect.width, height: rect.height - totalInset)
         }
         
-        /// Inset a size's height by the extra space above and below a font's cap height and baseline, as displayed in a UILabel.
+        /// Inset a size's height by the extra space above and below a font's cap height and baseline, as displayed in a
+        /// UILabel.
         /// - parameter size: The size to shorten (typically a UILabel's height).
         /// - returns: A size reduced in height by the `totalInset`.
         public func inset(size: CGSize) -> CGSize {
             return CGSize(width: size.width, height: size.height - totalInset)
         }
+
     }
-    
+
+    // MARK: - Public Methods
+
     /// The space above and below the receiver's capHeight and baseline, as displayed in a UILabel.
     /// - parameter scaleFactor: The UI scale factor for pixel rounding.
     /// - returns: The insets.
     public func labelCapInsets(in scaleFactor: ScaleFactorProviding) -> LabelCapInsets {
-        // One would expect ceil(ascender) - floor(descender) so that the baseline would land on a pixel boundary, but sadly no--this is what `UILabel.sizeToFit()` does.
+        // One would expect ceil(ascender) - floor(descender) so that the baseline would land on a pixel boundary, but
+        // sadly no--this is what `UILabel.sizeToFit()` does.
         let lineHeight = (ascender - descender).ceilToPixel(in: scaleFactor)
         
         // Based on experiments with SFUIText and Helvetica Neue, this is how the text is positioned within a label.
