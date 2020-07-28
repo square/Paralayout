@@ -59,13 +59,13 @@ extension UIView {
         public static let maxSize: SizingConstraints = [ maxWidth, maxHeight ]
         public static let wrap: SizingConstraints = [ fixedWidth, maxHeight ]
 
-        // MARK: - Public Methods
+        // MARK: - Internal Methods
         
         /// Apply the constraints to a given size.
         /// - parameter sizeThatFits: The size to which the constraints should be applied.
         /// - parameter sizeToFit: The size with which to constrain the `sizeThatFits`.
         /// - returns: A size with the receiver's constraints applied.
-        public func apply(sizeThatFits: CGSize, sizeToFit: CGSize) -> CGSize {
+        func apply(sizeThatFits: CGSize, sizeToFit: CGSize) -> CGSize {
             var constrainedSize = sizeThatFits
             
             if contains(.minWidth) {
