@@ -19,7 +19,6 @@
 		D0624F801EDF8EE600076663 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090C61ECB95620077F3F6 /* Interpolation.swift */; };
 		D0624F811EDF8EE600076663 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090D01ECCD3EC0077F3F6 /* Label.swift */; };
 		D0624F821EDF8EE600076663 /* GeometryAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FDA31ECA7C89009BEF98 /* GeometryAdditions.swift */; };
-		D0624F831EDF8EE600076663 /* UIDeviceAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090D41ECF5AE10077F3F6 /* UIDeviceAdditions.swift */; };
 		D0624F841EDF8EE600076663 /* UIFontAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090CC1ECBB3510077F3F6 /* UIFontAdditions.swift */; };
 		D0624F851EDF8EE600076663 /* UIViewAdditions_Alignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090C41ECA7D260077F3F6 /* UIViewAdditions_Alignment.swift */; };
 		D0624F861EDF8EE600076663 /* UIViewAdditions_Distribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */; };
@@ -93,7 +92,6 @@
 		D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UIViewAdditions_Distribution.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D0E090D01ECCD3EC0077F3F6 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		D0E090D21ECE29AF0077F3F6 /* Hairline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hairline.swift; sourceTree = "<group>"; };
-		D0E090D41ECF5AE10077F3F6 /* UIDeviceAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UIDeviceAdditions.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				D049FDA31ECA7C89009BEF98 /* GeometryAdditions.swift */,
-				D0E090D41ECF5AE10077F3F6 /* UIDeviceAdditions.swift */,
 				D0E090CC1ECBB3510077F3F6 /* UIFontAdditions.swift */,
 				D0E090C41ECA7D260077F3F6 /* UIViewAdditions_Alignment.swift */,
 				D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */,
@@ -372,7 +369,6 @@
 				D0624F801EDF8EE600076663 /* Interpolation.swift in Sources */,
 				D0624F811EDF8EE600076663 /* Label.swift in Sources */,
 				D0624F821EDF8EE600076663 /* GeometryAdditions.swift in Sources */,
-				D0624F831EDF8EE600076663 /* UIDeviceAdditions.swift in Sources */,
 				D0624F841EDF8EE600076663 /* UIFontAdditions.swift in Sources */,
 				D0624F851EDF8EE600076663 /* UIViewAdditions_Alignment.swift in Sources */,
 				D0624F861EDF8EE600076663 /* UIViewAdditions_Distribution.swift in Sources */,
