@@ -58,7 +58,7 @@ class HairlineTests: XCTestCase {
     }
     
     func testNewInSuperview() {
-        // This test is broken in iOS 13 and later due to a bug around setting `UIWindow.screen`.
+        // This test is broken in iOS 13 and later due to a bug around setting `UIWindow.screen` (FB8674601).
         if #available(iOS 13, *) {
             return
         }
@@ -122,7 +122,7 @@ class HairlineTests: XCTestCase {
     }
 
     func testSpanSuperview() {
-        // This test is broken in iOS 13 and later due to a bug around setting `UIWindow.screen`.
+        // This test is broken in iOS 13 and later due to a bug around setting `UIWindow.screen` (FB8674601).
         if #available(iOS 13, *) {
             return
         }
@@ -161,7 +161,7 @@ class HairlineTests: XCTestCase {
     private func screensToTest() -> [UIScreen] {
         if #available(iOS 13, *) {
             // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
-            // multiple screens.
+            // multiple screens (FB8674601).
             return [.main]
 
         } else {

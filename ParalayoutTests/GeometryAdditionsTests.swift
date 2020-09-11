@@ -133,7 +133,7 @@ class GeometryAdditionsTests: XCTestCase {
     private func screensToTest() -> [UIScreen] {
         if #available(iOS 13, *) {
             // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
-            // multiple screens.
+            // multiple screens (FB8674601).
             return [.main]
 
         } else {
