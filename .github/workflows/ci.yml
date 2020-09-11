@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_11.6.app/Contents/Developer
       - name: Build and Test
         run: |
           xcrun xcodebuild \
