@@ -97,10 +97,6 @@ videoPlayer.frame = AspectRatio.widescreen.rect(toFit: bounds, at: .topCenter, i
 
 These extensions provide numerous conveniences for computing rectangles and snapping coordinates to pixel dimensions. The `ScaleFactorProviding` protocol encapsulates the latter, allowing a view to provide the context necessary to align its subviews to pixels. One benefit of this approach is that unit tests can cover both 2x and 3x scale factors regardless of the simulator used to run the test.
 
-#### UIDevice Extensions
-
-In practice, designers adjust margins and text sizes for specific device sizes, not abstract screen dimensions. It may be simplest, for example, to just hide a particular UI element on 3.5" iPhones only, rather than build complex sizing/layout logic that triggers the behavior change at a threshold associated with a small screen.
-
 #### UIFont Extensions
 
 The extra space within a label above the "cap height" and below the "baseline" of its font is deterministic but non-obvious, especially at different scale factors. The simple `LabelCapInsets` value type encapsulates that logic.
