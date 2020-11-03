@@ -69,6 +69,10 @@ class ViewController: UIViewController {
     private var resizingTouchStart: CGPoint = .zero
     private var resizingCorner = Position.center
     private var resizingContainerOriginalFrame: CGRect = .null
+
+    private var hairlineWidth: CGFloat {
+        return (view.window?.screen ?? UIScreen.main).hairlineWidth
+    }
     
     // MARK: - UIViewController
     
@@ -87,7 +91,7 @@ class ViewController: UIViewController {
         containerView.frame = maximumContainerFrame.insetBy(dx: 8, dy: 8)
         containerView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         containerView.layer.borderColor = UIColor.lightGray.cgColor
-        containerView.layer.borderWidth = view.hairlineWidth
+        containerView.layer.borderWidth = hairlineWidth
         
         view.addSubview(containerView)
         
@@ -121,7 +125,7 @@ class ViewController: UIViewController {
         }
         
         // Size the sample into the container with a hairline inset (so the border doesn't overlap it).
-        sampleView.resize(toFit: containerView.bounds.insetBy(dx: view.hairlineWidth, dy: view.hairlineWidth).size)
+        sampleView.resize(toFit: containerView.bounds.insetBy(dx: hairlineWidth, dy: hairlineWidth).size)
         sampleView.alignToSuperview(.center)
         
         // Lay out the toggle and slider.
@@ -184,7 +188,7 @@ class ViewController: UIViewController {
         let offset = resizingTouch.location(in: view) - resizingTouchStart
         let maximumFrame = maximumContainerFrame
         let originalFrame = resizingContainerOriginalFrame
-        let minContainerSize = CGSize(width: Metrics.controlSize.width + 2 * view.hairlineWidth, height: Metrics.controlSize.height + 2 * view.hairlineWidth)
+        let minContainerSize = CGSize(width: Metrics.controlSize.width + 2 * hairlineWidth, height: Metrics.controlSize.height + 2 * hairlineWidth)
         
         // An edge can be moved out as far as the maximumFrame, and in as far as the opposite edge (minus the minimum width).
         func offsetLeft() -> CGFloat {
@@ -237,4 +241,17 @@ class ViewController: UIViewController {
         resizingContainerOriginalFrame = .null
     }
     
+}
+
+// MARK: -
+
+extension UIScreen {
+
+    /// The width of a hairline (in points) for the receiver's scale factor.
+    var hairlineWidth: CGFloat {
+        // A hairline is 1/2 pt thick, rounded down to the nearest whole (non-zero) pixel.
+        let hairline = CGFloat(0.5).floorToPixel(in: self)
+        return (hairline > 0.0) ? hairline : CGFloat(0.5).ceilToPixel(in: self)
+    }
+
 }
