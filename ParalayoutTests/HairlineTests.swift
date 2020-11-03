@@ -42,15 +42,15 @@ class HairlineTests: XCTestCase {
         XCTAssert(TestScreen.at1x.hairlineWidth == 1)
         XCTAssert(TestScreen.at2x.hairlineWidth == 0.5)
         XCTAssert(TestScreen.at3x.hairlineWidth == (CGFloat(1) / 3))
-        
+
         // Native width is 1/2 point.
         XCTAssert(UIScreen.hairlineWidth(for: 0) == 0.5)
-        
+
         // A hypothetical 4x display should have 2px (not 1px) hairlines.
         XCTAssert(UIScreen.hairlineWidth(for: 4) == 0.5)
-        
+
         // Windows/views should inherit the scale of the screen they're on.
-        for screen in TestScreen.all {
+        for screen in screensToTest() {
             Samples.window.screen = screen
             XCTAssert(Samples.window.hairlineWidth == screen.hairlineWidth)
             XCTAssert(Samples.view.hairlineWidth == screen.hairlineWidth)
@@ -58,27 +58,32 @@ class HairlineTests: XCTestCase {
     }
     
     func testNewInSuperview() {
+        // This test is broken in iOS 13 and later due to a bug around setting `UIWindow.screen` (FB8674601).
+        if #available(iOS 13, *) {
+            return
+        }
+
         // Left, 3x, inset, with mask.
         Samples.window.screen = TestScreen.at3x
         let leftHairline = Hairline.new(in: Samples.window, at: .minXEdge, inset: 10, autoresize: true)
         XCTAssert(leftHairline.frame == CGRect(x: 0, y: 10, width: CGFloat(1) / 3, height: 30))
         XCTAssert(leftHairline.autoresizingMask == [ .flexibleHeight, .flexibleRightMargin ])
         XCTAssert(!leftHairline.isHorizontal)
-        
+
         // Top, 2x, no inset, no resizing mask.
         Samples.window.screen = TestScreen.at2x
         let topHairline = Hairline.new(in: Samples.window, at: .minYEdge)
         XCTAssert(topHairline.frame == CGRect(x: 0, y: 0, width: 100, height: 0.5))
         XCTAssert(topHairline.autoresizingMask == [])
         XCTAssert(topHairline.isHorizontal)
-        
+
         // Right, 2x, inset, no mask.
         Samples.window.screen = TestScreen.at2x
         let rightHairline = Hairline.new(in: Samples.window, at: .maxXEdge, inset: -5, autoresize: false)
         XCTAssert(rightHairline.frame == CGRect(x: 99.5, y: -5, width: 0.5, height: 60))
         XCTAssert(rightHairline.autoresizingMask == [])
         XCTAssert(!rightHairline.isHorizontal)
-        
+
         // Bottom, 1x, no inset, with mask.
         Samples.window.screen = TestScreen.at3x
         let bottomHairline = Hairline.new(in: Samples.window, at: .maxYEdge, autoresize: true)
@@ -105,45 +110,63 @@ class HairlineTests: XCTestCase {
     }
     
     func testSizeThatFits() {
-        for screen in TestScreen.all {
+        for screen in screensToTest() {
             Samples.window.screen = screen
-            
+
             Samples.hairline.isHorizontal = true
-            XCTAssert(Samples.hairline.sizeThatFits(CGSize(width: 100, height: 100)) == CGSize(width: 100, height: screen.hairlineWidth))
-            
+            XCTAssertEqual(Samples.hairline.sizeThatFits(CGSize(width: 100, height: 100)), CGSize(width: 100, height: screen.hairlineWidth))
+
             Samples.hairline.isHorizontal = false
-            XCTAssert(Samples.hairline.sizeThatFits(CGSize(width: 100, height: 100)) == CGSize(width: screen.hairlineWidth, height: 100))
+            XCTAssertEqual(Samples.hairline.sizeThatFits(CGSize(width: 100, height: 100)), CGSize(width: screen.hairlineWidth, height: 100))
         }
     }
-    
+
     func testSpanSuperview() {
+        // This test is broken in iOS 13 and later due to a bug around setting `UIWindow.screen` (FB8674601).
+        if #available(iOS 13, *) {
+            return
+        }
+
         // Left, 3x, inset, no mask.
         Samples.window.screen = TestScreen.at3x
         Samples.hairline.spanSuperview(at: .minXEdge, inset: 10, updateAutoresizingMask: false)
         XCTAssert(Samples.hairline.frame == CGRect(x: 0, y: 10, width: CGFloat(1) / 3, height: 30))
         XCTAssert(Samples.hairline.autoresizingMask == [])
         XCTAssert(!Samples.hairline.isHorizontal)
-        
+
         // Top, 2x, no inset, no resizing mask.
         Samples.window.screen = TestScreen.at2x
         Samples.hairline.spanSuperview(at: .minYEdge)
         XCTAssert(Samples.hairline.frame == CGRect(x: 0, y: 0, width: 100, height: 0.5))
         XCTAssert(Samples.hairline.autoresizingMask == [])
         XCTAssert(Samples.hairline.isHorizontal)
-        
+
         // Right, 2x, inset, with mask.
         Samples.window.screen = TestScreen.at2x
         Samples.hairline.spanSuperview(at: .maxXEdge, inset: -5, updateAutoresizingMask: true)
         XCTAssert(Samples.hairline.frame == CGRect(x: 99.5, y: -5, width: 0.5, height: 60))
         XCTAssert(Samples.hairline.autoresizingMask == [ .flexibleHeight, .flexibleLeftMargin ])
         XCTAssert(!Samples.hairline.isHorizontal)
-        
+
         // Bottom, 1x, no inset, with mask.
         Samples.window.screen = TestScreen.at3x
         Samples.hairline.spanSuperview(at: .maxYEdge, updateAutoresizingMask: true)
         XCTAssert(Samples.hairline.frame == CGRect(x: 0, y: 50 - UIScreen.hairlineWidth(for: 3), width: 100, height: UIScreen.hairlineWidth(for: 3)))
         XCTAssert(Samples.hairline.autoresizingMask == [ .flexibleWidth, .flexibleTopMargin ])
         XCTAssert(Samples.hairline.isHorizontal)
+    }
+
+    // MARK: - Private Methods
+
+    private func screensToTest() -> [UIScreen] {
+        if #available(iOS 13, *) {
+            // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
+            // multiple screens (FB8674601).
+            return [.main]
+
+        } else {
+            return TestScreen.all
+        }
     }
     
 }

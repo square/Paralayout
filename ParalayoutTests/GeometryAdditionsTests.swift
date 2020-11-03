@@ -68,11 +68,11 @@ class GeometryAdditionsTests: XCTestCase {
     
     func testViewPixelRounding() {
         // A view should inherit the scale factor of its parent screen.
-        for screen in TestScreen.all {
+        for screen in screensToTest() {
             Samples.window.screen = screen
-            XCTAssert(Samples.view.pixelsPerPoint == screen.pixelsPerPoint)
+            XCTAssertEqual(Samples.view.pixelsPerPoint, screen.pixelsPerPoint)
         }
-        
+
         // With no superview, the main screen's scale should be used.
         Samples.view.removeFromSuperview()
         XCTAssert(Samples.view.pixelsPerPoint == UIScreen.main.pixelsPerPoint)
@@ -126,6 +126,19 @@ class GeometryAdditionsTests: XCTestCase {
         
         XCTAssert(sample.slice(from: .maxYEdge, amount: 100) == (sample,
                                                                  CGRect(x:  0,   y:  0, width: 100, height:   0)))
+    }
+
+    // MARK: - Private Methods
+
+    private func screensToTest() -> [UIScreen] {
+        if #available(iOS 13, *) {
+            // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
+            // multiple screens (FB8674601).
+            return [.main]
+
+        } else {
+            return TestScreen.all
+        }
     }
     
 }

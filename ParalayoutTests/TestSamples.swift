@@ -36,4 +36,10 @@ final class TestScreen: UIScreen {
     override var scale: CGFloat {
         return testScaleFactor
     }
+
+    override var traitCollection: UITraitCollection {
+        // By default, `UIScreen` returns an invalid trait collection. Use the main screen's trait collection here
+        // instead since we know that should be valid.
+        return UIScreen.main.traitCollection
+    }
 }
