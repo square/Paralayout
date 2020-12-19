@@ -11,6 +11,8 @@
 		3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC53C258C110F005BFBC1 /* AngleTests.swift */; };
 		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5EE80620701F2300B767FA /* LabelTests.swift */; };
+		3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F8757258DC41300765277 /* PixelRounding.swift */; };
+		3D8F875C258DC46900765277 /* PixelRoundingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F875B258DC46900765277 /* PixelRoundingTests.swift */; };
 		D031F4781EDE066F008EC23D /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D031F4771EDE066F008EC23D /* SampleView.swift */; };
 		D049FD841ECA7BC4009BEF98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */; };
 		D049FD861ECA7BC4009BEF98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD851ECA7BC4009BEF98 /* ViewController.swift */; };
@@ -70,6 +72,8 @@
 		3D5DC53C258C110F005BFBC1 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
 		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5EE80620701F2300B767FA /* LabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTests.swift; sourceTree = "<group>"; };
+		3D8F8757258DC41300765277 /* PixelRounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRounding.swift; sourceTree = "<group>"; };
+		3D8F875B258DC46900765277 /* PixelRoundingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRoundingTests.swift; sourceTree = "<group>"; };
 		D031F4771EDE066F008EC23D /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SampleView.swift; path = ../ParalayoutStudio/SampleView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D049FD801ECA7BC4009BEF98 /* ParalayoutStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParalayoutStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = AppDelegate.swift; path = ../ParalayoutStudio/AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -140,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				D049FDA31ECA7C89009BEF98 /* GeometryAdditions.swift */,
+				3D8F8757258DC41300765277 /* PixelRounding.swift */,
 				D0E090CC1ECBB3510077F3F6 /* UIFontAdditions.swift */,
 				D0E090C41ECA7D260077F3F6 /* UIViewAdditions_Alignment.swift */,
 				D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */,
@@ -200,6 +205,7 @@
 				D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */,
 				3D5EE80620701F2300B767FA /* LabelTests.swift */,
 				3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */,
+				3D8F875B258DC46900765277 /* PixelRoundingTests.swift */,
 				D0624FD31EE214DA00076663 /* TestSamples.swift */,
 				D0624FC81EDFA1AE00076663 /* Info.plist */,
 			);
@@ -375,6 +381,7 @@
 				D0624F851EDF8EE600076663 /* UIViewAdditions_Alignment.swift in Sources */,
 				D0624F861EDF8EE600076663 /* UIViewAdditions_Distribution.swift in Sources */,
 				D0624F871EDF8EE600076663 /* UIViewAdditions_Sizing.swift in Sources */,
+				3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +390,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */,
+				3D8F875C258DC46900765277 /* PixelRoundingTests.swift in Sources */,
 				D0624FC71EDFA1AE00076663 /* GeometryAdditionsTests.swift in Sources */,
 				3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */,
 				D0624FD41EE214DA00076663 /* TestSamples.swift in Sources */,
