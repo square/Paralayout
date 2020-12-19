@@ -108,6 +108,33 @@ final class GeometryAdditionsTests: XCTestCase {
         XCTAssert(Samples.view.pixelsPerPoint == UIScreen.main.pixelsPerPoint)
     }
 
+    // MARK: - Tests - CGPoint Extensions
+
+    func testMidpoint() {
+        // The midpoint between two of the same point should be that point.
+        XCTAssertEqual(CGPoint(midpoint: .zero, .zero), .zero)
+        XCTAssertEqual(CGPoint(midpoint: .init(x: 20, y: 40), .init(x: 20, y: 40)), .init(x: 20, y: 40))
+
+        XCTAssertEqual(CGPoint(midpoint: .init(x: 20, y: 30), .init(x: 10, y: 70)), .init(x: 15, y: 50))
+        XCTAssertEqual(CGPoint(midpoint: .init(x: -20, y: 30), .init(x: 10, y: -70)), .init(x: -5, y: -20))
+        XCTAssertEqual(CGPoint(midpoint: .init(x: -20, y: -30), .init(x: -10, y: -70)), .init(x: -15, y: -50))
+    }
+
+    func testDistanceBetweenPoints() {
+        // A point's distance from itself is always zero.
+        XCTAssertEqual(CGPoint.zero.distance(to: .zero), 0)
+        XCTAssertEqual(CGPoint(x: 20, y: -30).distance(to: .init(x: 20, y: -30)), 0)
+
+        // Test along all of the +/- x/y axes.
+        XCTAssertEqual(CGPoint.zero.distance(to: .init(x: 0, y: 10)), 10)
+        XCTAssertEqual(CGPoint.zero.distance(to: .init(x: 10, y: 0)), 10)
+        XCTAssertEqual(CGPoint.zero.distance(to: .init(x: 0, y: -10)), 10)
+        XCTAssertEqual(CGPoint.zero.distance(to: .init(x: -10, y: 0)), 10)
+
+        XCTAssertEqual(CGPoint(x: -10, y: 10).distance(to: .init(x: -12, y: 12)), 2 * sqrt(2), accuracy: 1e-10)
+        XCTAssertEqual(CGPoint(x: 10, y: 10).distance(to: .init(x: 11, y: 11)), sqrt(2), accuracy: 1e-10)
+    }
+
     // MARK: - Tests - CGRect Extensions
     
     func testCGRectCreation() {
