@@ -407,13 +407,20 @@ public final class Label : UILabel {
             textBounds.origin.x = textBounds.maxX - bestWidth
             
         case .natural, .justified:
-            switch UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) {
+            let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
+            switch layoutDirection {
             case .leftToRight:
                 break // No-op. Text bounds are already left-alignment.
                 
             case .rightToLeft:
                 textBounds.origin.x = textBounds.maxX - bestWidth
+
+            @unknown default:
+                fatalError("Unknown user interface layout direction: \(layoutDirection)")
             }
+
+        @unknown default:
+            fatalError("Unknown text alignment: \(textAlignment)")
         }
         
         textBounds.size.width = bestWidth
