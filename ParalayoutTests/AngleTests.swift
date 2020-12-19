@@ -21,9 +21,9 @@ final class AngleTests: XCTestCase {
 
     func testConstants() {
         XCTAssertEqual(Angle.zero.radians, 0)
-        XCTAssertEqual(Angle.right.degrees, 90, accuracy: 1e-6)
-        XCTAssertEqual(Angle.halfCircle.degrees, 180, accuracy: 1e-6)
-        XCTAssertEqual(Angle.fullCircle.degrees, 360, accuracy: 1e-6)
+        XCTAssertEqual(Angle.right.degrees, 90, accuracy: 1e-4)
+        XCTAssertEqual(Angle.halfCircle.degrees, 180, accuracy: 1e-4)
+        XCTAssertEqual(Angle.fullCircle.degrees, 360, accuracy: 1e-4)
     }
 
     func testValueInitializers() {
@@ -32,7 +32,7 @@ final class AngleTests: XCTestCase {
         }
 
         func assertDegreeInitPreservesValue(_ degrees: CGFloat) {
-            XCTAssertEqual(Angle(degrees: degrees).degrees, degrees, accuracy: 1e-6)
+            XCTAssertEqual(Angle(degrees: degrees).degrees, degrees, accuracy: 1e-4)
         }
 
         let testValues: [CGFloat] = [ 0, 0.01, 1, .pi, 2 * .pi, 90, 180, 360, 400 ]
@@ -51,14 +51,14 @@ final class AngleTests: XCTestCase {
         // Identical points should have a zero angle between them (and importantly not have a divide-by-zero result).
         XCTAssertEqual(Angle(from: centerPoint, to: centerPoint).degrees, 0, accuracy: 1e-20)
 
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.rightCenter.point(in: rect)).degrees, 0, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomRight.point(in: rect)).degrees, 45, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomCenter.point(in: rect)).degrees, 90, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomLeft.point(in: rect)).degrees, 135, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.leftCenter.point(in: rect)).degrees, 180, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topLeft.point(in: rect)).degrees, -135, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topCenter.point(in: rect)).degrees, -90, accuracy: 1e-6)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topRight.point(in: rect)).degrees, -45, accuracy: 1e-6)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.rightCenter.point(in: rect)).degrees, 0, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomRight.point(in: rect)).degrees, 45, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomCenter.point(in: rect)).degrees, 90, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomLeft.point(in: rect)).degrees, 135, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.leftCenter.point(in: rect)).degrees, 180, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.topLeft.point(in: rect)).degrees, -135, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.topCenter.point(in: rect)).degrees, -90, accuracy: 1e-4)
+        XCTAssertEqual(Angle(from: centerPoint, to: Position.topRight.point(in: rect)).degrees, -45, accuracy: 1e-4)
     }
 
     func testPointAtDistance() {
@@ -82,14 +82,14 @@ final class AngleTests: XCTestCase {
             assertEqual(
                 Angle(degrees: angleDegrees).point(atDistance: distance, from: centerPoint),
                 position.point(in: rect),
-                accuracy: 1e-6,
+                accuracy: 1e-4,
                 file: file,
                 line: line
             )
             assertEqual(
                 Angle(degrees: angleDegrees - 360).point(atDistance: distance, from: centerPoint),
                 position.point(in: rect),
-                accuracy: 1e-6,
+                accuracy: 1e-4,
                 file: file,
                 line: line
             )
@@ -126,27 +126,27 @@ final class AngleTests: XCTestCase {
         XCTAssertEqual(Angle(radians: 1.5 * .pi).normalizedPositive.radians, 1.5 * .pi)
 
         // A full rotation should come back as zero.
-        XCTAssertEqual(Angle.fullCircle.normalizedPositive.radians, Angle.zero.radians, accuracy: 1e-6)
+        XCTAssertEqual(Angle.fullCircle.normalizedPositive.radians, Angle.zero.radians, accuracy: 1e-4)
 
         // Anything over a full rotation should come back with the remainder.
-        XCTAssertEqual(Angle(radians: 7.0).normalizedPositive.radians, 7.0 - 2.0 * .pi, accuracy: 1e-6)
+        XCTAssertEqual(Angle(radians: 7.0).normalizedPositive.radians, 7.0 - 2.0 * .pi, accuracy: 1e-4)
 
         // Negative rotations should come back as the equivalent positive rotation.
-        XCTAssertEqual(Angle(radians: -.pi / 2).normalizedPositive.radians, 1.5 * .pi, accuracy: 1e-6)
+        XCTAssertEqual(Angle(radians: -.pi / 2).normalizedPositive.radians, 1.5 * .pi, accuracy: 1e-4)
     }
 
     func testHalfCircleNormalization() {
         // In the range [-180º,180º), the angle should be unmutated.
-        XCTAssertEqual(Angle.zero.normalizedHalfCircle.radians, Angle.zero.radians, accuracy: 1e-6)
-        XCTAssertEqual(Angle.right.normalizedHalfCircle.radians, Angle.right.radians, accuracy: 1e-6)
+        XCTAssertEqual(Angle.zero.normalizedHalfCircle.radians, Angle.zero.radians, accuracy: 1e-4)
+        XCTAssertEqual(Angle.right.normalizedHalfCircle.radians, Angle.right.radians, accuracy: 1e-4)
 
         // A half circle rotation in either direction should prefer the negative value.
-        XCTAssertEqual(Angle(degrees: -180).normalizedHalfCircle.degrees, -180, accuracy: 1e-6)
-        XCTAssertEqual(Angle(degrees: 180).normalizedHalfCircle.degrees, -180, accuracy: 1e-6)
+        XCTAssertEqual(Angle(degrees: -180).normalizedHalfCircle.degrees, -180, accuracy: 1e-4)
+        XCTAssertEqual(Angle(degrees: 180).normalizedHalfCircle.degrees, -180, accuracy: 1e-4)
 
         // Angles outside of the range should be normalized.
-        XCTAssertEqual(Angle(degrees: 270).normalizedHalfCircle.degrees, -90, accuracy: 1e-6)
-        XCTAssertEqual(Angle(degrees: -270).normalizedHalfCircle.degrees, 90, accuracy: 1e-6)
+        XCTAssertEqual(Angle(degrees: 270).normalizedHalfCircle.degrees, -90, accuracy: 1e-4)
+        XCTAssertEqual(Angle(degrees: -270).normalizedHalfCircle.degrees, 90, accuracy: 1e-4)
     }
 
 }
