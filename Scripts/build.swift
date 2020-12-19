@@ -2,7 +2,7 @@
 
 import Foundation
 
-// Usage: build.swift xcode <platform> [<path_to_xcpretty>]
+// Usage: build.swift <spm|xcode> <platform> [<path_to_xcpretty>]
 
 func execute(commandPath: String, arguments: [String], pipedTo pipeProcess: Process? = nil) throws {
 	let task = Process()
@@ -71,17 +71,13 @@ enum Platform: String, CustomStringConvertible {
 }
 
 enum Task: String, CustomStringConvertible {
+	case spm
 	case xcode
-
-	var workspace: String? {
-		switch self {
-		case .xcode:
-			return nil
-		}
-	}
 
 	var project: String? {
 		switch self {
+		case .spm:
+			return nil
 		case .xcode:
 			return "Paralayout.xcodeproj"
 		}
@@ -89,29 +85,19 @@ enum Task: String, CustomStringConvertible {
 
 	var scheme: String {
 		switch self {
+		case .spm:
+			return "Paralayout"
 		case .xcode:
 			return "ParalayoutStudio"
 		}
 	}
 
-	var configuration: String {
+	var configuration: String? {
 		switch self {
+		case .spm:
+			return nil
 		case .xcode:
 			return "Debug"
-		}
-	}
-
-	var shouldGenerateXcodeProject: Bool {
-		switch self {
-		case .xcode:
-			return false
-		}
-	}
-
-	var shouldRunTests: Bool {
-		switch self {
-		case .xcode:
-			return true
 		}
 	}
 
@@ -121,7 +107,7 @@ enum Task: String, CustomStringConvertible {
 }
 
 guard CommandLine.arguments.count > 2 else {
-	print("Usage: build.swift xcode <platform>")
+	print("Usage: build.swift [spm|xcode] <platform>")
 	throw TaskError.code(1)
 }
 
@@ -133,10 +119,6 @@ guard let task = Task(rawValue: rawTask) else {
 	throw TaskError.code(1)
 }
 
-if task.shouldGenerateXcodeProject {
-	try execute(commandPath: "/usr/bin/swift", arguments: ["package", "generate-xcodeproj", "--output=generated/"])
-}
-
 guard let platform = Platform(rawValue: rawPlatform) else {
 	print("Received unknown platform \"\(rawPlatform)\"")
 	throw TaskError.code(1)
@@ -144,12 +126,14 @@ guard let platform = Platform(rawValue: rawPlatform) else {
 
 var xcodeBuildArguments: [String] = []
 
-if let workspace = task.workspace {
-	xcodeBuildArguments.append("-workspace")
-	xcodeBuildArguments.append(workspace)
-} else if let project = task.project {
+if let project = task.project {
 	xcodeBuildArguments.append("-project")
 	xcodeBuildArguments.append(project)
+}
+
+if let configuration = task.configuration {
+	xcodeBuildArguments.append("-configuration")
+	xcodeBuildArguments.append(configuration)
 }
 
 xcodeBuildArguments.append(
@@ -158,16 +142,12 @@ xcodeBuildArguments.append(
 		"-sdk", "iphonesimulator",
 		"-PBXBuildsContinueAfterErrors=0",
 		"-destination", platform.destination,
-		"-configuration", task.configuration,
 		"-derivedDataPath", platform.derivedDataPath,
 		"ONLY_ACTIVE_ARCH=NO",
-		"build"
+		"build",
+		"test",
 	]
 )
-
-if task.shouldRunTests {
-	xcodeBuildArguments.append("test")
-}
 
 let xcpretty: Process?
 if CommandLine.arguments.count > 3 {
