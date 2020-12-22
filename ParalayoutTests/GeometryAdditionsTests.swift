@@ -19,21 +19,6 @@ import XCTest
 
 final class GeometryAdditionsTests: XCTestCase {
 
-    // MARK: - Private Types
-    
-    private enum Samples {
-        static let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        static let view = UIView()
-    }
-
-    // MARK: - XCTest
-    
-    override func setUp() {
-        super.setUp()
-
-        Samples.window.addSubview(Samples.view)
-    }
-
     // MARK: - Tests - Operators
     
     func testOffsetOperators() {
@@ -72,40 +57,6 @@ final class GeometryAdditionsTests: XCTestCase {
             CGPoint(x: 50, y: 20) - CGPoint(x: 40, y: 20),
             UIOffset(horizontal: 10, vertical: 0)
         )
-    }
-
-    // MARK: - Tests - Pixel Rounding
-    
-    func testPixelRounding() {
-        XCTAssert(CGFloat(1.75).floorToPixel(in: 0) == 1.75)
-        XCTAssert(CGFloat(1.75).floorToPixel(in: TestScreen.at1x) == 1)
-        XCTAssert(CGFloat(1.75).floorToPixel(in: TestScreen.at2x) == 1.5)
-        XCTAssert(CGFloat(1.75).floorToPixel(in: TestScreen.at3x) == CGFloat(2) - 1 / 3)
-        XCTAssert(CGFloat(-1.6).floorToPixel(in: TestScreen.at2x) == -2)
-        
-        XCTAssert(CGFloat(1.75).roundToPixel(in: 0) == 1.75)
-        XCTAssert(CGFloat(1.75).roundToPixel(in: TestScreen.at1x) == 2)
-        XCTAssert(CGFloat(1.75).roundToPixel(in: TestScreen.at2x) == 2)
-        XCTAssert(CGFloat(1.75).roundToPixel(in: TestScreen.at3x) == CGFloat(2) - 1 / 3)
-        XCTAssert(CGFloat(-1.6).roundToPixel(in: TestScreen.at3x) == CGFloat(-2) + 1 / 3)
-        
-        XCTAssert(CGFloat(1.25).ceilToPixel(in: 0) == 1.25)
-        XCTAssert(CGFloat(1.25).ceilToPixel(in: TestScreen.at1x) == 2)
-        XCTAssert(CGFloat(1.25).ceilToPixel(in: TestScreen.at2x) == 1.5)
-        XCTAssert(CGFloat(1.25).ceilToPixel(in: TestScreen.at3x) == CGFloat(1) + 1 / 3)
-        XCTAssert(CGFloat(-1.75).ceilToPixel(in: TestScreen.at2x) == -1.5)
-    }
-    
-    func testViewPixelRounding() {
-        // A view should inherit the scale factor of its parent screen.
-        for screen in screensToTest() {
-            Samples.window.screen = screen
-            XCTAssertEqual(Samples.view.pixelsPerPoint, screen.pixelsPerPoint)
-        }
-
-        // With no superview, the main screen's scale should be used.
-        Samples.view.removeFromSuperview()
-        XCTAssert(Samples.view.pixelsPerPoint == UIScreen.main.pixelsPerPoint)
     }
 
     // MARK: - Tests - CGPoint Extensions
@@ -206,19 +157,6 @@ final class GeometryAdditionsTests: XCTestCase {
         
         XCTAssert(sample.slice(from: .maxYEdge, amount: 100) == (sample,
                                                                  CGRect(x:  0,   y:  0, width: 100, height:   0)))
-    }
-
-    // MARK: - Private Methods
-
-    private func screensToTest() -> [UIScreen] {
-        if #available(iOS 13, *) {
-            // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
-            // multiple screens (FB8674601).
-            return [.main]
-
-        } else {
-            return TestScreen.all
-        }
     }
     
 }
