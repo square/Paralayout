@@ -59,30 +59,31 @@ extension UIView {
         public static let maxSize: SizingConstraints = [ maxWidth, maxHeight ]
         public static let wrap: SizingConstraints = [ fixedWidth, maxHeight ]
 
-        // MARK: - Public Methods
+        // MARK: - Internal Methods
         
         /// Apply the constraints to a given size.
-        /// - parameter size: The size to constrain.
+        /// - parameter sizeThatFits: The size to which the constraints should be applied.
+        /// - parameter sizeToFit: The size with which to constrain the `sizeThatFits`.
         /// - returns: A size with the receiver's constraints applied.
-        public func apply(_ size: CGSize) -> CGSize {
-            var constrainedSize = size
+        func apply(sizeThatFits: CGSize, sizeToFit: CGSize) -> CGSize {
+            var constrainedSize = sizeThatFits
             
             if contains(.minWidth) {
-                assert(size.width < CGFloat.greatestFiniteMagnitude, "Can't use CGFloat.max with minWidth!")
-                constrainedSize.width = max(constrainedSize.width, size.width)
+                assert(sizeToFit.width < CGFloat.greatestFiniteMagnitude, "Can't use CGFloat.max with minWidth!")
+                constrainedSize.width = max(constrainedSize.width, sizeToFit.width)
             }
             
             if contains(.maxWidth) {
-                constrainedSize.width = min(constrainedSize.width, size.width)
+                constrainedSize.width = min(constrainedSize.width, sizeToFit.width)
             }
             
             if contains(.minHeight) {
-                assert(size.height < CGFloat.greatestFiniteMagnitude, "Can't use CGFloat.max with minHeight!")
-                constrainedSize.height = max(constrainedSize.height, size.height)
+                assert(sizeToFit.height < CGFloat.greatestFiniteMagnitude, "Can't use CGFloat.max with minHeight!")
+                constrainedSize.height = max(constrainedSize.height, sizeToFit.height)
             }
             
             if contains(.maxHeight) {
-                constrainedSize.height = min(constrainedSize.height, size.height)
+                constrainedSize.height = min(constrainedSize.height, sizeToFit.height)
             }
             
             return constrainedSize
@@ -97,7 +98,7 @@ extension UIView {
     /// - parameter constraints: Limits on the returned size (optional, defaults to `.none`).
     /// - returns: A size for the receiver's `frame` that best fits its content.
     public func frameSize(thatFits size: CGSize, constraints: SizingConstraints = .none) -> CGSize {
-        return constraints.apply(sizeThatFits(size))
+        return constraints.apply(sizeThatFits: sizeThatFits(size), sizeToFit: size)
     }
     
     /// The frame size that "best" fits the supplied bounding size, with constraints applied.

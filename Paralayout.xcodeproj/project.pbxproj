@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3D5DC537258C0B4B005BFBC1 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC536258C0B4B005BFBC1 /* Angle.swift */; };
 		3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC53C258C110F005BFBC1 /* AngleTests.swift */; };
+		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5EE80620701F2300B767FA /* LabelTests.swift */; };
 		D031F4781EDE066F008EC23D /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D031F4771EDE066F008EC23D /* SampleView.swift */; };
 		D049FD841ECA7BC4009BEF98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */; };
@@ -67,6 +68,7 @@
 /* Begin PBXFileReference section */
 		3D5DC536258C0B4B005BFBC1 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		3D5DC53C258C110F005BFBC1 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
+		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5EE80620701F2300B767FA /* LabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTests.swift; sourceTree = "<group>"; };
 		D031F4771EDE066F008EC23D /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SampleView.swift; path = ../ParalayoutStudio/SampleView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D049FD801ECA7BC4009BEF98 /* ParalayoutStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParalayoutStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +199,7 @@
 				D0624FCF1EE1D47500076663 /* AspectRatioTests.swift */,
 				D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */,
 				3D5EE80620701F2300B767FA /* LabelTests.swift */,
+				3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */,
 				D0624FD31EE214DA00076663 /* TestSamples.swift */,
 				D0624FC81EDFA1AE00076663 /* Info.plist */,
 			);
@@ -380,6 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */,
 				D0624FC71EDFA1AE00076663 /* GeometryAdditionsTests.swift in Sources */,
 				3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */,
 				D0624FD41EE214DA00076663 /* TestSamples.swift in Sources */,
