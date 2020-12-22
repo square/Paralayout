@@ -10,22 +10,24 @@ jobs:
   xcode-build:
     name: Xcode Build
     runs-on: macOS-latest
+    strategy:
+      matrix:
+        platform: ['iOS_14', 'iOS_13', 'iOS_12']
+      fail-fast: false
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Select Xcode Version
+      - name: Select Xcode Version (12.2)
+        run: sudo xcode-select --switch /Applications/Xcode_12.2.app/Contents/Developer
+        if: matrix.platform == 'iOS_13'
+      - name: Select Xcode Version (11.6)
         run: sudo xcode-select --switch /Applications/Xcode_11.6.app/Contents/Developer
+        if: matrix.platform == 'iOS_13'
+      - name: Select Xcode Version (10.3)
+        run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
+        if: matrix.platform == 'iOS_12'
       - name: Build and Test
-        run: |
-          xcrun xcodebuild \
-            -project Paralayout.xcodeproj \
-            -scheme "ParalayoutStudio" \
-            -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,OS=13.6,name=iPhone 11 Pro" \
-            -configuration Debug \
-            -PBXBuildsContinueAfterErrors=0 \
-            ACTIVE_ARCH_ONLY=0 \
-            build test
+        run: Scripts/build.swift xcode ${{ matrix.platform }} `which xcpretty`
   pod-lint:
     name: Lint Pod
     runs-on: macOS-latest

@@ -15,8 +15,7 @@ Paralayout is a set of simple, useful, and straightforward utilities that enable
 
 Integrating Paralayout into your iOS project via [CocoaPods](http://cocoapods.org) is simple:
 
-```
-platform :ios, '9.0'
+```ruby
 pod 'Paralayout'
 ```
 
@@ -156,8 +155,9 @@ Fixing layout issues is as simple as using the Xcode debugger. Remember that on 
 
 ## Requirements
 
-* Xcode 10 / Swift 4.2
-* iOS 9.0 or later
+* iOS 12.0 or later
+* Xcode 10.0 or later
+* Swift 5.0
 
 
 ## Contributing
