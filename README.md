@@ -19,6 +19,15 @@ Integrating Paralayout into your iOS project via [CocoaPods](http://cocoapods.or
 pod 'Paralayout'
 ```
 
+### Swift Package Manager
+
+Installing Paralayout via [Swift Package Manager](https://swift.org/package-manager/) by adding the following to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(name: "Paralayout", url: "https://github.com/square/Paralayout.git", from: "1.0.0"),
+]
+```
 
 ### Carthage
 
@@ -38,7 +47,6 @@ github "Square/Paralayout"
 ```
 
 Run `carthage` to build the framework and drag the built `Paralayout.framework` into your Xcode project.
-
 
 ### Submodules
 
