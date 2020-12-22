@@ -191,7 +191,7 @@ extension CGSize {
 extension CGPoint {
 
     /// Create a point between two other points.
-    public init(midpoint point1: CGPoint, _ point2: CGPoint) {
+    public init(midpointBetween point1: CGPoint, and point2: CGPoint) {
         self = CGPoint(
             x: (point1.x + point2.x) / 2.0,
             y: (point1.y + point2.y) / 2.0

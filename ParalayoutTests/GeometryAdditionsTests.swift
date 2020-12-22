@@ -112,12 +112,21 @@ final class GeometryAdditionsTests: XCTestCase {
 
     func testMidpoint() {
         // The midpoint between two of the same point should be that point.
-        XCTAssertEqual(CGPoint(midpoint: .zero, .zero), .zero)
-        XCTAssertEqual(CGPoint(midpoint: .init(x: 20, y: 40), .init(x: 20, y: 40)), .init(x: 20, y: 40))
+        XCTAssertEqual(CGPoint(midpointBetween: .zero, and: .zero), .zero)
+        XCTAssertEqual(CGPoint(midpointBetween: .init(x: 20, y: 40), and: .init(x: 20, y: 40)), .init(x: 20, y: 40))
 
-        XCTAssertEqual(CGPoint(midpoint: .init(x: 20, y: 30), .init(x: 10, y: 70)), .init(x: 15, y: 50))
-        XCTAssertEqual(CGPoint(midpoint: .init(x: -20, y: 30), .init(x: 10, y: -70)), .init(x: -5, y: -20))
-        XCTAssertEqual(CGPoint(midpoint: .init(x: -20, y: -30), .init(x: -10, y: -70)), .init(x: -15, y: -50))
+        XCTAssertEqual(
+            CGPoint(midpointBetween: .init(x: 20, y: 30), and: .init(x: 10, y: 70)),
+            .init(x: 15, y: 50)
+        )
+        XCTAssertEqual(
+            CGPoint(midpointBetween: .init(x: -20, y: 30), and: .init(x: 10, y: -70)),
+            .init(x: -5, y: -20)
+        )
+        XCTAssertEqual(
+            CGPoint(midpointBetween: .init(x: -20, y: -30), and: .init(x: -10, y: -70)),
+            .init(x: -15, y: -50)
+        )
     }
 
     func testDistanceBetweenPoints() {
