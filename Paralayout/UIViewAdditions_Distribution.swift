@@ -508,7 +508,7 @@ extension UIView : ViewDistributionSpecifying {
     /// Size and position subviews to equally take up all horizontal space.
     /// - parameter subviews: The subviews to lay out.
     /// - parameter axis: The direction of layout.
-    /// - parameter margin: The space between each subview, e.g. the receiving view's `.hairlineWidth`.
+    /// - parameter margin: The space between each subview.
     /// - parameter bounds: A custom area within which to layout the subviews, or `nil` to use the receiver's `bounds`
     /// (optional, defaults to `nil`).
     /// - parameter sizeToBounds: If `true`, also set the size of the subviews orthogonal to `axis` to match the size of

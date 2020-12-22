@@ -17,7 +17,6 @@
 		D0624F781EDF8C3F00076663 /* Paralayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0624F711EDF8C3F00076663 /* Paralayout.framework */; };
 		D0624F791EDF8C3F00076663 /* Paralayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0624F711EDF8C3F00076663 /* Paralayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0624F7E1EDF8EE600076663 /* AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090C81ECB9CFC0077F3F6 /* AspectRatio.swift */; };
-		D0624F7F1EDF8EE600076663 /* Hairline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090D21ECE29AF0077F3F6 /* Hairline.swift */; };
 		D0624F801EDF8EE600076663 /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090C61ECB95620077F3F6 /* Interpolation.swift */; };
 		D0624F811EDF8EE600076663 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E090D01ECCD3EC0077F3F6 /* Label.swift */; };
 		D0624F821EDF8EE600076663 /* GeometryAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FDA31ECA7C89009BEF98 /* GeometryAdditions.swift */; };
@@ -31,7 +30,6 @@
 		D0624FC71EDFA1AE00076663 /* GeometryAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */; };
 		D0624FC91EDFA1AE00076663 /* Paralayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0624F711EDF8C3F00076663 /* Paralayout.framework */; };
 		D0624FD01EE1D47500076663 /* AspectRatioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0624FCF1EE1D47500076663 /* AspectRatioTests.swift */; };
-		D0624FD21EE2146500076663 /* HairlineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0624FD11EE2146500076663 /* HairlineTests.swift */; };
 		D0624FD41EE214DA00076663 /* TestSamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0624FD31EE214DA00076663 /* TestSamples.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,7 +84,6 @@
 		D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryAdditionsTests.swift; sourceTree = "<group>"; };
 		D0624FC81EDFA1AE00076663 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0624FCF1EE1D47500076663 /* AspectRatioTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AspectRatioTests.swift; sourceTree = "<group>"; };
-		D0624FD11EE2146500076663 /* HairlineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HairlineTests.swift; sourceTree = "<group>"; };
 		D0624FD31EE214DA00076663 /* TestSamples.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSamples.swift; sourceTree = "<group>"; };
 		D0E090C41ECA7D260077F3F6 /* UIViewAdditions_Alignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UIViewAdditions_Alignment.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D0E090C61ECB95620077F3F6 /* Interpolation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Interpolation.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -95,7 +92,6 @@
 		D0E090CC1ECBB3510077F3F6 /* UIFontAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UIFontAdditions.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UIViewAdditions_Distribution.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D0E090D01ECCD3EC0077F3F6 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
-		D0E090D21ECE29AF0077F3F6 /* Hairline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hairline.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +126,6 @@
 			children = (
 				3D5DC536258C0B4B005BFBC1 /* Angle.swift */,
 				D0E090C81ECB9CFC0077F3F6 /* AspectRatio.swift */,
-				D0E090D21ECE29AF0077F3F6 /* Hairline.swift */,
 				D0E090C61ECB95620077F3F6 /* Interpolation.swift */,
 				D0E090D01ECCD3EC0077F3F6 /* Label.swift */,
 				D031F4761EDE0587008EC23D /* Categories */,
@@ -200,7 +195,6 @@
 			children = (
 				3D5DC53C258C110F005BFBC1 /* AngleTests.swift */,
 				D0624FCF1EE1D47500076663 /* AspectRatioTests.swift */,
-				D0624FD11EE2146500076663 /* HairlineTests.swift */,
 				D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */,
 				3D5EE80620701F2300B767FA /* LabelTests.swift */,
 				D0624FD31EE214DA00076663 /* TestSamples.swift */,
@@ -372,7 +366,6 @@
 			files = (
 				D0624F7E1EDF8EE600076663 /* AspectRatio.swift in Sources */,
 				3D5DC537258C0B4B005BFBC1 /* Angle.swift in Sources */,
-				D0624F7F1EDF8EE600076663 /* Hairline.swift in Sources */,
 				D0624F801EDF8EE600076663 /* Interpolation.swift in Sources */,
 				D0624F811EDF8EE600076663 /* Label.swift in Sources */,
 				D0624F821EDF8EE600076663 /* GeometryAdditions.swift in Sources */,
@@ -391,7 +384,6 @@
 				3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */,
 				D0624FD41EE214DA00076663 /* TestSamples.swift in Sources */,
 				D0624FD01EE1D47500076663 /* AspectRatioTests.swift in Sources */,
-				D0624FD21EE2146500076663 /* HairlineTests.swift in Sources */,
 				3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
