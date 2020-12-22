@@ -188,6 +188,25 @@ extension CGSize {
 
 // MARK: -
 
+extension CGPoint {
+
+    /// Create a point between two other points.
+    public init(midpointBetween point1: CGPoint, and point2: CGPoint) {
+        self = CGPoint(
+            x: (point1.x + point2.x) / 2.0,
+            y: (point1.y + point2.y) / 2.0
+        )
+    }
+
+    /// Returns the straight-line distance to another point.
+    public func distance(to point: CGPoint) -> CGFloat {
+        return hypot(point.y - y, point.x - x)
+    }
+
+}
+
+// MARK: -
+
 extension CGRect {
     
     /// Initialize a CGRect with bounding coordinates (always with non-negative size).
