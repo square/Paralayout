@@ -95,6 +95,28 @@ final class GeometryAdditionsTests: XCTestCase {
         XCTAssertEqual(CGPoint(x: 10, y: 10).distance(to: .init(x: 11, y: 11)), sqrt(2), accuracy: 1e-10)
     }
 
+    // MARK: - Tests - CGSize Extensions
+
+    func testSizeOfGreatestFiniteMagnitude() {
+        let size = CGSize.greatestFiniteMagnitude
+        XCTAssertEqual(size.width, .greatestFiniteMagnitude)
+        XCTAssertEqual(size.height, .greatestFiniteMagnitude)
+    }
+
+    func testScalingSize() {
+        // A zero size scaled by anything should still be zero.
+        XCTAssertEqual(CGSize.zero * 100, .zero)
+
+        // Any size scaled by 1 should be the same size.
+        XCTAssertEqual(CGSize(width: 300, height: 200) * 1, CGSize(width: 300, height: 200))
+        XCTAssertEqual(CGSize(width: 0, height: 100) * 1, CGSize(width: 0, height: 100))
+
+        XCTAssertEqual(CGSize(width: 300, height: 200) * 2.5, CGSize(width: 750, height: 500))
+        XCTAssertEqual(CGSize(width: 0, height: 200) * 2.5, CGSize(width: 0, height: 500))
+        XCTAssertEqual(CGSize(width: 300, height: 0) * 2.5, CGSize(width: 750, height: 0))
+        XCTAssertEqual(CGSize(width: 300, height: 200) * -2.5, CGSize(width: -750, height: -500))
+    }
+
     // MARK: - Tests - CGRect Extensions
     
     func testCGRectCreation() {

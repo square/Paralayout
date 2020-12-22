@@ -69,6 +69,25 @@ extension CGPoint {
 
 // MARK: -
 
+extension CGSize {
+
+    // MARK: - Public Static Properties
+
+    public static let greatestFiniteMagnitude: CGSize = .init(
+        width: CGFloat.greatestFiniteMagnitude,
+        height: CGFloat.greatestFiniteMagnitude
+    )
+
+    // MARK: - Operators
+
+    public static func * (lhs: CGSize, rhs: CGFloat) -> CGSize {
+        return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
+    }
+
+}
+
+// MARK: -
+
 extension CGRect {
     
     /// Initialize a CGRect with bounding coordinates (always with non-negative size).
