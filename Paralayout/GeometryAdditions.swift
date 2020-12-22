@@ -90,32 +90,6 @@ extension CGRect {
         return inset(by: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
     
-    /// Outsets the rect, if necessary, to snap to the nearest pixel at the specified scale.
-    /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
-    /// snap to pixel).
-    /// - returns: A new rect with pixel-aligned boundaries, enclosing the original rect.
-    public func expandToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
-        return CGRect(
-            left: minX.floorToPixel(in: scaleFactor),
-            top: minY.floorToPixel(in: scaleFactor),
-            right: maxX.ceilToPixel(in: scaleFactor),
-            bottom: maxY.ceilToPixel(in: scaleFactor)
-        )
-    }
-    
-    /// Insets the rect, if necessary, to snap to the nearest pixel at the specified scale.
-    /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
-    /// snap to pixel).
-    /// - returns: A new rect with pixel-aligned boundaries, enclosed by the original rect.
-    public func contractToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
-        return CGRect(
-            left: minX.ceilToPixel(in: scaleFactor),
-            top: minY.ceilToPixel(in: scaleFactor),
-            right: maxX.floorToPixel(in: scaleFactor),
-            bottom: maxY.floorToPixel(in: scaleFactor)
-        )
-    }
-    
     /// Divides the receiver in two.
     /// - parameter from: The edge from which the amount is interpreted.
     /// - parameter amount: The size of the slice (absolute).

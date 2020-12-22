@@ -113,16 +113,6 @@ final class GeometryAdditionsTests: XCTestCase {
             CGRect(x: 10, y: 10, width: 40, height: 40).inset(by: UIEdgeInsets(top: 10, left: 5, bottom: 15, right: 0)),
             CGRect(x: 15, y: 20, width: 35, height: 15)
         )
-        
-        // CGRect.expandToPixel
-        XCTAssertEqual(
-            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandToPixel(TestScreen.at2x),
-            CGRect(left: 10.5, top: 10.0, right: 51, bottom: 51)
-        )
-        XCTAssertEqual(
-            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).expandToPixel(TestScreen.at3x),
-            CGRect(left: CGFloat(10) + 2 / 3, top: CGFloat(10) + 1 / 3, right: CGFloat(50) + 2 / 3, bottom: 51)
-        )
     }
     
     func testCGRectSlice() {
