@@ -98,20 +98,57 @@ final class GeometryAdditionsTests: XCTestCase {
     // MARK: - Tests - CGRect Extensions
     
     func testCGRectCreation() {
-        // CGRect(left:top:right:bottom:)
-        XCTAssert(CGRect(left: 10, top: 10, right: 50, bottom: 50) == CGRect(x: 10, y: 10, width: 40, height: 40))
-        XCTAssert(CGRect(left: 50, top: 50, right: 10, bottom: 10) == CGRect(x: 10, y: 10, width: 40, height: 40))
-        
+        XCTAssertEqual(CGRect(left: 10, top: 10, right: 50, bottom: 50), CGRect(x: 10, y: 10, width: 40, height: 40))
+        XCTAssertEqual(CGRect(left: 50, top: 50, right: 10, bottom: 10), CGRect(x: 10, y: 10, width: 40, height: 40))
+    }
+
+    func testCGRectInset() {
         // CGRect.inset(left:top:right:bottom:)
         XCTAssertEqual(
             CGRect(x: 10, y: 10, width: 40, height: 40).inset(left: 5, top: 10, right: 0, bottom: 15),
             CGRect(x: 15, y: 20, width: 35, height: 15)
         )
-        
-        // CGRect.inset(by:)
         XCTAssertEqual(
-            CGRect(x: 10, y: 10, width: 40, height: 40).inset(by: UIEdgeInsets(top: 10, left: 5, bottom: 15, right: 0)),
-            CGRect(x: 15, y: 20, width: 35, height: 15)
+            CGRect(x: 10, y: 10, width: 40, height: 40).inset(top: 10),
+            CGRect(x: 10, y: 20, width: 40, height: 30)
+        )
+        XCTAssertEqual(
+            CGRect(x: 10, y: 10, width: 40, height: 40).inset(left: -10),
+            CGRect(x: 0, y: 10, width: 50, height: 40)
+        )
+
+        // CGRect.inset(allSides:)
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).inset(allSides: 5),
+            CGRect(x: 15, y: 25, width: 20, height: 30)
+        )
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).inset(allSides: -5),
+            CGRect(x: 5, y: 15, width: 40, height: 50)
+        )
+
+        // CGRect.inset(horizontal:vertical:)
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).inset(horizontal: 4, vertical: 5),
+            CGRect(x: 14, y: 25, width: 22, height: 30)
+        )
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).inset(horizontal: -4),
+            CGRect(x: 6, y: 20, width: 38, height: 40)
+        )
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).inset(vertical: -4),
+            CGRect(x: 10, y: 16, width: 30, height: 48)
+        )
+
+        // CGRect.outset(by:)
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).outset(by: .init(top: 1, left: 2, bottom: 3, right: 4)),
+            CGRect(x: 8, y: 19, width: 36, height: 44)
+        )
+        XCTAssertEqual(
+            CGRect(x: 10, y: 20, width: 30, height: 40).outset(by: .zero),
+            CGRect(x: 10, y: 20, width: 30, height: 40)
         )
     }
     

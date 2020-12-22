@@ -89,6 +89,38 @@ extension CGRect {
     public func inset(left: CGFloat = 0.0, top: CGFloat = 0.0, right: CGFloat = 0.0, bottom: CGFloat = 0.0) -> CGRect {
         return inset(by: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
+
+    /// Insets the rect equally on all sides.
+    /// - parameter inset: The amount by which to contract each edge of the receiver.
+    /// - returns: A new rect with the inset applied.
+    public func inset(allSides inset: CGFloat) -> CGRect {
+        return insetBy(dx: inset, dy: inset)
+    }
+
+    /// Insets the rect horizontally and/or vertically.
+    /// - parameter horizontal: The inset to apply to the left and right edges. Defaults to `0`.
+    /// - parameter vertical: The inset to apply to the top and bottom edges. Defaults to `0`.
+    /// - returns: A new rect with the inset(s) applied.
+    public func inset(horizontal dx: CGFloat = 0.0, vertical dy: CGFloat = 0.0) -> CGRect {
+        return insetBy(dx: dx, dy: dy)
+    }
+
+    /// Add additional padding to the outside of the receiver.
+    ///
+    /// This is the inverse of the `inset(by:)` method.
+    ///
+    /// - parameter insets: The amount by which to expand each edge of the receiver.
+    /// - returns: A new rect with the outset applied.
+    public func outset(by insets: UIEdgeInsets) -> CGRect {
+        let outsets = UIEdgeInsets(
+            top: -insets.top,
+            left: -insets.left,
+            bottom: -insets.bottom,
+            right: -insets.right
+        )
+
+        return inset(by: outsets)
+    }
     
     /// Divides the receiver in two.
     /// - parameter from: The edge from which the amount is interpreted.
