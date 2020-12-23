@@ -321,7 +321,7 @@ extension UIView {
     /// - returns: A size for the view's *alignment* bounds, suitable for use in a superview's `sizeThatFits()`
     /// implementation.
     public func contentSize(thatFits size: CGSize, constraints: SizingConstraints = .none) -> CGSize {
-        let sizeThatFits = frameSize(thatFits: size, constraints: constraints)
+        let sizeThatFits = self.sizeThatFits(size, constraints: constraints)
         
         if let insets = (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets {
             return CGSize(

@@ -131,12 +131,12 @@ class SampleView: UIView {
     private func labelSizesThatFit(_ size: CGSize) -> (CGSize, CGSize) {
         // The title is vertically unconstrained.
         let textWidth = max(0, size.width - 2 * Metrics.contentMargin)
-        let titleLabelSize = titleLabel.frameSize(thatFitsWidth: textWidth, height: size.height, constraints: .wrap)
+        let titleLabelSize = titleLabel.sizeThatFits(width: textWidth, height: size.height, constraints: .wrap)
         
         // The subtext needs to fit in the space that remains. Take into account text heights.
         let titleLabelLayoutHeight = titleLabelSize.height - titleLabel.verticalAlignmentInset
         let verticalSpaceForSubtextLabel = size.height - heightForContentExcludingAllText - titleLabelLayoutHeight + subtextLabel.verticalAlignmentInset
-        let subtextLabelSize = subtextLabel.frameSize(thatFitsWidth: textWidth, height: verticalSpaceForSubtextLabel, constraints: .wrap)
+        let subtextLabelSize = subtextLabel.sizeThatFits(width: textWidth, height: verticalSpaceForSubtextLabel, constraints: .wrap)
         
         return (titleLabelSize, subtextLabelSize)
     }

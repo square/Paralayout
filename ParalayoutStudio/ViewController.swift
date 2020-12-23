@@ -125,7 +125,7 @@ class ViewController: UIViewController {
         }
         
         // Size the sample into the container with a hairline inset (so the border doesn't overlap it).
-        sampleView.resize(toFit: containerView.bounds.insetBy(dx: hairlineWidth, dy: hairlineWidth).size)
+        sampleView.sizeToFit(containerView.bounds.insetBy(dx: hairlineWidth, dy: hairlineWidth).size)
         sampleView.alignToSuperview(.center)
         
         // Lay out the toggle and slider.
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
         toggle.sizeToFit()
         toggle.alignToSuperview(.bottomLeft, inset: optionControlMargin)
         
-        slider.resize(toFitWidth: view.bounds.width - (toggle.frame.width + 3 * optionControlMargin))
+        slider.sizeToFit(width: view.bounds.width - (toggle.frame.width + 3 * optionControlMargin))
         slider.align(.leftCenter, with: toggle, .rightCenter, horizontalOffset: optionControlMargin)
     }
     

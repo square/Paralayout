@@ -1,9 +1,17 @@
 //
-//  UIViewSizingTests.swift
-//  ParalayoutTests
+//  Copyright © 2020 Square, Inc.
 //
-//  Created by Nicholas Entin on 7/27/20.
-//  Copyright © 2020 Square, Inc. All rights reserved.
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import Paralayout
@@ -13,68 +21,68 @@ final class UIViewSizingTests: XCTestCase {
 
     // MARK: - Tests
 
-    func testFrameSizeWithNoConstraints() {
+    func testSizeThatFitsWithNoConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
         XCTAssertEqual(
-            testView.frameSize(thatFits: .zero),
+            testView.sizeThatFits(.zero),
             .init(width: 300, height: 200)
         )
     }
 
-    func testFrameSizeWithMaxWidthConstraints() {
+    func testSizeThatFitsWithMaxWidthConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
         XCTAssertEqual(
-            testView.frameSize(thatFits: .init(width: 150, height: 100), constraints: .maxWidth),
+            testView.sizeThatFits(.init(width: 150, height: 100), constraints: .maxWidth),
             .init(width: 150, height: 200)
         )
     }
 
-    func testFrameSizeWithMaxHeightConstraints() {
+    func testSizeThatFitsWithMaxHeightConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
         XCTAssertEqual(
-            testView.frameSize(thatFits: .init(width: 150, height: 100), constraints: .maxHeight),
+            testView.sizeThatFits(.init(width: 150, height: 100), constraints: .maxHeight),
             .init(width: 300, height: 100)
         )
     }
 
-    func testFrameSizeWithMaxSizeConstraints() {
+    func testSizeThatFitsWithMaxSizeConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
         XCTAssertEqual(
-            testView.frameSize(thatFits: .init(width: 150, height: 100), constraints: .maxSize),
+            testView.sizeThatFits(.init(width: 150, height: 100), constraints: .maxSize),
             .init(width: 150, height: 100)
         )
     }
 
-    func testFrameSizeWithMinWidthConstraints() {
+    func testSizeThatFitsWithMinWidthConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
         XCTAssertEqual(
-            testView.frameSize(thatFits: .init(width: 500, height: 400), constraints: .minWidth),
+            testView.sizeThatFits(.init(width: 500, height: 400), constraints: .minWidth),
             .init(width: 500, height: 200)
         )
     }
 
-    func testFrameSizeWithMinHeightConstraints() {
+    func testSizeThatFitsWithMinHeightConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
         XCTAssertEqual(
-            testView.frameSize(thatFits: .init(width: 500, height: 400), constraints: .minHeight),
+            testView.sizeThatFits(.init(width: 500, height: 400), constraints: .minHeight),
             .init(width: 300, height: 400)
         )
     }
 
-    func testFrameSizeWithMinSizeConstraints() {
-           let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
+    func testSizeThatFitsWithMinSizeConstraints() {
+        let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
-           XCTAssertEqual(
-               testView.frameSize(thatFits: .init(width: 500, height: 400), constraints: .minSize),
-               .init(width: 500, height: 400)
-           )
-       }
+        XCTAssertEqual(
+            testView.sizeThatFits(.init(width: 500, height: 400), constraints: .minSize),
+            .init(width: 500, height: 400)
+        )
+    }
 
 }
 
