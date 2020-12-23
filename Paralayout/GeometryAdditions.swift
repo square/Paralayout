@@ -223,3 +223,49 @@ extension UIEdgeInsets {
     }
 
 }
+
+// MARK: -
+
+extension NSDirectionalEdgeInsets {
+
+    /// Initialize edge insets with the same amount inset on each side.
+    ///
+    /// - parameter inset: The amount by which to inset each edge.
+    public init(uniform inset: CGFloat) {
+        self.init(top: inset, leading: inset, bottom: inset, trailing: inset)
+    }
+
+    /// Initialize edge insets with the same amount outset on each edge.
+    ///
+    /// This is the inverse of `init(uniform:)`.
+    ///
+    /// - parameter outset: The amount by which to outset each side.
+    public init(uniformOutset outset: CGFloat) {
+        self.init(uniform: -outset)
+    }
+
+    /// Initialize edge insets with `vertical` insets on the top and bottom edges and `horizontal` insets on the leading
+    /// and trailing edges.
+    ///
+    /// - parameter vertical: The amount by which to inset the top and bottom edges.
+    /// - parameter horizontal: The amount by which to inset the leading and trailing edges.
+    public init(vertical: CGFloat, horizontal: CGFloat) {
+        self.init(
+            top: vertical,
+            leading: horizontal,
+            bottom: vertical,
+            trailing: horizontal
+        )
+    }
+
+    /// The combined top and bottom insets.
+    public var verticalAmount: CGFloat {
+        return top + bottom
+    }
+
+    /// The combined leading and trailing insets.
+    public var horizontalAmount: CGFloat {
+        return leading + trailing
+    }
+
+}
