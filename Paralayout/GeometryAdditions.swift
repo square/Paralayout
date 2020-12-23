@@ -181,7 +181,37 @@ extension CGRect {
 // MARK: -
 
 extension UIEdgeInsets {
-    
+
+    /// Initialize edge insets with the same amount inset on each edge.
+    ///
+    /// - parameter inset: The amount by which to inset each edge.
+    public init(uniform inset: CGFloat) {
+        self.init(top: inset, left: inset, bottom: inset, right: inset)
+    }
+
+    /// Initialize edge insets with the same amount outset on each edge.
+    ///
+    /// This is the inverse of `init(uniform:)`.
+    ///
+    /// - parameter outset: The amount by which to outset each edge.
+    public init(uniformOutset outset: CGFloat) {
+        self.init(uniform: -outset)
+    }
+
+    /// Initialize edge insets with `vertical` insets on the top and bottom edges and `horizontal` insets on the left
+    /// and right edges.
+    ///
+    /// - parameter vertical: The amount by which to inset the top and bottom edges.
+    /// - parameter horizontal: The amount by which to inset the left and right edges.
+    public init(vertical: CGFloat, horizontal: CGFloat) {
+        self.init(
+            top: vertical,
+            left: horizontal,
+            bottom: vertical,
+            right: horizontal
+        )
+    }
+
     /// The combined top and bottom insets.
     public var verticalAmount: CGFloat {
         return top + bottom
