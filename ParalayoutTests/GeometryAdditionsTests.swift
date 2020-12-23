@@ -103,17 +103,17 @@ final class GeometryAdditionsTests: XCTestCase {
     }
 
     func testCGRectInset() {
-        // CGRect.inset(left:top:right:bottom:)
+        // CGRect.insetBy(left:top:right:bottom:)
         XCTAssertEqual(
-            CGRect(x: 10, y: 10, width: 40, height: 40).inset(left: 5, top: 10, right: 0, bottom: 15),
+            CGRect(x: 10, y: 10, width: 40, height: 40).insetBy(left: 5, top: 10, right: 0, bottom: 15),
             CGRect(x: 15, y: 20, width: 35, height: 15)
         )
         XCTAssertEqual(
-            CGRect(x: 10, y: 10, width: 40, height: 40).inset(top: 10),
+            CGRect(x: 10, y: 10, width: 40, height: 40).insetBy(top: 10),
             CGRect(x: 10, y: 20, width: 40, height: 30)
         )
         XCTAssertEqual(
-            CGRect(x: 10, y: 10, width: 40, height: 40).inset(left: -10),
+            CGRect(x: 10, y: 10, width: 40, height: 40).insetBy(left: -10),
             CGRect(x: 0, y: 10, width: 50, height: 40)
         )
 

@@ -153,10 +153,12 @@ class ViewController: UIViewController {
     // MARK: - Private Properties & Methods
     
     private var maximumContainerFrame: CGRect {
-        return view.bounds.inset(left: Metrics.controlSize.width,
-                                 top: 20 + Metrics.controlSize.height,
-                                 right: Metrics.controlSize.width,
-                                 bottom: Metrics.controlSize.height + 40)
+        return view.bounds.insetBy(
+            left: Metrics.controlSize.width,
+            top: 20 + Metrics.controlSize.height,
+            right: Metrics.controlSize.width,
+            bottom: Metrics.controlSize.height + 40
+        )
     }
     
     fileprivate func dragBegan(_ touches: Set<UITouch>) {

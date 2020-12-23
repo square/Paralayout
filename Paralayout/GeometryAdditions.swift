@@ -86,7 +86,7 @@ extension CGRect {
     /// - parameter right: The inset to apply to the right edge (optional, defaults to 0).
     /// - parameter bottom: The inset to apply to the bottom edge (optional, defaults to 0).
     /// - returns: A new rect inset by the specified amount(s).
-    public func inset(left: CGFloat = 0.0, top: CGFloat = 0.0, right: CGFloat = 0.0, bottom: CGFloat = 0.0) -> CGRect {
+    public func insetBy(left: CGFloat = 0.0, top: CGFloat = 0.0, right: CGFloat = 0.0, bottom: CGFloat = 0.0) -> CGRect {
         return inset(by: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
 
