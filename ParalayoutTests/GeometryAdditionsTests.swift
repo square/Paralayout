@@ -127,20 +127,6 @@ final class GeometryAdditionsTests: XCTestCase {
             CGRect(x: 5, y: 15, width: 40, height: 50)
         )
 
-        // CGRect.inset(horizontal:vertical:)
-        XCTAssertEqual(
-            CGRect(x: 10, y: 20, width: 30, height: 40).inset(horizontal: 4, vertical: 5),
-            CGRect(x: 14, y: 25, width: 22, height: 30)
-        )
-        XCTAssertEqual(
-            CGRect(x: 10, y: 20, width: 30, height: 40).inset(horizontal: -4),
-            CGRect(x: 6, y: 20, width: 38, height: 40)
-        )
-        XCTAssertEqual(
-            CGRect(x: 10, y: 20, width: 30, height: 40).inset(vertical: -4),
-            CGRect(x: 10, y: 16, width: 30, height: 48)
-        )
-
         // CGRect.outset(by:)
         XCTAssertEqual(
             CGRect(x: 10, y: 20, width: 30, height: 40).outset(by: .init(top: 1, left: 2, bottom: 3, right: 4)),

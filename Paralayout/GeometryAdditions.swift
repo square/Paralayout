@@ -97,14 +97,6 @@ extension CGRect {
         return insetBy(dx: inset, dy: inset)
     }
 
-    /// Insets the rect horizontally and/or vertically.
-    /// - parameter horizontal: The inset to apply to the left and right edges. Defaults to `0`.
-    /// - parameter vertical: The inset to apply to the top and bottom edges. Defaults to `0`.
-    /// - returns: A new rect with the inset(s) applied.
-    public func inset(horizontal dx: CGFloat = 0.0, vertical dy: CGFloat = 0.0) -> CGRect {
-        return insetBy(dx: dx, dy: dy)
-    }
-
     /// Add additional padding to the outside of the receiver.
     ///
     /// This is the inverse of the `inset(by:)` method.
