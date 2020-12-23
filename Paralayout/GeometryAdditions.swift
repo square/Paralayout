@@ -93,7 +93,7 @@ extension CGRect {
     /// Insets the rect equally on all sides.
     /// - parameter inset: The amount by which to contract each edge of the receiver.
     /// - returns: A new rect with the inset applied.
-    public func inset(allSides inset: CGFloat) -> CGRect {
+    public func insetAllSides(by inset: CGFloat) -> CGRect {
         return insetBy(dx: inset, dy: inset)
     }
 

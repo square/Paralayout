@@ -117,13 +117,13 @@ final class GeometryAdditionsTests: XCTestCase {
             CGRect(x: 0, y: 10, width: 50, height: 40)
         )
 
-        // CGRect.inset(allSides:)
+        // CGRect.insetAllSides(by:)
         XCTAssertEqual(
-            CGRect(x: 10, y: 20, width: 30, height: 40).inset(allSides: 5),
+            CGRect(x: 10, y: 20, width: 30, height: 40).insetAllSides(by: 5),
             CGRect(x: 15, y: 25, width: 20, height: 30)
         )
         XCTAssertEqual(
-            CGRect(x: 10, y: 20, width: 30, height: 40).inset(allSides: -5),
+            CGRect(x: 10, y: 20, width: 30, height: 40).insetAllSides(by: -5),
             CGRect(x: 5, y: 15, width: 40, height: 50)
         )
 
