@@ -180,5 +180,27 @@ final class GeometryAdditionsTests: XCTestCase {
         XCTAssert(sample.slice(from: .maxYEdge, amount: 100) == (sample,
                                                                  CGRect(x:  0,   y:  0, width: 100, height:   0)))
     }
+
+    // MARK: - Tests - UIEdgeInsets Extensions
+
+    func testCreateUniformInsets() {
+        XCTAssertEqual(UIEdgeInsets(uniform: 20), UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+        XCTAssertEqual(UIEdgeInsets(uniformOutset: 20), UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20))
+    }
+
+    func testCreateInsetsByAxis() {
+        XCTAssertEqual(
+            UIEdgeInsets(vertical: 10, horizontal: 20),
+            UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+        )
+    }
+
+    func testInsetAmountOnAxis() {
+        XCTAssertEqual(UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40).horizontalAmount, 60)
+        XCTAssertEqual(UIEdgeInsets(top: 10, left: 20, bottom: 15, right: 40).verticalAmount, 25)
+
+        XCTAssertEqual(UIEdgeInsets(top: -10, left: 0, bottom: 20, right: 0).verticalAmount, 10)
+        XCTAssertEqual(UIEdgeInsets(top: 0, left: -10, bottom: 0, right: -20).horizontalAmount, -30)
+    }
     
 }
