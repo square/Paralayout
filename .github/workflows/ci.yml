@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Select Xcode Version (12.2)
         run: sudo xcode-select --switch /Applications/Xcode_12.2.app/Contents/Developer
-        if: matrix.platform == 'iOS_13'
+        if: matrix.platform == 'iOS_14'
       - name: Select Xcode Version (11.6)
         run: sudo xcode-select --switch /Applications/Xcode_11.6.app/Contents/Developer
         if: matrix.platform == 'iOS_13'
