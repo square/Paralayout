@@ -202,5 +202,33 @@ final class GeometryAdditionsTests: XCTestCase {
         XCTAssertEqual(UIEdgeInsets(top: -10, left: 0, bottom: 20, right: 0).verticalAmount, 10)
         XCTAssertEqual(UIEdgeInsets(top: 0, left: -10, bottom: 0, right: -20).horizontalAmount, -30)
     }
+
+    // MARK: - Tests - NSDirectionalEdgeInsets Extensions
+
+    func testCreateUniformDirectionalInsets() {
+        XCTAssertEqual(
+            NSDirectionalEdgeInsets(uniform: 20),
+            NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        )
+        XCTAssertEqual(
+            NSDirectionalEdgeInsets(uniformOutset: 20),
+            NSDirectionalEdgeInsets(top: -20, leading: -20, bottom: -20, trailing: -20)
+        )
+    }
+
+    func testCreateDirectionalInsetsByAxis() {
+        XCTAssertEqual(
+            NSDirectionalEdgeInsets(vertical: 10, horizontal: 20),
+            NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
+        )
+    }
+
+    func testDirectionalInsetAmountOnAxis() {
+        XCTAssertEqual(NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 30, trailing: 40).horizontalAmount, 60)
+        XCTAssertEqual(NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 40).verticalAmount, 25)
+
+        XCTAssertEqual(NSDirectionalEdgeInsets(top: -10, leading: 0, bottom: 20, trailing: 0).verticalAmount, 10)
+        XCTAssertEqual(NSDirectionalEdgeInsets(top: 0, leading: -10, bottom: 0, trailing: -20).horizontalAmount, -30)
+    }
     
 }
