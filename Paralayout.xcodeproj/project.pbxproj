@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5DC537258C0B4B005BFBC1 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC536258C0B4B005BFBC1 /* Angle.swift */; };
 		3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC53C258C110F005BFBC1 /* AngleTests.swift */; };
-		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5EE80620701F2300B767FA /* LabelTests.swift */; };
 		3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F8757258DC41300765277 /* PixelRounding.swift */; };
 		3D8F875C258DC46900765277 /* PixelRoundingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F875B258DC46900765277 /* PixelRoundingTests.swift */; };
+		3DE5CB0725A7ABE500F497F7 /* LayoutDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */; };
 		D031F4781EDE066F008EC23D /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D031F4771EDE066F008EC23D /* SampleView.swift */; };
 		D049FD841ECA7BC4009BEF98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */; };
 		D049FD861ECA7BC4009BEF98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD851ECA7BC4009BEF98 /* ViewController.swift */; };
@@ -68,12 +69,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5DC536258C0B4B005BFBC1 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		3D5DC53C258C110F005BFBC1 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
-		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5EE80620701F2300B767FA /* LabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTests.swift; sourceTree = "<group>"; };
 		3D8F8757258DC41300765277 /* PixelRounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRounding.swift; sourceTree = "<group>"; };
 		3D8F875B258DC46900765277 /* PixelRoundingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRoundingTests.swift; sourceTree = "<group>"; };
+		3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDirection.swift; sourceTree = "<group>"; };
 		D031F4771EDE066F008EC23D /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SampleView.swift; path = ../ParalayoutStudio/SampleView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D049FD801ECA7BC4009BEF98 /* ParalayoutStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParalayoutStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = AppDelegate.swift; path = ../ParalayoutStudio/AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -145,6 +147,7 @@
 			children = (
 				D049FDA31ECA7C89009BEF98 /* GeometryAdditions.swift */,
 				3D8F8757258DC41300765277 /* PixelRounding.swift */,
+				3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */,
 				D0E090CC1ECBB3510077F3F6 /* UIFontAdditions.swift */,
 				D0E090C41ECA7D260077F3F6 /* UIViewAdditions_Alignment.swift */,
 				D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */,
@@ -382,6 +385,7 @@
 				D0624F861EDF8EE600076663 /* UIViewAdditions_Distribution.swift in Sources */,
 				D0624F871EDF8EE600076663 /* UIViewAdditions_Sizing.swift in Sources */,
 				3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */,
+				3DE5CB0725A7ABE500F497F7 /* LayoutDirection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

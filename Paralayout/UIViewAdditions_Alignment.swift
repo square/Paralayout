@@ -23,6 +23,10 @@ public enum Position {
     case leftCenter, center, rightCenter
     case bottomLeft, bottomCenter, bottomRight
 
+    case topLeading, topTrailing
+    case leadingCenter, trailingCenter
+    case bottomLeading, bottomTrailing
+
     // MARK: - Public Methods
     
     /// The "opposite" position.
@@ -73,32 +77,72 @@ public enum Position {
             } else {
                 return vertically ? .topRight : .bottomRight
             }
+
+        case .topLeading:
+            if horizontally {
+                return vertically ? .bottomTrailing : .topTrailing
+            } else {
+                return vertically ? .bottomLeading : .topLeading
+            }
+
+        case .topTrailing:
+            if horizontally {
+                return vertically ? .bottomLeading : .topLeading
+            } else {
+                return vertically ? .bottomTrailing : .topTrailing
+            }
+
+        case .leadingCenter:
+            return horizontally ? .trailingCenter : .leadingCenter
+
+        case .trailingCenter:
+            return horizontally ? .leadingCenter : .trailingCenter
+
+        case .bottomLeading:
+            if horizontally {
+                return vertically ? .topTrailing : .bottomTrailing
+            } else {
+                return vertically ? .topLeading : .bottomLeading
+            }
+
+        case .bottomTrailing:
+            if horizontally {
+                return vertically ? .topLeading : .bottomLeading
+            } else {
+                return vertically ? .topTrailing : .bottomTrailing
+            }
         }
     }
     
     /// The position in a specific rectangle.
     /// - parameter rect: The rect for which to interpret the position.
     /// - returns: The point within the rect at the specified position.
-    public func point(in rect: CGRect) -> CGPoint {
-        switch self {
+    public func point(in rect: CGRect, userInterfaceLayoutDirection: UIUserInterfaceLayoutDirection) -> CGPoint {
+        switch ResolvedPosition(resolving: self, with: userInterfaceLayoutDirection) {
         case .topLeft:
             return CGPoint(x: rect.minX, y: rect.minY)
+
         case .topCenter:
             return CGPoint(x: rect.midX, y: rect.minY)
+
         case .topRight:
             return CGPoint(x: rect.maxX, y: rect.minY)
             
         case .leftCenter:
             return CGPoint(x: rect.minX, y: rect.midY)
+
         case .center:
             return CGPoint(x: rect.midX, y: rect.midY)
+
         case .rightCenter:
             return CGPoint(x: rect.maxX, y: rect.midY)
             
         case .bottomLeft:
             return CGPoint(x: rect.minX, y: rect.maxY)
+
         case .bottomCenter:
             return CGPoint(x: rect.midX, y: rect.maxY)
+
         case .bottomRight:
             return CGPoint(x: rect.maxX, y: rect.maxY)
         }
@@ -106,18 +150,72 @@ public enum Position {
     
 }
 
+internal enum ResolvedPosition {
+
+    case topLeft, topCenter, topRight
+    case leftCenter, center, rightCenter
+    case bottomLeft, bottomCenter, bottomRight
+
+    init(resolving position: Position, with layoutDirection: UIUserInterfaceLayoutDirection) {
+        switch (position, layoutDirection) {
+        case (.topLeft, _),
+             (.topLeading, .leftToRight),
+             (.topTrailing, .rightToLeft):
+            self = .topLeft
+
+        case (.topCenter, _):
+            self = .topCenter
+
+        case (.topRight, _),
+             (.topLeading, .rightToLeft),
+             (.topTrailing, .leftToRight):
+            self = .topRight
+
+        case (.leftCenter, _),
+             (.leadingCenter, .leftToRight),
+             (.trailingCenter, .rightToLeft):
+            self = .leftCenter
+
+        case (.center, _):
+            self = .center
+
+        case (.rightCenter, _),
+             (.leadingCenter, .rightToLeft),
+             (.trailingCenter, .leftToRight):
+            self = .rightCenter
+
+        case (.bottomLeft, _),
+             (.bottomLeading, .leftToRight),
+             (.bottomTrailing, .rightToLeft):
+            self = .bottomLeft
+
+        case (.bottomCenter, _):
+            self = .bottomCenter
+
+        case (.bottomRight, _),
+             (.bottomLeading, .rightToLeft),
+             (.bottomTrailing, .leftToRight):
+            self = .bottomRight
+
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
+        }
+    }
+
+}
+
 // MARK: -
 
 extension UIView {
     
     // MARK: - View Alignment - Core
-    
+
     /// The location of a position in the view in the view's `bounds`.
     ///
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
     public func point(at position: Position) -> CGPoint {
-        return position.point(in: bounds)
+        return position.point(in: bounds, userInterfaceLayoutDirection: effectiveUserInterfaceLayoutDirection)
     }
     
     /// The offset between two views' positions.
@@ -250,7 +348,7 @@ extension UIView {
         }
         
         let offset: UIOffset
-        switch position {
+        switch ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection) {
         case .topLeft:
             offset = UIOffset(horizontal: inset,    vertical: inset)
         case .topCenter:

@@ -210,28 +210,28 @@ class ViewController: UIViewController {
         }
         
         // Based on which corner is being moved, offset or preserve the original edge.
-        switch resizingCorner {
-        case .topLeft:
-            containerView.frame = CGRect(left: offsetLeft(), top: offsetTop(), right: originalFrame.maxX, bottom: originalFrame.maxY)
-        case .topCenter:
-            containerView.frame = CGRect(left: originalFrame.minX, top: offsetTop(), right: originalFrame.maxX, bottom: originalFrame.maxY)
-        case .topRight:
-            containerView.frame = CGRect(left: originalFrame.minX, top: offsetTop(), right: offsetRight(), bottom: originalFrame.maxY)
-            
-        case .leftCenter:
-            containerView.frame = CGRect(left: offsetLeft(), top: originalFrame.minY, right: originalFrame.maxX, bottom: originalFrame.maxY)
-        case .center:
-            break
-        case .rightCenter:
-            containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: offsetRight(), bottom: originalFrame.maxY)
-            
-        case .bottomLeft:
-            containerView.frame = CGRect(left: offsetLeft(), top: originalFrame.minY, right: originalFrame.maxX, bottom: offsetBottom())
-        case .bottomCenter:
-            containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: originalFrame.maxX, bottom: offsetBottom())
-        case .bottomRight:
-            containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: offsetRight(), bottom: offsetBottom())
-        }
+//        switch (resizingCorner, view.effectiveUserInterfaceLayoutDirection) {
+//        case .topLeft:
+//            containerView.frame = CGRect(left: offsetLeft(), top: offsetTop(), right: originalFrame.maxX, bottom: originalFrame.maxY)
+//        case .topCenter:
+//            containerView.frame = CGRect(left: originalFrame.minX, top: offsetTop(), right: originalFrame.maxX, bottom: originalFrame.maxY)
+//        case .topRight:
+//            containerView.frame = CGRect(left: originalFrame.minX, top: offsetTop(), right: offsetRight(), bottom: originalFrame.maxY)
+//            
+//        case .leftCenter:
+//            containerView.frame = CGRect(left: offsetLeft(), top: originalFrame.minY, right: originalFrame.maxX, bottom: originalFrame.maxY)
+//        case .center:
+//            break
+//        case .rightCenter:
+//            containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: offsetRight(), bottom: originalFrame.maxY)
+//            
+//        case .bottomLeft:
+//            containerView.frame = CGRect(left: offsetLeft(), top: originalFrame.minY, right: originalFrame.maxX, bottom: offsetBottom())
+//        case .bottomCenter:
+//            containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: originalFrame.maxX, bottom: offsetBottom())
+//        case .bottomRight:
+//            containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: offsetRight(), bottom: offsetBottom())
+//        }
         
         view.setNeedsLayout()
     }

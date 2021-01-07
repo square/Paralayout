@@ -168,8 +168,32 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
-    public func rect(toFit rect: CGRect, at position: Position, in scaleFactor: ScaleFactorProviding) -> CGRect {
-        return CGRect(size: size(toFit: rect.size, in: scaleFactor), at: position, of: rect, in: scaleFactor)
+    public func rect(
+        toFit rect: CGRect,
+        at position: Position,
+        in scaleFactor: ScaleFactorProviding,
+        layoutDirection: UIUserInterfaceLayoutDirection
+    ) -> CGRect {
+        return CGRect(
+            size: size(toFit: rect.size, in: scaleFactor),
+            at: position,
+            of: rect,
+            in: scaleFactor,
+            layoutDirection: layoutDirection
+        )
+    }
+
+    public func rect(
+        toFit rect: CGRect,
+        at position: Position,
+        in context: (ScaleFactorProviding & LayoutDirectionProviding)
+    ) -> CGRect {
+        return self.rect(
+            toFit: rect,
+            at: position,
+            in: context,
+            layoutDirection: context.effectiveUserInterfaceLayoutDirection
+        )
     }
 
     /// An "aspect-fill" function that determines the smallest size of the receiver's aspect ratio that fits a size
@@ -199,8 +223,32 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
-    public func rect(toFill rect: CGRect, at position: Position, in scaleFactor: ScaleFactorProviding) -> CGRect {
-        return CGRect(size: size(toFill: rect.size, in: scaleFactor), at: position, of: rect, in: scaleFactor)
+    public func rect(
+        toFill rect: CGRect,
+        at position: Position,
+        in scaleFactor: ScaleFactorProviding,
+        layoutDirection: UIUserInterfaceLayoutDirection
+    ) -> CGRect {
+        return CGRect(
+            size: size(toFill: rect.size, in: scaleFactor),
+            at: position,
+            of: rect,
+            in: scaleFactor,
+            layoutDirection: layoutDirection
+        )
+    }
+
+    public func rect(
+        toFill rect: CGRect,
+        at position: Position,
+        in context: (ScaleFactorProviding & LayoutDirectionProviding)
+    ) -> CGRect {
+        return self.rect(
+            toFill: rect,
+            at: position,
+            in: context,
+            layoutDirection: context.effectiveUserInterfaceLayoutDirection
+        )
     }
 
 }
@@ -231,14 +279,15 @@ extension CGRect {
         size newSize: CGSize,
         at position: Position,
         of alignmentRect: CGRect,
-        in scaleFactor: ScaleFactorProviding
+        in scaleFactor: ScaleFactorProviding,
+        layoutDirection: UIUserInterfaceLayoutDirection
     ) {
         let newOrigin: CGPoint
 
         if newSize.width == alignmentRect.width {
             // The width matches; position vertically.
             let newMinY: CGFloat
-            switch position {
+            switch ResolvedPosition(resolving: position, with: layoutDirection) {
             case .topLeft, .topCenter, .topRight:
                 newMinY = alignmentRect.minY
             case .leftCenter, .center, .rightCenter:
@@ -252,7 +301,7 @@ extension CGRect {
         } else {
             // The height matches; position horizontally.
             let newMinX: CGFloat
-            switch position {
+            switch ResolvedPosition(resolving: position, with: layoutDirection) {
             case .topLeft, .leftCenter, .bottomLeft:
                 newMinX = alignmentRect.minX
             case .topCenter, .center, .bottomCenter:
