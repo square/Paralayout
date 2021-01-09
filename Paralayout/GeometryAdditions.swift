@@ -105,34 +105,32 @@ extension CGRect {
     /// - parameter right: The inset to apply to the right edge (optional, defaults to 0).
     /// - parameter bottom: The inset to apply to the bottom edge (optional, defaults to 0).
     /// - returns: A new rect inset by the specified amount(s).
-    public func inset(left: CGFloat = 0.0, top: CGFloat = 0.0, right: CGFloat = 0.0, bottom: CGFloat = 0.0) -> CGRect {
+    public func insetBy(left: CGFloat = 0.0, top: CGFloat = 0.0, right: CGFloat = 0.0, bottom: CGFloat = 0.0) -> CGRect {
         return inset(by: UIEdgeInsets(top: top, left: left, bottom: bottom, right: right))
     }
-    
-    /// Outsets the rect, if necessary, to snap to the nearest pixel at the specified scale.
-    /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
-    /// snap to pixel).
-    /// - returns: A new rect with pixel-aligned boundaries, enclosing the original rect.
-    public func expandToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
-        return CGRect(
-            left: minX.floorToPixel(in: scaleFactor),
-            top: minY.floorToPixel(in: scaleFactor),
-            right: maxX.ceilToPixel(in: scaleFactor),
-            bottom: maxY.ceilToPixel(in: scaleFactor)
-        )
+
+    /// Insets the rect equally on all sides.
+    /// - parameter inset: The amount by which to contract each edge of the receiver.
+    /// - returns: A new rect with the inset applied.
+    public func insetAllSides(by inset: CGFloat) -> CGRect {
+        return insetBy(dx: inset, dy: inset)
     }
-    
-    /// Insets the rect, if necessary, to snap to the nearest pixel at the specified scale.
-    /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
-    /// snap to pixel).
-    /// - returns: A new rect with pixel-aligned boundaries, enclosed by the original rect.
-    public func contractToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
-        return CGRect(
-            left: minX.ceilToPixel(in: scaleFactor),
-            top: minY.ceilToPixel(in: scaleFactor),
-            right: maxX.floorToPixel(in: scaleFactor),
-            bottom: maxY.floorToPixel(in: scaleFactor)
+
+    /// Add additional padding to the outside of the receiver.
+    ///
+    /// This is the inverse of the `inset(by:)` method.
+    ///
+    /// - parameter insets: The amount by which to expand each edge of the receiver.
+    /// - returns: A new rect with the outset applied.
+    public func outset(by insets: UIEdgeInsets) -> CGRect {
+        let outsets = UIEdgeInsets(
+            top: -insets.top,
+            left: -insets.left,
+            bottom: -insets.bottom,
+            right: -insets.right
         )
+
+        return inset(by: outsets)
     }
     
     /// Divides the receiver in two.
