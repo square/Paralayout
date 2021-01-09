@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-import OSLog
+import os
 import UIKit
 
 /// Locations within a rectangle.
