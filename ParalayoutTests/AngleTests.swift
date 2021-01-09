@@ -51,14 +51,46 @@ final class AngleTests: XCTestCase {
         // Identical points should have a zero angle between them (and importantly not have a divide-by-zero result).
         XCTAssertEqual(Angle(from: centerPoint, to: centerPoint).degrees, 0, accuracy: 1e-20)
 
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.rightCenter.point(in: rect, layoutDirection: .leftToRight)).degrees, 0, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomRight.point(in: rect, layoutDirection: .leftToRight)).degrees, 45, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomCenter.point(in: rect, layoutDirection: .leftToRight)).degrees, 90, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomLeft.point(in: rect, layoutDirection: .leftToRight)).degrees, 135, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.leftCenter.point(in: rect, layoutDirection: .leftToRight)).degrees, 180, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topLeft.point(in: rect, layoutDirection: .leftToRight)).degrees, -135, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topCenter.point(in: rect, layoutDirection: .leftToRight)).degrees, -90, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topRight.point(in: rect, layoutDirection: .leftToRight)).degrees, -45, accuracy: 1e-4)
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.rightCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            0,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.bottomRight.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            45,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.bottomCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            90,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.bottomLeft.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            135,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.leftCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            180,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.topLeft.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            -135,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.topCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            -90,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.topRight.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            -45,
+            accuracy: 1e-4
+        )
     }
 
     func testPointAtDistance() {
