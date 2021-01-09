@@ -118,8 +118,8 @@ public enum Position {
     /// The position in a specific rectangle.
     /// - parameter rect: The rect for which to interpret the position.
     /// - returns: The point within the rect at the specified position.
-    public func point(in rect: CGRect, userInterfaceLayoutDirection: UIUserInterfaceLayoutDirection) -> CGPoint {
-        switch ResolvedPosition(resolving: self, with: userInterfaceLayoutDirection) {
+    public func point(in rect: CGRect, layoutDirection: UIUserInterfaceLayoutDirection) -> CGPoint {
+        switch ResolvedPosition(resolving: self, with: layoutDirection) {
         case .topLeft:
             return CGPoint(x: rect.minX, y: rect.minY)
 
@@ -216,7 +216,7 @@ extension UIView {
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
     public func point(at position: Position) -> CGPoint {
-        return position.point(in: bounds, userInterfaceLayoutDirection: effectiveUserInterfaceLayoutDirection)
+        return position.point(in: bounds, layoutDirection: effectiveUserInterfaceLayoutDirection)
     }
     
     /// The offset between two views' positions.
