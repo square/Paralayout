@@ -131,11 +131,12 @@ final class AspectRatioTests: XCTestCase {
 
                         // An AspectRatio's size that fits a rect of the same aspect ratio should also be the same as
                         // the size of that rect.
-                        let rectToFit = ratio.rect(toFit: rect, at: position, in: scale)
+                        let rectToFit = ratio.rect(toFit: rect, at: position, in: scale, layoutDirection: .leftToRight)
                         XCTAssert(rectToFit.size == ratio.size(toFit: rect.size, in: scale))
 
                         // The rect needs to be positioned as requested (within a pixel).
-                        let rectToFitOffset = position.point(in: rectToFit) - position.point(in: rect)
+                        let rectToFitOffset = position.point(in: rectToFit, layoutDirection: .leftToRight)
+                            - position.point(in: rect, layoutDirection: .leftToRight)
                         XCTAssert(rectToFitOffset.horizontal * scale < 1 && rectToFitOffset.vertical * scale < 1)
 
                         if rectToFit.width == rect.width {
@@ -154,11 +155,17 @@ final class AspectRatioTests: XCTestCase {
                         }
 
                         // Rect/size to fill.
-                        let rectToFill = ratio.rect(toFill: rect, at: position, in: scale)
+                        let rectToFill = ratio.rect(
+                            toFill: rect,
+                            at: position,
+                            in: scale,
+                            layoutDirection: .leftToRight
+                        )
                         XCTAssert(rectToFill.size == ratio.size(toFill: rect.size, in: scale))
 
                         // The rect needs to be positioned as requested (within a pixel).
-                        let rectToFillOffset = position.point(in: rectToFill) - position.point(in: rect)
+                        let rectToFillOffset = position.point(in: rectToFill, layoutDirection: .leftToRight)
+                            - position.point(in: rect, layoutDirection: .leftToRight)
                         XCTAssert(rectToFillOffset.horizontal * scale < 1 && rectToFillOffset.vertical * scale < 1)
 
                         if rectToFill.width == rect.width {
