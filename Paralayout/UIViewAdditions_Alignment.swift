@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import OSLog
 import UIKit
 
 /// Locations within a rectangle.
@@ -228,6 +229,27 @@ extension UIView {
         guard let superview = superview else {
             return .zero
         }
+
+        switch position {
+        case .topLeft, .topRight, .leftCenter, .rightCenter, .bottomLeft, .bottomRight:
+            switch otherPosition {
+            case .topLeading, .topTrailing, .leadingCenter, .trailingCenter, .bottomLeading, .bottomTrailing:
+                ParalayoutAlertForMismatchedAlignmentPositionTypes()
+            default:
+                break
+            }
+
+        case .topLeading, .topTrailing, .leadingCenter, .trailingCenter, .bottomLeading, .bottomTrailing:
+            switch otherPosition {
+            case .topLeft, .topRight, .leftCenter, .rightCenter, .bottomLeft, .bottomRight:
+                ParalayoutAlertForMismatchedAlignmentPositionTypes()
+            default:
+                break
+            }
+
+        default:
+            break
+        }
         
         // Convert both points to the receiver's superview, since we are working with the frame (not the bounds).
         let srcPoint = superview.convert(point(at: position), from: self)
@@ -373,3 +395,24 @@ extension UIView {
     }
     
 }
+
+// MARK: -
+
+private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category: "layout")
+
+/// Triggered when an alignment method is called that uses mismatched position types, i.e. aligning a view's leading or
+/// trailing edge to another view's left or right edge, or vice versa. This type of mismatch is likely to look correct
+/// under certain circumstance, but may look incorrect when using a different user interface layout direction.
+private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
+    os_log(
+        "%@",
+        log: ParalayoutLog,
+        type: .default,
+        """
+        Paralayout detected an alignment with mismatched position types. Set a symbolic breakpoint for \
+        \"ParalayoutAlertForMismatchedAlignmentPositions\" to debug. Call stack:
+        \(Thread.callStackSymbols.dropFirst(2).joined(separator: "\n"))
+        """
+    )
+}
+
