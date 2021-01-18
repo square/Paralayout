@@ -102,7 +102,9 @@ class SampleView: UIView {
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         let (titleSize, subtextSize) = labelSizesThatFit(size)
-        let heightThatFits = heightForContentExcludingAllText + (titleSize.height - titleLabel.verticalAlignmentInset) + (subtextSize.height - subtextLabel.verticalAlignmentInset)
+        let titleCapInsets = titleLabel.font.labelCapInsets(in: self)
+        let subtextCapInsets = subtextLabel.font.labelCapInsets(in: self)
+        let heightThatFits = heightForContentExcludingAllText + (titleSize.height - titleCapInsets.totalInset) + (subtextSize.height - subtextCapInsets.totalInset)
         
         return CGSize(width: size.width, height: heightThatFits)
     }
@@ -134,8 +136,8 @@ class SampleView: UIView {
         let titleLabelSize = titleLabel.sizeThatFits(width: textWidth, height: size.height, constraints: .wrap)
         
         // The subtext needs to fit in the space that remains. Take into account text heights.
-        let titleLabelLayoutHeight = titleLabelSize.height - titleLabel.verticalAlignmentInset
-        let verticalSpaceForSubtextLabel = size.height - heightForContentExcludingAllText - titleLabelLayoutHeight + subtextLabel.verticalAlignmentInset
+        let titleLabelLayoutHeight = titleLabelSize.height - titleLabel.font.labelCapInsets(in: self).totalInset
+        let verticalSpaceForSubtextLabel = size.height - heightForContentExcludingAllText - titleLabelLayoutHeight + subtextLabel.font.labelCapInsets(in: self).totalInset
         let subtextLabelSize = subtextLabel.sizeThatFits(width: textWidth, height: verticalSpaceForSubtextLabel, constraints: .wrap)
         
         return (titleLabelSize, subtextLabelSize)
