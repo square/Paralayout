@@ -19,7 +19,7 @@ import XCTest
 
 final class UIViewSizingTests: XCTestCase {
 
-    // MARK: - Tests
+    // MARK: - Tests - Size That Fits
 
     func testSizeThatFitsWithNoConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
@@ -81,6 +81,28 @@ final class UIViewSizingTests: XCTestCase {
         XCTAssertEqual(
             testView.sizeThatFits(.init(width: 500, height: 400), constraints: .minSize),
             .init(width: 500, height: 400)
+        )
+    }
+
+    // MARK: - Tests - Size To Fit
+
+    func testSizeToFitWithNoConstraints() {
+        let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
+        testView.sizeToFit(.zero)
+
+        XCTAssertEqual(
+            testView.bounds.size,
+            .init(width: 300, height: 200)
+        )
+    }
+
+    func testSizeToFitWithMaxSizeConstraints() {
+        let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
+        testView.sizeToFit(.init(width: 100, height: 50), constraints: .maxSize)
+
+        XCTAssertEqual(
+            testView.bounds.size,
+            .init(width: 100, height: 50)
         )
     }
 
