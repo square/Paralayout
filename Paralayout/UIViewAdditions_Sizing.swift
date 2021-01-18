@@ -116,11 +116,22 @@ extension UIView {
         return sizeThatFits(CGSize(width: width, height: height), constraints: constraints)
     }
 
-    /// Resize the view to fit a given size, with constraints applied.
-    /// - parameter sizeToFit: The size to fit, typically the `superview.bounds` or smaller.
-    /// - parameter constraints: Limits on the size to actually set (optional, defaults to `.none`).
+    /// Set the "ideal" size for the receiver within the available space (the `sizeToFit`), applying the provided
+    /// constraints. The view's final size will never be less than zero in either dimension.
+    ///
+    /// This method updates the size of the receiver's `bounds`, and is therefore `center`-preserving. Note that this
+    /// means the receiver's `frame.origin` may change as a result of calling this method.
+    ///
+    /// - parameter sizeToFit: The size within which to fit, passed through to `sizeThatFits(_:)`.
+    /// - parameter constraints: Limits on the size to actually set. Defaults to `.none`.
     public func sizeToFit(_ sizeToFit: CGSize, constraints: SizingConstraints = .none) {
-        frame.size = sizeThatFits(sizeToFit, constraints: constraints)
+        let sizeThatFits = self.sizeThatFits(sizeToFit, constraints: constraints)
+
+        // Setting the bound's width or height to a negative value will result in the origin being shifted by that
+        // amount (and the size parameter inverted). This is almost never the behavior we want here, and is difficult to
+        // undo later since it requires explicitly setting the bound's origin.
+        bounds.size.width = max(sizeThatFits.width, 0)
+        bounds.size.height = max(sizeThatFits.height, 0)
     }
 
     /// Resize the view to fit a given width.
