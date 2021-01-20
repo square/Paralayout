@@ -394,7 +394,7 @@ extension UIView : ViewDistributionSpecifying {
     /// Adopt `ViewDistributionSpecifying`, making it possible to include UIView instances directly in distributions
     /// passed to `apply[Vertical,Horizontal]Distribution()`.
     public var distributionItem: ViewDistributionItem {
-        return .view(self, (self as? AlignmentPositionAdjusting)?.alignmentPositionInsets ?? .zero)
+        return .view(self, .zero)
     }
     
     /// Arrange subviews according to a distribution with fixed and/or flexible spacers. Examples:
