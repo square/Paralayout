@@ -121,24 +121,26 @@ final class AspectRatioTests: XCTestCase {
             .bottomCenter,
             .bottomRight,
         ]
+        let layoutDirections = [UIUserInterfaceLayoutDirection.leftToRight, .rightToLeft]
 
         forEachCombination(
             aspectRatios,
             rectangles,
             scaleFactors,
-            positions
-        ) { ratio, rectangle, scale, position in
+            positions,
+            layoutDirections
+        ) { ratio, rectangle, scale, position, layoutDirection in
             // Make sure the source rectangle matches the scale factor we're testing.
             let rect = rectangle.expandToPixel(scale)
 
             // An AspectRatio's size that fits a rect of the same aspect ratio should also be the same as the size of
             // that rect.
-            let rectToFit = ratio.rect(toFit: rect, at: position, in: scale, layoutDirection: .leftToRight)
+            let rectToFit = ratio.rect(toFit: rect, at: position, in: scale, layoutDirection: layoutDirection)
             XCTAssert(rectToFit.size == ratio.size(toFit: rect.size, in: scale))
 
             // The rect needs to be positioned as requested (within a pixel).
-            let actualFitPointAtPosition = position.point(in: rectToFit, layoutDirection: .leftToRight)
-            let expectedFitPointAtPosition = position.point(in: rect, layoutDirection: .leftToRight)
+            let actualFitPointAtPosition = position.point(in: rectToFit, layoutDirection: layoutDirection)
+            let expectedFitPointAtPosition = position.point(in: rect, layoutDirection: layoutDirection)
             let rectToFitOffset = actualFitPointAtPosition - expectedFitPointAtPosition
             XCTAssert(rectToFitOffset.horizontal * scale < 1 && rectToFitOffset.vertical * scale < 1)
 
@@ -162,13 +164,13 @@ final class AspectRatioTests: XCTestCase {
                 toFill: rect,
                 at: position,
                 in: scale,
-                layoutDirection: .leftToRight
+                layoutDirection: layoutDirection
             )
             XCTAssert(rectToFill.size == ratio.size(toFill: rect.size, in: scale))
 
             // The rect needs to be positioned as requested (within a pixel).
-            let actualFillPointAtPosition = position.point(in: rectToFill, layoutDirection: .leftToRight)
-            let expectedFillPointAtPosition = position.point(in: rect, layoutDirection: .leftToRight)
+            let actualFillPointAtPosition = position.point(in: rectToFill, layoutDirection: layoutDirection)
+            let expectedFillPointAtPosition = position.point(in: rect, layoutDirection: layoutDirection)
             let rectToFillOffset = actualFillPointAtPosition - expectedFillPointAtPosition
             XCTAssert(rectToFillOffset.horizontal * scale < 1 && rectToFillOffset.vertical * scale < 1)
 
