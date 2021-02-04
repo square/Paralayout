@@ -160,9 +160,14 @@ extension UIView {
             assertionFailure("Can't align view without a superview!")
             return
         }
-        
+
+        // Resolve the position before aligning, since we always want to use the top left corner (i.e. the origin) of
+        // superview, regardless of the layout direction. Without this, we'll hit the mismatched alignment positions
+        // alert when using a leading/trailing position.
+        let resolvedPosition = ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection)
+
         align(
-            position,
+            resolvedPosition.layoutDirectionAgnosticPosition,
             with: superview,
             .topLeft,
             offset: .init(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.x + verticalOffset)

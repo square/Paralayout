@@ -204,4 +204,27 @@ internal enum ResolvedPosition {
         }
     }
 
+    var layoutDirectionAgnosticPosition: Position {
+        switch self {
+        case .topLeft:
+            return .topLeft
+        case .topCenter:
+            return .topCenter
+        case .topRight:
+            return .topRight
+        case .leftCenter:
+            return .leftCenter
+        case .center:
+            return .center
+        case .rightCenter:
+            return .rightCenter
+        case .bottomLeft:
+            return .bottomLeft
+        case .bottomCenter:
+            return .bottomCenter
+        case .bottomRight:
+            return .bottomRight
+        }
+    }
+
 }
