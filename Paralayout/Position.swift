@@ -30,8 +30,15 @@ public enum Position {
     // MARK: - Public Methods
 
     /// The "opposite" position.
-    /// - parameter horizontally: Whether to reflect left and right positions (optional, defaults to `true`).
-    /// - parameter vertically: Whether to reflect top and bottom positions (optional, defaults to `true`).
+    ///
+    /// Direction-agnostic positions (those defined with left and right) will be swapped with other direction-agnostic
+    /// positions. Likewise direction-aware positions (those defined leading and trailing) will be swapped with other
+    /// direction-aware positions.
+    ///
+    /// - parameter horizontally: Whether to reflect positions across the Y axis (where the origin is at the center of
+    /// the rect).
+    /// - parameter vertically: Whether to reflect positions across the X axis (where the origin is at the center of the
+    /// rect).
     /// - returns: A position on the opposite side/corner as specified.
     public func reflected(horizontally: Bool = true, vertically: Bool = true) -> Position {
         switch self {
@@ -115,7 +122,10 @@ public enum Position {
     }
 
     /// The position in a specific rectangle.
+    ///
     /// - parameter rect: The rect for which to interpret the position.
+    /// - parameter layoutDirection: The layout direction of the view in which the rect is defined. Used to resolve
+    /// leading and trailing positions.
     /// - returns: The point within the rect at the specified position.
     public func point(in rect: CGRect, layoutDirection: UIUserInterfaceLayoutDirection) -> CGPoint {
         switch ResolvedPosition(resolving: self, with: layoutDirection) {

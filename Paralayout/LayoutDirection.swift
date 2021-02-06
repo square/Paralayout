@@ -16,6 +16,7 @@
 
 import Foundation
 
+/// Defines an object that vends its current user interface layout direction.
 public protocol LayoutDirectionProviding {
 
     var effectiveUserInterfaceLayoutDirection: UIUserInterfaceLayoutDirection { get }
