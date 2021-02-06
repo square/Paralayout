@@ -167,6 +167,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
     /// be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
+    /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
     public func rect(
         toFit rect: CGRect,
@@ -183,6 +184,15 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
         )
     }
 
+    /// An "aspect-fit" function that determines the largest rect of the receiver's aspect ratio that fits within a
+    /// rect.
+    ///
+    /// - parameter rect: The bounding rect.
+    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
+    /// be if the aspect ratios do not match perfectly.
+    /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
+    /// which the rect should be positioned.
+    /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
     public func rect(
         toFit rect: CGRect,
         at position: Position,
@@ -222,6 +232,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
     /// be if the aspect ratios do not match perfectly.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
+    /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
     public func rect(
         toFill rect: CGRect,
@@ -237,7 +248,15 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
             layoutDirection: layoutDirection
         )
     }
-
+    /// An "aspect-fill" function that determines the smallest rect of the receiver's aspect ratio that fits a rect
+    /// within it.
+    ///
+    /// - parameter rect: The bounding rect.
+    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
+    /// be if the aspect ratios do not match perfectly.
+    /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
+    /// which the rect should be positioned.
+    /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
     public func rect(
         toFill rect: CGRect,
         at position: Position,
