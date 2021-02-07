@@ -56,6 +56,34 @@ final class PixelRoundingTests: XCTestCase {
         XCTAssertEqual(CGFloat(-1.75).ceiledToPixel(in: TestScreen.at2x), -1.5)
     }
 
+    func testPointPixelRounding() {
+        XCTAssertEqual(CGPoint(x: 0.9, y: -1.1).flooredToPixel(in: 0), CGPoint(x: 0.9, y: -1.1))
+        XCTAssertEqual(CGPoint(x: 0.9, y: -1.1).flooredToPixel(in: 1), CGPoint(x: 0, y: -2))
+        XCTAssertEqual(CGPoint(x: 0.9, y: -1.1).flooredToPixel(in: 2), CGPoint(x: 0.5, y: -1.5))
+
+        XCTAssertEqual(CGPoint(x: 0.1, y: -1.9).ceiledToPixel(in: 0), CGPoint(x: 0.1, y: -1.9))
+        XCTAssertEqual(CGPoint(x: 0.1, y: -1.9).ceiledToPixel(in: 1), CGPoint(x: 1, y: -1))
+        XCTAssertEqual(CGPoint(x: 0.1, y: -1.9).ceiledToPixel(in: 2), CGPoint(x: 0.5, y: -1.5))
+
+        XCTAssertEqual(CGPoint(x: 0.4, y: -1.4).roundedToPixel(in: 0), CGPoint(x: 0.4, y: -1.4))
+        XCTAssertEqual(CGPoint(x: 0.4, y: -1.4).roundedToPixel(in: 1), CGPoint(x: 0, y: -1))
+        XCTAssertEqual(CGPoint(x: 0.4, y: -1.4).roundedToPixel(in: 2), CGPoint(x: 0.5, y: -1.5))
+    }
+
+    func testSizePixelRounding() {
+        XCTAssertEqual(CGSize(width: 0.9, height: -1.1).flooredToPixel(in: 0), CGSize(width: 0.9, height: -1.1))
+        XCTAssertEqual(CGSize(width: 0.9, height: -1.1).flooredToPixel(in: 1), CGSize(width: 0, height: -2))
+        XCTAssertEqual(CGSize(width: 0.9, height: -1.1).flooredToPixel(in: 2), CGSize(width: 0.5, height: -1.5))
+
+        XCTAssertEqual(CGSize(width: 0.1, height: -1.9).ceiledToPixel(in: 0), CGSize(width: 0.1, height: -1.9))
+        XCTAssertEqual(CGSize(width: 0.1, height: -1.9).ceiledToPixel(in: 1), CGSize(width: 1, height: -1))
+        XCTAssertEqual(CGSize(width: 0.1, height: -1.9).ceiledToPixel(in: 2), CGSize(width: 0.5, height: -1.5))
+
+        XCTAssertEqual(CGSize(width: 0.4, height: -1.4).roundedToPixel(in: 0), CGSize(width: 0.4, height: -1.4))
+        XCTAssertEqual(CGSize(width: 0.4, height: -1.4).roundedToPixel(in: 1), CGSize(width: 0, height: -1))
+        XCTAssertEqual(CGSize(width: 0.4, height: -1.4).roundedToPixel(in: 2), CGSize(width: 0.5, height: -1.5))
+    }
+
     func testRectPixelRounding() {
         XCTAssertEqual(
             CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandedToPixel(TestScreen.at2x),
@@ -76,7 +104,9 @@ final class PixelRoundingTests: XCTestCase {
         )
     }
 
-    func testViewPixelRounding() {
+    // MARK: - Tests - Scale Factor
+
+    func testViewScaleFactor() {
         // A view should inherit the scale factor of its parent screen.
         for screen in screensToTest() {
             Samples.window.screen = screen
