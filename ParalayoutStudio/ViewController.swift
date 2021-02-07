@@ -255,8 +255,8 @@ extension UIScreen {
     /// The width of a hairline (in points) for the receiver's scale factor.
     var hairlineWidth: CGFloat {
         // A hairline is 1/2 pt thick, rounded down to the nearest whole (non-zero) pixel.
-        let hairline = CGFloat(0.5).floorToPixel(in: self)
-        return (hairline > 0.0) ? hairline : CGFloat(0.5).ceilToPixel(in: self)
+        let hairline = CGFloat(0.5).flooredToPixel(in: self)
+        return (hairline > 0.0) ? hairline : CGFloat(0.5).ceiledToPixel(in: self)
     }
 
 }

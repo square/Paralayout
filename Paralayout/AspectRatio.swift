@@ -106,7 +106,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter width: The desired width.
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
     public func height(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
-        return (ratioHeight * width / ratioWidth).roundToPixel(in: scaleFactor)
+        return (ratioHeight * width / ratioWidth).roundedToPixel(in: scaleFactor)
     }
 
     /// Returns the width of the aspect ratio for a given `height` rounded to the nearest pixel.
@@ -114,7 +114,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter height: The desired height.
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
     public func width(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
-        return (ratioWidth * height / ratioHeight).roundToPixel(in: scaleFactor)
+        return (ratioWidth * height / ratioHeight).roundedToPixel(in: scaleFactor)
     }
 
     /// Returns a size of the aspect ratio with the specified `width`. The size's `height` will be rounded to the
@@ -310,7 +310,7 @@ extension CGRect {
             case .topLeft, .topCenter, .topRight:
                 newMinY = alignmentRect.minY
             case .leftCenter, .center, .rightCenter:
-                newMinY = (alignmentRect.midY - newSize.height / 2).roundToPixel(in: scaleFactor)
+                newMinY = (alignmentRect.midY - newSize.height / 2).roundedToPixel(in: scaleFactor)
             case .bottomLeft, .bottomCenter, .bottomRight:
                 newMinY = alignmentRect.maxY - newSize.height
             }
@@ -324,7 +324,7 @@ extension CGRect {
             case .topLeft, .leftCenter, .bottomLeft:
                 newMinX = alignmentRect.minX
             case .topCenter, .center, .bottomCenter:
-                newMinX = (alignmentRect.midX - newSize.width / 2).roundToPixel(in: scaleFactor)
+                newMinX = (alignmentRect.midX - newSize.width / 2).roundedToPixel(in: scaleFactor)
             case .topRight, .rightCenter, .bottomRight:
                 newMinX = alignmentRect.maxX - newSize.width
             }
