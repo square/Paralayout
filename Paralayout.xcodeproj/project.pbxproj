@@ -144,6 +144,7 @@
 				D0E090D01ECCD3EC0077F3F6 /* Label.swift */,
 				3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */,
 				3D75C52C25A977B600D63205 /* Position.swift */,
+				3D8F8757258DC41300765277 /* PixelRounding.swift */,
 				D031F4761EDE0587008EC23D /* Categories */,
 				D0624F721EDF8C3F00076663 /* Other */,
 			);
@@ -154,7 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				D049FDA31ECA7C89009BEF98 /* GeometryAdditions.swift */,
-				3D8F8757258DC41300765277 /* PixelRounding.swift */,
 				D0E090CC1ECBB3510077F3F6 /* UIFontAdditions.swift */,
 				D0E090C41ECA7D260077F3F6 /* UIViewAdditions_Alignment.swift */,
 				D0E090CE1ECBC5BE0077F3F6 /* UIViewAdditions_Distribution.swift */,
