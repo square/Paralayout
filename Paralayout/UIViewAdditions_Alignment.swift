@@ -14,110 +14,19 @@
 //  limitations under the License.
 //
 
+import os
 import UIKit
-
-/// Locations within a rectangle.
-public enum Position {
-    
-    case topLeft, topCenter, topRight
-    case leftCenter, center, rightCenter
-    case bottomLeft, bottomCenter, bottomRight
-
-    // MARK: - Public Methods
-    
-    /// The "opposite" position.
-    /// - parameter horizontally: Whether to reflect left and right positions (optional, defaults to `true`).
-    /// - parameter vertically: Whether to reflect top and bottom positions (optional, defaults to `true`).
-    /// - returns: A position on the opposite side/corner as specified.
-    public func reflected(horizontally: Bool = true, vertically: Bool = true) -> Position {
-        switch self {
-        case .topLeft:
-            if horizontally {
-                return vertically ? .bottomRight : .topRight
-            } else {
-                return vertically ? .bottomLeft : .topLeft
-            }
-            
-        case .topCenter:
-            return vertically ? .bottomCenter : .topCenter
-            
-        case .topRight:
-            if horizontally {
-                return vertically ? .bottomLeft : .topLeft
-            } else {
-                return vertically ? .bottomRight : .topRight
-            }
-            
-        case .leftCenter:
-            return horizontally ? .rightCenter : .leftCenter
-            
-        case .center:
-            return .center
-            
-        case .rightCenter:
-            return horizontally ? .leftCenter : .rightCenter
-            
-        case .bottomLeft:
-            if horizontally {
-                return vertically ? .topRight : .bottomRight
-            } else {
-                return vertically ? .topLeft : .bottomLeft
-            }
-            
-        case .bottomCenter:
-            return vertically ? .topCenter : .bottomCenter
-            
-        case .bottomRight:
-            if horizontally {
-                return vertically ? .topLeft : .bottomLeft
-            } else {
-                return vertically ? .topRight : .bottomRight
-            }
-        }
-    }
-    
-    /// The position in a specific rectangle.
-    /// - parameter rect: The rect for which to interpret the position.
-    /// - returns: The point within the rect at the specified position.
-    public func point(in rect: CGRect) -> CGPoint {
-        switch self {
-        case .topLeft:
-            return CGPoint(x: rect.minX, y: rect.minY)
-        case .topCenter:
-            return CGPoint(x: rect.midX, y: rect.minY)
-        case .topRight:
-            return CGPoint(x: rect.maxX, y: rect.minY)
-            
-        case .leftCenter:
-            return CGPoint(x: rect.minX, y: rect.midY)
-        case .center:
-            return CGPoint(x: rect.midX, y: rect.midY)
-        case .rightCenter:
-            return CGPoint(x: rect.maxX, y: rect.midY)
-            
-        case .bottomLeft:
-            return CGPoint(x: rect.minX, y: rect.maxY)
-        case .bottomCenter:
-            return CGPoint(x: rect.midX, y: rect.maxY)
-        case .bottomRight:
-            return CGPoint(x: rect.maxX, y: rect.maxY)
-        }
-    }
-    
-}
-
-// MARK: -
 
 extension UIView {
     
     // MARK: - View Alignment - Core
-    
+
     /// The location of a position in the view in the view's `bounds`.
     ///
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
     public func point(at position: Position) -> CGPoint {
-        return position.point(in: bounds)
+        return position.point(in: bounds, layoutDirection: effectiveUserInterfaceLayoutDirection)
     }
     
     /// The offset between two views' positions.
@@ -129,6 +38,27 @@ extension UIView {
         // We can't be aligned to another view if we don't have a superview.
         guard let superview = superview else {
             return .zero
+        }
+
+        switch position {
+        case .topLeft, .topRight, .leftCenter, .rightCenter, .bottomLeft, .bottomRight:
+            switch otherPosition {
+            case .topLeading, .topTrailing, .leadingCenter, .trailingCenter, .bottomLeading, .bottomTrailing:
+                ParalayoutAlertForMismatchedAlignmentPositionTypes()
+            default:
+                break
+            }
+
+        case .topLeading, .topTrailing, .leadingCenter, .trailingCenter, .bottomLeading, .bottomTrailing:
+            switch otherPosition {
+            case .topLeft, .topRight, .leftCenter, .rightCenter, .bottomLeft, .bottomRight:
+                ParalayoutAlertForMismatchedAlignmentPositionTypes()
+            default:
+                break
+            }
+
+        default:
+            break
         }
         
         // Convert both points to the receiver's superview, since we are working with the frame (not the bounds).
@@ -230,9 +160,14 @@ extension UIView {
             assertionFailure("Can't align view without a superview!")
             return
         }
-        
+
+        // Resolve the position before aligning, since we always want to use the top left corner (i.e. the origin) of
+        // superview, regardless of the layout direction. Without this, we'll hit the mismatched alignment positions
+        // alert when using a leading/trailing position.
+        let resolvedPosition = ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection)
+
         align(
-            position,
+            resolvedPosition.layoutDirectionAgnosticPosition,
             with: superview,
             .topLeft,
             offset: .init(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.x + verticalOffset)
@@ -250,7 +185,7 @@ extension UIView {
         }
         
         let offset: UIOffset
-        switch position {
+        switch ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection) {
         case .topLeft:
             offset = UIOffset(horizontal: inset,    vertical: inset)
         case .topCenter:
@@ -275,3 +210,24 @@ extension UIView {
     }
     
 }
+
+// MARK: -
+
+private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category: "layout")
+
+/// Triggered when an alignment method is called that uses mismatched position types, i.e. aligning a view's leading or
+/// trailing edge to another view's left or right edge, or vice versa. This type of mismatch is likely to look correct
+/// under certain circumstance, but may look incorrect when using a different user interface layout direction.
+private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
+    os_log(
+        "%@",
+        log: ParalayoutLog,
+        type: .default,
+        """
+        Paralayout detected an alignment with mismatched position types. Set a symbolic breakpoint for \
+        \"ParalayoutAlertForMismatchedAlignmentPositions\" to debug. Call stack:
+        \(Thread.callStackSymbols.dropFirst(2).joined(separator: "\n"))
+        """
+    )
+}
+

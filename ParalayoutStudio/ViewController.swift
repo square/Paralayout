@@ -210,27 +210,30 @@ class ViewController: UIViewController {
         }
         
         // Based on which corner is being moved, offset or preserve the original edge.
-        switch resizingCorner {
-        case .topLeft:
+        switch (resizingCorner, view.effectiveUserInterfaceLayoutDirection) {
+        case (.topLeft, _), (.topLeading, .leftToRight), (.topTrailing, .rightToLeft):
             containerView.frame = CGRect(left: offsetLeft(), top: offsetTop(), right: originalFrame.maxX, bottom: originalFrame.maxY)
-        case .topCenter:
+        case (.topCenter, _):
             containerView.frame = CGRect(left: originalFrame.minX, top: offsetTop(), right: originalFrame.maxX, bottom: originalFrame.maxY)
-        case .topRight:
+        case (.topRight, _), (.topTrailing, .leftToRight), (.topLeading, .rightToLeft):
             containerView.frame = CGRect(left: originalFrame.minX, top: offsetTop(), right: offsetRight(), bottom: originalFrame.maxY)
-            
-        case .leftCenter:
+
+        case (.leftCenter, _), (.leadingCenter, .leftToRight), (.trailingCenter, .rightToLeft):
             containerView.frame = CGRect(left: offsetLeft(), top: originalFrame.minY, right: originalFrame.maxX, bottom: originalFrame.maxY)
-        case .center:
+        case (.center, _):
             break
-        case .rightCenter:
+        case (.rightCenter, _), (.trailingCenter, .leftToRight), (.leadingCenter, .rightToLeft):
             containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: offsetRight(), bottom: originalFrame.maxY)
-            
-        case .bottomLeft:
+
+        case (.bottomLeft, _), (.bottomLeading, .leftToRight), (.bottomTrailing, .rightToLeft):
             containerView.frame = CGRect(left: offsetLeft(), top: originalFrame.minY, right: originalFrame.maxX, bottom: offsetBottom())
-        case .bottomCenter:
+        case (.bottomCenter, _):
             containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: originalFrame.maxX, bottom: offsetBottom())
-        case .bottomRight:
+        case (.bottomRight, _), (.bottomTrailing, .leftToRight), (.bottomLeading, .rightToLeft):
             containerView.frame = CGRect(left: originalFrame.minX, top: originalFrame.minY, right: offsetRight(), bottom: offsetBottom())
+
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
         }
         
         view.setNeedsLayout()

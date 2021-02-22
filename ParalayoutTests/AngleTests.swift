@@ -46,25 +46,57 @@ final class AngleTests: XCTestCase {
 
     func testPointInitializer() {
         let rect = CGRect(x: -1, y: -1, width: 2, height: 2)
-        let centerPoint = Position.center.point(in: rect)
+        let centerPoint = Position.center.point(in: rect, layoutDirection: .leftToRight)
 
         // Identical points should have a zero angle between them (and importantly not have a divide-by-zero result).
         XCTAssertEqual(Angle(from: centerPoint, to: centerPoint).degrees, 0, accuracy: 1e-20)
 
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.rightCenter.point(in: rect)).degrees, 0, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomRight.point(in: rect)).degrees, 45, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomCenter.point(in: rect)).degrees, 90, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.bottomLeft.point(in: rect)).degrees, 135, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.leftCenter.point(in: rect)).degrees, 180, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topLeft.point(in: rect)).degrees, -135, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topCenter.point(in: rect)).degrees, -90, accuracy: 1e-4)
-        XCTAssertEqual(Angle(from: centerPoint, to: Position.topRight.point(in: rect)).degrees, -45, accuracy: 1e-4)
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.rightCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            0,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.bottomRight.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            45,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.bottomCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            90,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.bottomLeft.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            135,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.leftCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            180,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.topLeft.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            -135,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.topCenter.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            -90,
+            accuracy: 1e-4
+        )
+        XCTAssertEqual(
+            Angle(from: centerPoint, to: Position.topRight.point(in: rect, layoutDirection: .leftToRight)).degrees,
+            -45,
+            accuracy: 1e-4
+        )
     }
 
     func testPointAtDistance() {
         let rect = CGRect(x: -1, y: -1, width: 2, height: 2)
         let diagonalUnit: CGFloat = sqrt(2)
-        let centerPoint = Position.center.point(in: rect)
+        let centerPoint = Position.center.point(in: rect, layoutDirection: .leftToRight)
 
         func assertEqual(_ lhs: CGPoint, _ rhs: CGPoint, accuracy: CGFloat, file: StaticString, line: UInt) {
             XCTAssertEqual(lhs.x, rhs.x, accuracy: accuracy, file: file, line: line)
@@ -81,14 +113,14 @@ final class AngleTests: XCTestCase {
             // Test two equivalent values for the same angle.
             assertEqual(
                 Angle(degrees: angleDegrees).point(atDistance: distance, from: centerPoint),
-                position.point(in: rect),
+                position.point(in: rect, layoutDirection: .leftToRight),
                 accuracy: 1e-4,
                 file: file,
                 line: line
             )
             assertEqual(
                 Angle(degrees: angleDegrees - 360).point(atDistance: distance, from: centerPoint),
-                position.point(in: rect),
+                position.point(in: rect, layoutDirection: .leftToRight),
                 accuracy: 1e-4,
                 file: file,
                 line: line

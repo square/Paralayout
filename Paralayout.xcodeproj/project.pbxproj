@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5DC537258C0B4B005BFBC1 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC536258C0B4B005BFBC1 /* Angle.swift */; };
 		3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC53C258C110F005BFBC1 /* AngleTests.swift */; };
-		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5EE80620701F2300B767FA /* LabelTests.swift */; };
+		3D75C52D25A977B600D63205 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D75C52C25A977B600D63205 /* Position.swift */; };
 		3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F8757258DC41300765277 /* PixelRounding.swift */; };
 		3D8F875C258DC46900765277 /* PixelRoundingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F875B258DC46900765277 /* PixelRoundingTests.swift */; };
+		3DA50D1C25CBB91300E478B6 /* CombinationTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA50D1B25CBB91300E478B6 /* CombinationTesting.swift */; };
+		3DA50D2625CBD13B00E478B6 /* PositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA50D2525CBD13B00E478B6 /* PositionTests.swift */; };
+		3DE5CB0725A7ABE500F497F7 /* LayoutDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */; };
 		D031F4781EDE066F008EC23D /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D031F4771EDE066F008EC23D /* SampleView.swift */; };
 		D049FD841ECA7BC4009BEF98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */; };
 		D049FD861ECA7BC4009BEF98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D049FD851ECA7BC4009BEF98 /* ViewController.swift */; };
@@ -68,12 +72,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5DC536258C0B4B005BFBC1 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		3D5DC53C258C110F005BFBC1 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
-		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5EE80620701F2300B767FA /* LabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTests.swift; sourceTree = "<group>"; };
+		3D75C52C25A977B600D63205 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		3D8F8757258DC41300765277 /* PixelRounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRounding.swift; sourceTree = "<group>"; };
 		3D8F875B258DC46900765277 /* PixelRoundingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRoundingTests.swift; sourceTree = "<group>"; };
+		3DA50D1B25CBB91300E478B6 /* CombinationTesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinationTesting.swift; sourceTree = "<group>"; };
+		3DA50D2525CBD13B00E478B6 /* PositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionTests.swift; sourceTree = "<group>"; };
+		3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDirection.swift; sourceTree = "<group>"; };
 		D031F4771EDE066F008EC23D /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = SampleView.swift; path = ../ParalayoutStudio/SampleView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D049FD801ECA7BC4009BEF98 /* ParalayoutStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParalayoutStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D049FD831ECA7BC4009BEF98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = AppDelegate.swift; path = ../ParalayoutStudio/AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -134,6 +142,8 @@
 				D0E090C81ECB9CFC0077F3F6 /* AspectRatio.swift */,
 				D0E090C61ECB95620077F3F6 /* Interpolation.swift */,
 				D0E090D01ECCD3EC0077F3F6 /* Label.swift */,
+				3DE5CB0625A7ABE500F497F7 /* LayoutDirection.swift */,
+				3D75C52C25A977B600D63205 /* Position.swift */,
 				D031F4761EDE0587008EC23D /* Categories */,
 				D0624F721EDF8C3F00076663 /* Other */,
 			);
@@ -202,10 +212,12 @@
 			children = (
 				3D5DC53C258C110F005BFBC1 /* AngleTests.swift */,
 				D0624FCF1EE1D47500076663 /* AspectRatioTests.swift */,
+				3DA50D1B25CBB91300E478B6 /* CombinationTesting.swift */,
 				D0624FC61EDFA1AE00076663 /* GeometryAdditionsTests.swift */,
 				3D5EE80620701F2300B767FA /* LabelTests.swift */,
 				3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */,
 				3D8F875B258DC46900765277 /* PixelRoundingTests.swift */,
+				3DA50D2525CBD13B00E478B6 /* PositionTests.swift */,
 				D0624FD31EE214DA00076663 /* TestSamples.swift */,
 				D0624FC81EDFA1AE00076663 /* Info.plist */,
 			);
@@ -374,6 +386,7 @@
 			files = (
 				D0624F7E1EDF8EE600076663 /* AspectRatio.swift in Sources */,
 				3D5DC537258C0B4B005BFBC1 /* Angle.swift in Sources */,
+				3D75C52D25A977B600D63205 /* Position.swift in Sources */,
 				D0624F801EDF8EE600076663 /* Interpolation.swift in Sources */,
 				D0624F811EDF8EE600076663 /* Label.swift in Sources */,
 				D0624F821EDF8EE600076663 /* GeometryAdditions.swift in Sources */,
@@ -382,6 +395,7 @@
 				D0624F861EDF8EE600076663 /* UIViewAdditions_Distribution.swift in Sources */,
 				D0624F871EDF8EE600076663 /* UIViewAdditions_Sizing.swift in Sources */,
 				3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */,
+				3DE5CB0725A7ABE500F497F7 /* LayoutDirection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +407,9 @@
 				3D8F875C258DC46900765277 /* PixelRoundingTests.swift in Sources */,
 				D0624FC71EDFA1AE00076663 /* GeometryAdditionsTests.swift in Sources */,
 				3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */,
+				3DA50D1C25CBB91300E478B6 /* CombinationTesting.swift in Sources */,
 				D0624FD41EE214DA00076663 /* TestSamples.swift in Sources */,
+				3DA50D2625CBD13B00E478B6 /* PositionTests.swift in Sources */,
 				D0624FD01EE1D47500076663 /* AspectRatioTests.swift in Sources */,
 				3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */,
 			);
