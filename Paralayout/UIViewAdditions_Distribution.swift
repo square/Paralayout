@@ -460,30 +460,30 @@ extension UIView : ViewDistributionSpecifying {
                 
                 switch axis {
                 case .horizontal:
-                    frame.origin.x = (viewOrigin - insets.left).roundToPixel(in: self)
+                    frame.origin.x = (viewOrigin - insets.left).roundedToPixel(in: self)
                     
                     if let verticalAlignment = orthogonalAlignment {
                         switch verticalAlignment {
                         case .leading(inset: let inset):
-                            frame.origin.y = (layoutBounds.minY + inset).roundToPixel(in: self)
+                            frame.origin.y = (layoutBounds.minY + inset).roundedToPixel(in: self)
                         case .centered(offset: let offset):
-                            frame.origin.y = (layoutBounds.midY - frame.height / 2 + offset).roundToPixel(in: self)
+                            frame.origin.y = (layoutBounds.midY - frame.height / 2 + offset).roundedToPixel(in: self)
                         case .trailing(inset: let inset):
-                            frame.origin.y = (layoutBounds.maxY - (frame.height + inset)).roundToPixel(in: self)
+                            frame.origin.y = (layoutBounds.maxY - (frame.height + inset)).roundedToPixel(in: self)
                         }
                     }
                     
                 case .vertical:
-                    frame.origin.y = (viewOrigin - insets.top).roundToPixel(in: self)
+                    frame.origin.y = (viewOrigin - insets.top).roundedToPixel(in: self)
                     
                     if let horizontalAlignment = orthogonalAlignment {
                         switch horizontalAlignment {
                         case .leading(inset: let inset):
-                            frame.origin.x = (layoutBounds.minX + inset).roundToPixel(in: self)
+                            frame.origin.x = (layoutBounds.minX + inset).roundedToPixel(in: self)
                         case .centered(offset: let offset):
-                            frame.origin.x = (layoutBounds.midX - frame.width / 2 + offset).roundToPixel(in: self)
+                            frame.origin.x = (layoutBounds.midX - frame.width / 2 + offset).roundedToPixel(in: self)
                         case .trailing(inset: let inset):
-                            frame.origin.x = (layoutBounds.maxX - (frame.width + inset)).roundToPixel(in: self)
+                            frame.origin.x = (layoutBounds.maxX - (frame.width + inset)).roundedToPixel(in: self)
                         }
                     }
                 }
@@ -549,7 +549,7 @@ extension UIView : ViewDistributionSpecifying {
             } else {
                 // Compute the trailing edge of the *unrounded* frame, not the size, to avoid accumulation of rounding
                 // error.
-                subviewTrailingEdge = axis.trailingEdge(of: unroundedFrame).roundToPixel(in: subview)
+                subviewTrailingEdge = axis.trailingEdge(of: unroundedFrame).roundedToPixel(in: subview)
             }
             
             var subviewFrame = unroundedFrame
