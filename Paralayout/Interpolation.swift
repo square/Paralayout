@@ -337,6 +337,18 @@ public struct Interpolation: Comparable {
             height: interpolate(from: start.height, to: end.height, curve: curve)
         )
     }
+
+    /// Compute an interpolated rect based on the Interpolation.
+    /// - parameter start: The initial rect, corresponding to `.start`.
+    /// - parameter end: The final rect, corresponding to `.end`.
+    /// - parameter curve: A curve to apply to the interpolation (optional, defaults to `.linear`).
+    /// - returns: The interpolated rect.
+    public func interpolate(from start: CGRect, to end: CGRect, curve: Curve = .linear) -> CGRect {
+        return .init(
+            origin: self.interpolate(from: start.origin, to: end.origin, curve: curve),
+            size: self.interpolate(from: start.size, to: end.size, curve: curve)
+        )
+    }
     
     /// Clamps the receiver to `[start...end]`.
     /// - parameter clamp: The clamp options to use (optional, defaults to `.both`).
