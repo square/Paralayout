@@ -10,6 +10,7 @@
 		3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */; };
 		3D5DC537258C0B4B005BFBC1 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC536258C0B4B005BFBC1 /* Angle.swift */; };
 		3D5DC53D258C110F005BFBC1 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5DC53C258C110F005BFBC1 /* AngleTests.swift */; };
+		10F8242225FAF55100D8DF2A /* InterpolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F8242125FAF55100D8DF2A /* InterpolationTests.swift */; };
 		3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5EE80620701F2300B767FA /* LabelTests.swift */; };
 		3D75C52D25A977B600D63205 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D75C52C25A977B600D63205 /* Position.swift */; };
 		3D8F8758258DC41300765277 /* PixelRounding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F8757258DC41300765277 /* PixelRounding.swift */; };
@@ -75,6 +76,7 @@
 		3D0A9B7E24CFE7DF00A9C5DE /* UIViewSizingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewSizingTests.swift; sourceTree = "<group>"; };
 		3D5DC536258C0B4B005BFBC1 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		3D5DC53C258C110F005BFBC1 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
+		10F8242125FAF55100D8DF2A /* InterpolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpolationTests.swift; sourceTree = "<group>"; };
 		3D5EE80620701F2300B767FA /* LabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTests.swift; sourceTree = "<group>"; };
 		3D75C52C25A977B600D63205 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		3D8F8757258DC41300765277 /* PixelRounding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelRounding.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				3DA50D2525CBD13B00E478B6 /* PositionTests.swift */,
 				D0624FD31EE214DA00076663 /* TestSamples.swift */,
 				D0624FC81EDFA1AE00076663 /* Info.plist */,
+				10F8242125FAF55100D8DF2A /* InterpolationTests.swift */,
 			);
 			path = ParalayoutTests;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 			files = (
 				3D0A9B7F24CFE7DF00A9C5DE /* UIViewSizingTests.swift in Sources */,
 				3D8F875C258DC46900765277 /* PixelRoundingTests.swift in Sources */,
+				10F8242225FAF55100D8DF2A /* InterpolationTests.swift in Sources */,
 				D0624FC71EDFA1AE00076663 /* GeometryAdditionsTests.swift in Sources */,
 				3D5EE80720701F2300B767FA /* LabelTests.swift in Sources */,
 				3DA50D1C25CBB91300E478B6 /* CombinationTesting.swift in Sources */,
