@@ -13,7 +13,7 @@ Paralayout is a set of simple, useful, and straightforward utilities that enable
 
 ### CocoaPods
 
-Integrating Paralayout into your iOS project via [CocoaPods](http://cocoapods.org) is simple:
+To install Paralayout via [CocoaPods](http://cocoapods.org), add the following to your `Podfile`:
 
 ```ruby
 pod 'Paralayout'
@@ -21,7 +21,7 @@ pod 'Paralayout'
 
 ### Swift Package Manager
 
-Installing Paralayout via [Swift Package Manager](https://swift.org/package-manager/) by adding the following to your `Package.swift`:
+To install Paralayout via [Swift Package Manager](https://swift.org/package-manager/), add the following to your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -31,22 +31,11 @@ dependencies: [
 
 ### Carthage
 
-[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
-
-You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
-
-```bash
-$ brew update
-$ brew install carthage
-```
-
-To integrate Paralayout into your Xcode project using Carthage, specify it in your `Cartfile`:
+To install Paralayout via [Carthage](https://github.com/Carthage/Carthage), add the following to your `Cartfile`:
 
 ```ogdl
 github "Square/Paralayout"
 ```
-
-Run `carthage` to build the framework and drag the built `Paralayout.framework` into your Xcode project.
 
 ### Submodules
 
