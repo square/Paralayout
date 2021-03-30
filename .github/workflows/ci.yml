@@ -22,7 +22,7 @@ jobs:
       - name: Prepare iOS 13 Simulator
         run: |
           sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
-          sudo ln -s /Applications/Xcode_11.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 13.6.simruntime
+          sudo ln -s /Applications/Xcode_11.7.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 13.7.simruntime
           xcrun simctl list runtimes
         if: matrix.platform == 'iOS_13'
       - name: Bundle Install
@@ -64,7 +64,7 @@ jobs:
       - name: Prepare iOS 13 Simulator
         run: |
           sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
-          sudo ln -s /Applications/Xcode_11.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 13.6.simruntime
+          sudo ln -s /Applications/Xcode_11.7.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 13.7.simruntime
           xcrun simctl list runtimes
         if: matrix.platform == 'iOS_13'
       - name: Prepare iOS 12 Simulator

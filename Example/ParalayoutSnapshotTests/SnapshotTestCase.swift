@@ -45,7 +45,7 @@ class SnapshotTestCase: XCTestCase {
 
     private static let testedDevices = [
         TestDeviceConfig(systemVersion: "14.4", screenSize: CGSize(width: 390, height: 844), screenScale: 3),
-        TestDeviceConfig(systemVersion: "13.6", screenSize: CGSize(width: 375, height: 812), screenScale: 3),
+        TestDeviceConfig(systemVersion: "13.7", screenSize: CGSize(width: 375, height: 812), screenScale: 3),
         TestDeviceConfig(systemVersion: "12.4", screenSize: CGSize(width: 320, height: 568), screenScale: 2),
     ]
 
