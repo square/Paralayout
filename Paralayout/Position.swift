@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-import Foundation
+import UIKit
 
 /// Locations within a rectangle.
 public enum Position {

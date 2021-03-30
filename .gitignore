@@ -1,5 +1,7 @@
-# Xcode
+# macOS
 .DS_Store
+
+# Xcode
 build/
 *.pbxuser
 !default.pbxuser
@@ -9,10 +11,24 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
-*xcuserdata
+xcuserdata/
+*.xccheckout
 profile
 *.moved-aside
 DerivedData
-.idea/
+*.hmap
+*.ipa
+
+# Bundler
+.bundle
+
+# Carthage
+Carthage/Build
+
+# CocoaPods
+Pods/
+
+# Swift Package Manager
+generated/
+.build/
+.swiftpm/

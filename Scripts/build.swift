@@ -53,11 +53,11 @@ enum Platform: String, CustomStringConvertible {
 	var destination: String {
 		switch self {
 		case .iOS_14:
-			return "platform=iOS Simulator,OS=14.2,name=iPhone 12 Pro"
+			return "platform=iOS Simulator,OS=14.4,name=iPhone 12 Pro"
 		case .iOS_13:
-			return "platform=iOS Simulator,OS=13.6,name=iPhone 11 Pro"
+			return "platform=iOS Simulator,OS=13.7,name=iPhone 11 Pro"
 		case .iOS_12:
-			return "platform=iOS Simulator,OS=12.4,name=iPhone Xs"
+			return "platform=iOS Simulator,OS=12.4,name=iPhone 5s"
 		}
 	}
 
@@ -74,12 +74,12 @@ enum Task: String, CustomStringConvertible {
 	case spm
 	case xcode
 
-	var project: String? {
+	var workspace: String? {
 		switch self {
 		case .spm:
 			return nil
 		case .xcode:
-			return "Paralayout.xcodeproj"
+			return "Example/ParalayoutDemo.xcworkspace"
 		}
 	}
 
@@ -88,7 +88,7 @@ enum Task: String, CustomStringConvertible {
 		case .spm:
 			return "Paralayout"
 		case .xcode:
-			return "ParalayoutStudio"
+			return "ParalayoutDemo"
 		}
 	}
 
@@ -126,9 +126,9 @@ guard let platform = Platform(rawValue: rawPlatform) else {
 
 var xcodeBuildArguments: [String] = []
 
-if let project = task.project {
-	xcodeBuildArguments.append("-project")
-	xcodeBuildArguments.append(project)
+if let workspace = task.workspace {
+	xcodeBuildArguments.append("-workspace")
+	xcodeBuildArguments.append(workspace)
 }
 
 if let configuration = task.configuration {

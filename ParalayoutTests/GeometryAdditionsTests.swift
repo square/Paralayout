@@ -15,6 +15,7 @@
 //
 
 import Paralayout
+import UIKit
 import XCTest
 
 final class GeometryAdditionsTests: XCTestCase {

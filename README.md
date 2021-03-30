@@ -153,7 +153,7 @@ Fixing layout issues is as simple as using the Xcode debugger. Remember that on 
 ## Requirements
 
 * iOS 12.0 or later
-* Xcode 10.0 or later
+* Xcode 12.0 or later
 * Swift 5.0
 
 
