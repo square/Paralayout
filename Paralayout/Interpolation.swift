@@ -231,6 +231,38 @@ public struct Interpolation: Comparable {
     public init(ofUnit unitValue: CGFloat, clamp: Clamp = .both) {
         self.init(of: unitValue, from: 0.0, to: 1.0, clamp: clamp)
     }
+
+    /// Initialize an Interpolation with a Float.
+    /// - parameter value: The value to normalize.
+    /// - parameter min: The min value, corresponding to `.start`.
+    /// - parameter max: The max value, corresponding to `.end`.
+    /// - parameter clamp: The clamp to use for values outside `[min...max]` (optional, defaults to `.both`).
+    public init(of value: Float, from min: Float, to max: Float, clamp: Clamp = .both) {
+        self.init(of: CGFloat(value), from: CGFloat(min), to: CGFloat(max), clamp: clamp)
+    }
+
+    /// Initialize an Interpolation with a Float.
+    /// - parameter unitValue: The value to normalize in 0...1.
+    /// - parameter clamp: The clamp options to use for values outside `[0...1]` (optional, defaults to `.both`).
+    public init(ofUnit unitValue: Float, clamp: Clamp = .both) {
+        self.init(ofUnit: CGFloat(unitValue), clamp: clamp)
+    }
+
+    /// Initialize an Interpolation with a Double.
+    /// - parameter value: The value to normalize.
+    /// - parameter min: The min value, corresponding to `.start`.
+    /// - parameter max: The max value, corresponding to `.end`.
+    /// - parameter clamp: The clamp to use for values outside `[min...max]` (optional, defaults to `.both`).
+    public init(of value: Double, from min: Double, to max: Double, clamp: Clamp = .both) {
+        self.init(of: CGFloat(value), from: CGFloat(min), to: CGFloat(max), clamp: clamp)
+    }
+
+    /// Initialize an Interpolation with a Double.
+    /// - parameter unitValue: The value to normalize in 0...1.
+    /// - parameter clamp: The clamp options to use for values outside `[0...1]` (optional, defaults to `.both`).
+    public init(ofUnit unitValue: Double, clamp: Clamp = .both) {
+        self.init(ofUnit: CGFloat(unitValue), clamp: clamp)
+    }
     
     /// Initialize an Interpolation with an elapsed time.
     /// - parameter startDate: The start date from which to determine progress.
@@ -312,6 +344,80 @@ public struct Interpolation: Comparable {
         } else {
             return renormalizing(from: midInterpolation, to: .end).interpolate(from: mid, to: max, curve: endCurve)
         }
+    }
+
+    /// Compute an interpolated value based on the Interpolation.
+    /// - parameter min: The minimum value, corresponding to `.start`.
+    /// - parameter max: The maximum value, corresponding to `.end`.
+    /// - parameter curve: A curve to apply to the interpolation (optional, defaults to `.linear`).
+    /// - returns: The interpolated value.
+    public func interpolate(from min: Float, to max: Float, curve: Curve = .linear) -> Float {
+        Float(interpolate(from: CGFloat(min), to: CGFloat(max), curve: curve))
+    }
+
+    /// Compute an interpolated value based on the Interpolation, with a midpoint value.
+    /// - parameter min: The minimum value, corresponding to `.start`.
+    /// - parameter startCurve: The curve to apply between `min` and `mid` (optional, defaults to `.linear`).
+    /// - parameter mid: The midpoint value, corresponding to `midInterpolation`.
+    /// - parameter midInterpolation: The midpoint Interpolation value (optional, defaults to `.middle`).
+    /// - parameter endCurve: The curve to apply between `mid` and `max` (optional, defaults to `.linear`).
+    /// - parameter to: The maximum value, corresponding to `.end`.
+    /// - returns: The interpolated value.
+    public func interpolate(
+        from min: Float,
+        startCurve: Curve = .linear,
+        through mid: Float,
+        at midInterpolation: Interpolation = .middle,
+        endCurve: Curve = .linear,
+        to max: Float
+    ) -> Float {
+        Float(
+            interpolate(
+                from: CGFloat(min),
+                startCurve: startCurve,
+                through: CGFloat(mid),
+                at: midInterpolation,
+                endCurve: endCurve,
+                to: CGFloat(max)
+            )
+        )
+    }
+
+    /// Compute an interpolated value based on the Interpolation.
+    /// - parameter min: The minimum value, corresponding to `.start`.
+    /// - parameter max: The maximum value, corresponding to `.end`.
+    /// - parameter curve: A curve to apply to the interpolation (optional, defaults to `.linear`).
+    /// - returns: The interpolated value.
+    public func interpolate(from min: Double, to max: Double, curve: Curve = .linear) -> Double {
+        Double(interpolate(from: CGFloat(min), to: CGFloat(max), curve: curve))
+    }
+
+    /// Compute an interpolated value based on the Interpolation, with a midpoint value.
+    /// - parameter min: The minimum value, corresponding to `.start`.
+    /// - parameter startCurve: The curve to apply between `min` and `mid` (optional, defaults to `.linear`).
+    /// - parameter mid: The midpoint value, corresponding to `midInterpolation`.
+    /// - parameter midInterpolation: The midpoint Interpolation value (optional, defaults to `.middle`).
+    /// - parameter endCurve: The curve to apply between `mid` and `max` (optional, defaults to `.linear`).
+    /// - parameter to: The maximum value, corresponding to `.end`.
+    /// - returns: The interpolated value.
+    public func interpolate(
+        from min: Double,
+        startCurve: Curve = .linear,
+        through mid: Double,
+        at midInterpolation: Interpolation = .middle,
+        endCurve: Curve = .linear,
+        to max: Double
+    ) -> Double {
+        Double(
+            interpolate(
+                from: CGFloat(min),
+                startCurve: startCurve,
+                through: CGFloat(mid),
+                at: midInterpolation,
+                endCurve: endCurve,
+                to: CGFloat(max)
+            )
+        )
     }
     
     /// Compute an interpolated coordinate based on the Interpolation.
