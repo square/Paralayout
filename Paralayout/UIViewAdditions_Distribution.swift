@@ -280,13 +280,11 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
             case .view(let view, _):
                 // Validate the view.
                 guard superview == nil || view.superview === superview else {
-                    assertionFailure("\(view) is not a subview of \(String(describing: superview))!")
-                    return ([], 0, 0)
+                    fatalError("\(view) is not a subview of \(String(describing: superview))!")
                 }
                 
                 guard !subviewsToDistribute.contains(view) else {
-                    assertionFailure("\(view) is included twice in \(distribution)!")
-                    return ([], 0, 0)
+                    fatalError("\(view) is included twice in \(distribution)!")
                 }
                 
                 subviewsToDistribute.insert(view)
@@ -303,9 +301,8 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
             distributionItems.append(item)
         }
         
-        // Complain if no subviews were provided.
+        // Exit early if no subviews were provided.
         guard subviewsToDistribute.count > 0 else {
-            assertionFailure("No views to lay out in \(distribution)!")
             return ([], 0, 0)
         }
         
@@ -430,6 +427,9 @@ extension UIView : ViewDistributionSpecifying {
     /// (optional, defaults to `nil`).
     /// - parameter orthogonalAlignment: The alignment (orthogonal to the distribution axis) to apply to the views
     /// (optional, defaults to `.centered`). If `nil`, views are not moved orthogonally.
+    ///
+    /// - precondition: All views in the `distribution` must be subviews of the receiver.
+    /// - precondition: The `distribution` must not include any given view more than once.
     public func applySubviewDistribution(
         _ distribution: [ViewDistributionSpecifying],
         axis: ViewDistributionAxis = .vertical,
@@ -506,6 +506,7 @@ extension UIView : ViewDistributionSpecifying {
     }
     
     /// Size and position subviews to equally take up all horizontal space.
+    ///
     /// - parameter subviews: The subviews to lay out.
     /// - parameter axis: The direction of layout.
     /// - parameter margin: The space between each subview.
@@ -513,6 +514,10 @@ extension UIView : ViewDistributionSpecifying {
     /// (optional, defaults to `nil`).
     /// - parameter sizeToBounds: If `true`, also set the size of the subviews orthogonal to `axis` to match the size of
     /// the `bounds` (optional, defaults to `false`).
+    ///
+    /// - precondition: The available space on the specified `axis` of the receiver must be at least as large as the
+    /// space required for the specified `margin` between each subview. In other words, the `subviews` may result in a
+    /// size of zero along the specified `axis`, but it may not be negative.
     public func spreadOutSubviews(
         _ subviews: [UIView],
         axis: ViewDistributionAxis = .horizontal,
@@ -522,7 +527,6 @@ extension UIView : ViewDistributionSpecifying {
     ) {
         let subviewsCount = subviews.count
         guard subviewsCount > 0 else {
-            assertionFailure("Cannot arrange zero subviews!")
             return
         }
         
@@ -531,11 +535,11 @@ extension UIView : ViewDistributionSpecifying {
         let totalMarginSpace = margin * CGFloat(subviewsCount - 1)
         let totalSubviewSpace = axis.size(of: subviewBounds) - totalMarginSpace
         
-        guard totalSubviewSpace >= CGFloat(subviewsCount) else {
-            assertionFailure(
+        guard totalSubviewSpace >= 0 else {
+            fatalError(
                 "Cannot arrange \(subviewsCount) subviews with \(margin)-pt margins in \(subviewBounds.width) points "
-                    + "of space!")
-            return
+                    + "of space!"
+            )
         }
         
         var unroundedFrame = subviewBounds
