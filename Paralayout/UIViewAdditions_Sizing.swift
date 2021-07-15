@@ -130,8 +130,10 @@ extension UIView {
         // Setting the bound's width or height to a negative value will result in the origin being shifted by that
         // amount (and the size parameter inverted). This is almost never the behavior we want here, and is difficult to
         // undo later since it requires explicitly setting the bound's origin.
-        bounds.size.width = max(sizeThatFits.width, 0)
-        bounds.size.height = max(sizeThatFits.height, 0)
+        bounds.size = CGSize(
+            width: max(sizeThatFits.width, 0),
+            height: max(sizeThatFits.height, 0)
+        )
     }
 
     /// Resize the view to fit a given width.
