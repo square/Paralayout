@@ -107,6 +107,30 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    func testSizeToFitWithTransform() {
+        let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
+        testView.transform = .init(scaleX: 2, y: 2)
+        testView.sizeToFit(.init(width: 100, height: 50), constraints: .maxSize)
+
+        // The constrained size should be applied to the untransformed frame of the view.
+        XCTAssertEqual(testView.bounds.size, .init(width: 100, height: 50))
+        XCTAssertEqual(testView.frame.size, .init(width: 200, height: 100))
+    }
+
+    func testSizeToFitWithNegativeWidth() {
+        let testView = TestView(sizeThatFits: .init(width: -50, height: 200))
+        testView.sizeToFit(.init(width: 100, height: 50))
+
+        XCTAssertEqual(testView.bounds.size, .init(width: 0, height: 200))
+    }
+
+    func testSizeToFitWithNegativeHeight() {
+        let testView = TestView(sizeThatFits: .init(width: 200, height: -50))
+        testView.sizeToFit(.init(width: 100, height: 50))
+
+        XCTAssertEqual(testView.bounds.size, .init(width: 200, height: 0))
+    }
+
 }
 
 // MARK: -
