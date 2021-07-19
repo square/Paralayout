@@ -18,9 +18,9 @@ import UIKit
 
 /// A means of getting a `SubviewDistributionItem`: either a UIView, or a number as `.fixed` or `.flexible`.
 public protocol ViewDistributionSpecifying {
-    
+
     var distributionItem: ViewDistributionItem { get }
-    
+
 }
 
 // MARK: -
@@ -28,39 +28,58 @@ public protocol ViewDistributionSpecifying {
 /// A direction for subview distribution.
 public enum ViewDistributionAxis {
 
-    /// The horizontal direction, meaning views will be distributed left-to-right.
+    /// The horizontal direction, meaning views will be distributed left-to-right or right-to-left.
     case horizontal
 
     /// The vertical direction, meaning views will be distributed top-to-bottom.
     case vertical
 
     // MARK: - Private Methods
-    
-    fileprivate func select<T>(horizontal: @autoclosure () -> T, vertical: @autoclosure () -> T) -> T {
+
+    fileprivate func amount(of insets: UIEdgeInsets) -> CGFloat {
         switch self {
         case .horizontal:
-            return horizontal()
+            return insets.horizontalAmount
         case .vertical:
-            return vertical()
+            return insets.verticalAmount
         }
     }
-    
-    fileprivate func amount(of insets: UIEdgeInsets) -> CGFloat {
-        return select(horizontal: insets.horizontalAmount, vertical: insets.verticalAmount)
-    }
-    
+
     fileprivate func size(of rect: CGRect) -> CGFloat {
-        return select(horizontal: rect.width, vertical: rect.height)
+        switch self {
+        case .horizontal:
+            return rect.width
+        case .vertical:
+            return rect.height
+        }
     }
-    
-    fileprivate func leadingEdge(of rect: CGRect) -> CGFloat {
-        return select(horizontal: rect.minX, vertical: rect.minY)
+
+    fileprivate func leadingEdge(of rect: CGRect, layoutDirection: UIUserInterfaceLayoutDirection) -> CGFloat {
+        switch (self, layoutDirection) {
+        case (.horizontal, .leftToRight):
+            return rect.minX
+        case (.horizontal, .rightToLeft):
+            return rect.maxX
+        case (.vertical, _):
+            return rect.minY
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
+        }
     }
-    
-    fileprivate func trailingEdge(of rect: CGRect) -> CGFloat {
-        return select(horizontal: rect.maxX, vertical: rect.maxY)
+
+    fileprivate func trailingEdge(of rect: CGRect, layoutDirection: UIUserInterfaceLayoutDirection) -> CGFloat {
+        switch (self, layoutDirection) {
+        case (.horizontal, .leftToRight):
+            return rect.maxX
+        case (.horizontal, .rightToLeft):
+            return rect.minX
+        case (.vertical, _):
+            return rect.maxY
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
+        }
     }
-    
+
     fileprivate func setSize(_ size: CGFloat, ofRect rect: inout CGRect) {
         switch self {
         case .horizontal:
@@ -69,29 +88,45 @@ public enum ViewDistributionAxis {
             rect.size.height = size
         }
     }
-    
-    fileprivate func setLeadingEdge(_ leadingEdge: CGFloat, ofRect rect: inout CGRect) {
-        switch self {
-        case .horizontal:
+
+    fileprivate func setLeadingEdge(
+        _ leadingEdge: CGFloat,
+        ofRect rect: inout CGRect,
+        layoutDirection: UIUserInterfaceLayoutDirection
+    ) {
+        switch (self, layoutDirection) {
+        case (.horizontal, .leftToRight):
             rect.origin.x = leadingEdge
-        case .vertical:
+        case (.horizontal, .rightToLeft):
+            rect.origin.x = leadingEdge + rect.width
+        case (.vertical, _):
             rect.origin.y = leadingEdge
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
         }
     }
-    
+
 }
 
 /// Orthogonal alignment options for view distribution.
 public enum ViewDistributionAlignment {
 
-    /// Align to the left (for vertical distribution) or top (for horizontal).
+    /// Align to the leading edge (for vertical distribution) or top (for horizontal).
+    ///
+    /// - inset: An inset from the leading edge towards the center of the distribution axis.
     case leading(inset: CGFloat)
 
     /// Center-align along the distribution axis.
+    ///
+    /// - offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
+    /// trailing edge. Negative values indicate adjusting towards the leading edge.
     case centered(offset: CGFloat)
 
-    /// Align to the right (for vertical distribution) or bottom (for horizontal).
+    /// Align to the trailing edge (for vertical distribution) or bottom (for horizontal).
+    ///
+    /// - inset: An inset from the trailing edge towards the center of the distribution axis.
     case trailing(inset: CGFloat)
+
 }
 
 /// An element of a horizontal or vertical distribution.
@@ -105,9 +140,9 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
 
     /// Proportional spacer, a fraction of the space not taken up by UIViews or fixed spacers.
     case flexible(CGFloat)
-    
+
     // MARK: - Public Static Methods
-    
+
     /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent
     /// spacers (preferring larger ones).
     /// - parameter distribution: An array of optional distribution specifiers: either a UIView, or a number as `.fixed`
@@ -116,75 +151,75 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     /// spacers.
     public static func collapsing(_ distribution: [ViewDistributionSpecifying?]) -> [ViewDistributionItem] {
         var collapsedItems = [ViewDistributionItem]()
-        
+
         func isViewVisible(_ view: UIView) -> Bool {
             if view.superview == nil || view.isHidden || view.alpha == 0 || view.frame.isEmpty {
                 return false
-                
+
             } else if let label = view as? UILabel {
                 if let text = label.text {
                     return !text.isEmpty
                 } else {
                     return false
                 }
-                
+
             } else if let imageView = view as? UIImageView {
                 return (imageView.image != nil)
-                
+
             } else {
                 return true
             }
         }
-        
+
         for distributionSpecifier in distribution {
             // Filter out anything that's nil.
             guard let item = distributionSpecifier?.distributionItem else {
                 continue
             }
-            
+
             switch item {
             case .view(let view, _):
                 // Filter out invisible views.
                 if isViewVisible(view) {
                     collapsedItems.append(item)
                 }
-                
+
             case .fixed(let fixedSpace):
                 if let previousItem = collapsedItems.last {
                     switch previousItem {
                     case .view:
                         // Space after a visible view: append.
                         collapsedItems.append(item)
-                        
+
                     case .fixed(let previousFixedSpace):
                         // Fixed after fixed: replace if larger.
                         if fixedSpace > previousFixedSpace {
                             collapsedItems.removeLast()
                             collapsedItems.append(item)
                         }
-                        
+
                     case .flexible:
                         // Fixed after flexible: skip.
                         break
                     }
-                    
+
                 } else {
                     // This is the first item: append.
                     collapsedItems.append(item)
                 }
-                
+
             case .flexible(let flexibleSpace):
                 if let previousItem = collapsedItems.last {
                     switch previousItem {
                     case .view:
                         // Space after a visible view: append.
                         collapsedItems.append(item)
-                        
+
                     case .fixed:
                         // Flexible after fixed: replace.
                         collapsedItems.removeLast()
                         collapsedItems.append(item)
-                        
+
                     case .flexible(let previousFlexibleSpace):
                         // Flexible after flexible: replace if larger.
                         if flexibleSpace > previousFlexibleSpace {
@@ -192,14 +227,14 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
                             collapsedItems.append(item)
                         }
                     }
-                    
+
                 } else {
                     // This is the first item: append.
                     collapsedItems.append(item)
                 }
             }
         }
-        
+
         // Trim out fixed space at the start or finish.
         if let firstItem = collapsedItems.first {
             switch firstItem {
@@ -209,7 +244,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
                 break
             }
         }
-        
+
         if let lastItem = collapsedItems.last {
             switch lastItem {
             case .fixed:
@@ -218,11 +253,11 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
                 break
             }
         }
-        
+
         // All set.
         return collapsedItems
     }
-    
+
     /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent
     /// spacers (preferring larger ones).
     /// - parameter distribution: An series of optional distribution specifiers: either a UIView, or a number as
@@ -232,14 +267,14 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     public static func collapsing(_ distribution: ViewDistributionSpecifying? ...) -> [ViewDistributionItem] {
         return collapsing(distribution)
     }
-    
+
     // MARK: - Properties
-    
+
     /// Itself: `DistributionItem` trivially conforms to `ViewDistributionSpecifying`.
     public var distributionItem: ViewDistributionItem {
         return self
     }
-    
+
     /// Whether or not this item is flexible.
     public var isFlexible: Bool {
         switch self {
@@ -249,9 +284,9 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
             return true
         }
     }
-    
+
     // MARK: - Private Methods
-    
+
     /// Maps the specifiers to their provided items, and adds implied flexible spacers as necessary.
     /// If no spacers are included, equal flexible spacers are inserted between all views; if no `.flexible` spacers are
     /// included, two equal ones are added to the beginning and end.
@@ -262,50 +297,49 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
         impliedIn distribution: [ViewDistributionSpecifying],
         axis: ViewDistributionAxis,
         superview: UIView?
-    ) -> (items: [ViewDistributionItem], totalFixedSpace: CGFloat, flexibleSpaceDenominator: CGFloat)
-    {
+    ) -> (items: [ViewDistributionItem], totalFixedSpace: CGFloat, flexibleSpaceDenominator: CGFloat) {
         var distributionItems = [ViewDistributionItem]()
         var totalViewSize: CGFloat = 0
         var totalFixedSpace: CGFloat = 0
         var totalFlexibleSpace: CGFloat = 0
-        
+
         var subviewsToDistribute = Set<UIView>()
-        
+
         // Map the specifiers to items, tallying up space along the way.
         for specifier in distribution {
             let item = specifier.distributionItem
             let layoutSize = item.layoutSize(along: axis)
-            
+
             switch item {
             case .view(let view, _):
                 // Validate the view.
                 guard superview == nil || view.superview === superview else {
                     fatalError("\(view) is not a subview of \(String(describing: superview))!")
                 }
-                
+
                 guard !subviewsToDistribute.contains(view) else {
                     fatalError("\(view) is included twice in \(distribution)!")
                 }
-                
+
                 subviewsToDistribute.insert(view)
-                
+
                 totalViewSize += layoutSize
-                
+
             case .fixed:
                 totalFixedSpace += layoutSize
-                
+
             case .flexible:
                 totalFlexibleSpace += layoutSize
             }
-            
+
             distributionItems.append(item)
         }
-        
+
         // Exit early if no subviews were provided.
         guard subviewsToDistribute.count > 0 else {
             return ([], 0, 0)
         }
-        
+
         // Insert flexible space if necessary.
         if totalFlexibleSpace == 0 {
             if totalFixedSpace == 0 {
@@ -321,79 +355,79 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
                 totalFlexibleSpace += 2
             }
         }
-        
+
         return (distributionItems, totalFixedSpace + totalViewSize, totalFlexibleSpace)
     }
-    
+
     /// Returns the length of the DistributionItem (`axis` and `multiplier` are relevant only for `.view` and
     /// `.flexible` items, respectively).
     fileprivate func layoutSize(along axis: ViewDistributionAxis, multiplier: CGFloat = 1) -> CGFloat {
         switch self {
         case .view(let view, let insets):
             return axis.size(of: view.frame) - axis.amount(of: insets)
-            
+
         case .fixed(let margin):
             return margin
-            
+
         case .flexible(let space):
             return space * multiplier
         }
     }
-    
+
 }
 
 // MARK: -
 
 extension CGFloat {
-    
+
     /// Use the value as a fixed spacer in a distribution.
     public var fixed: ViewDistributionItem {
         return .fixed(self)
     }
-    
+
     /// Use the value as a flexible (proportional) spacer in a distribution.
     public var flexible: ViewDistributionItem {
         return .flexible(self)
     }
-    
+
 }
 
 extension Double {
-    
+
     /// Use the value as a fixed spacer in a distribution.
     public var fixed: ViewDistributionItem {
         return .fixed(CGFloat(self))
     }
-    
+
     /// Use the value as a flexible (proportional) spacer in a distribution.
     public var flexible: ViewDistributionItem {
         return .flexible(CGFloat(self))
     }
-    
+
 }
 
 extension Int {
-    
+
     /// Use the value as a fixed spacer in a distribution.
     public var fixed: ViewDistributionItem {
         return .fixed(CGFloat(self))
     }
-    
+
     /// Use the value as a flexible (proportional) spacer in a distribution.
     public var flexible: ViewDistributionItem {
         return .flexible(CGFloat(self))
     }
-    
+
 }
 
 extension UIView : ViewDistributionSpecifying {
-    
+
     /// Adopt `ViewDistributionSpecifying`, making it possible to include UIView instances directly in distributions
     /// passed to `apply[Vertical,Horizontal]Distribution()`.
     public var distributionItem: ViewDistributionItem {
         return .view(self, .zero)
     }
-    
+
     /// Arrange subviews according to a distribution with fixed and/or flexible spacers. Examples:
     ///
     /// To stack two elements (no `.flexible` items implies vertically centering the group):
@@ -420,13 +454,13 @@ extension UIView : ViewDistributionSpecifying {
     /// horizontal positioning).
     /// `applySubviewDistribution([ 1.flexible, icon, 2.flexible ], orthogonalOffset: nil)`
     ///
-    /// - parameter distribution: An array of distribution specifiers: either a UIView, or a number as `.fixed` or
-    /// `.flexible`.
-    /// - parameter axis: The direction of layout (optional, defaults to `.vertical`).
-    /// - parameter layoutBounds: The region in the view for the layout, or `nil` to indicate the view's bounds
-    /// (optional, defaults to `nil`).
-    /// - parameter orthogonalAlignment: The alignment (orthogonal to the distribution axis) to apply to the views
-    /// (optional, defaults to `.centered`). If `nil`, views are not moved orthogonally.
+    /// - parameter distribution: An array of distribution specifiers, ordered from the leading/top edge to the
+    /// trailing/bottom edge.
+    /// - parameter axis: The axis upon which the items should be distributed. Defaults to `.vertical`.
+    /// - parameter layoutBounds: The region in the receiver in which to distribute the view. Specify `nil` to use the
+    /// receiver's bounds. Defaults to `nil`.
+    /// - parameter orthogonalAlignment: The alignment (orthogonal to the distribution axis) to apply to the views. If
+    /// `nil`, views are not moved orthogonally. Defaults to centered with no offset.
     ///
     /// - precondition: All views in the `distribution` must be subviews of the receiver.
     /// - precondition: The `distribution` must not include any given view more than once.
@@ -446,22 +480,23 @@ extension UIView : ViewDistributionSpecifying {
         guard items.count > 0 else {
             return
         }
-        
+
         // Determine the layout parameters based on the space the distribution is going into.
         let layoutBounds = layoutBounds ?? bounds
         let flexibleSpaceMultiplier = (axis.size(of: layoutBounds) - totalFixedSpace) / flexibleSpaceDenominator
-        
+        let receiverLayoutDirection = effectiveUserInterfaceLayoutDirection
+
         // Okay, ready to go!
-        var viewOrigin = axis.leadingEdge(of: layoutBounds)
+        var viewOrigin = axis.leadingEdge(of: layoutBounds, layoutDirection: receiverLayoutDirection)
         for item in items {
             switch item {
             case .view(let subview, let insets):
                 var frame = subview.frame
-                
+
                 switch axis {
                 case .horizontal:
                     frame.origin.x = (viewOrigin - insets.left).roundedToPixel(in: self)
-                    
+
                     if let verticalAlignment = orthogonalAlignment {
                         switch verticalAlignment {
                         case .leading(inset: let inset):
@@ -472,39 +507,57 @@ extension UIView : ViewDistributionSpecifying {
                             frame.origin.y = (layoutBounds.maxY - (frame.height + inset)).roundedToPixel(in: self)
                         }
                     }
-                    
+
                 case .vertical:
                     frame.origin.y = (viewOrigin - insets.top).roundedToPixel(in: self)
-                    
+
                     if let horizontalAlignment = orthogonalAlignment {
-                        switch horizontalAlignment {
-                        case .leading(inset: let inset):
+                        switch (horizontalAlignment, receiverLayoutDirection) {
+                        case let (.leading(inset: inset), .leftToRight):
                             frame.origin.x = (layoutBounds.minX + inset).roundedToPixel(in: self)
-                        case .centered(offset: let offset):
-                            frame.origin.x = (layoutBounds.midX - frame.width / 2 + offset).roundedToPixel(in: self)
-                        case .trailing(inset: let inset):
+                        case let (.leading(inset: inset), .rightToLeft):
                             frame.origin.x = (layoutBounds.maxX - (frame.width + inset)).roundedToPixel(in: self)
+                        case let (.centered(offset: offset), .leftToRight):
+                            frame.origin.x = (layoutBounds.midX - frame.width / 2 + offset).roundedToPixel(in: self)
+                        case let (.centered(offset: offset), .rightToLeft):
+                            frame.origin.x = (layoutBounds.midX - frame.width / 2 - offset).roundedToPixel(in: self)
+                        case let (.trailing(inset: inset), .leftToRight):
+                            frame.origin.x = (layoutBounds.maxX - (frame.width + inset)).roundedToPixel(in: self)
+                        case let (.trailing(inset: inset), .rightToLeft):
+                            frame.origin.x = (layoutBounds.minX + inset).roundedToPixel(in: self)
+                        @unknown default:
+                            fatalError("Unknown user interface layout direction")
                         }
                     }
                 }
-                
+
                 subview.frame = frame
-                
+
             case .fixed, .flexible:
                 break
             }
-            
+
+            let distanceToMoveOrigin: CGFloat
             if item.isFlexible {
                 // Note that we don't round/floor here, but rather when setting the position of each subview
                 // individually, so that rounding error is not accumulated.
-                viewOrigin += item.layoutSize(along: axis, multiplier: flexibleSpaceMultiplier)
-                
+                distanceToMoveOrigin = item.layoutSize(along: axis, multiplier: flexibleSpaceMultiplier)
+
             } else {
-                viewOrigin += item.layoutSize(along: axis)
+                distanceToMoveOrigin = item.layoutSize(along: axis)
+            }
+
+            switch (axis, receiverLayoutDirection) {
+            case (.horizontal, .leftToRight), (.vertical, _):
+                viewOrigin += distanceToMoveOrigin
+            case (.horizontal, .rightToLeft):
+                viewOrigin -= distanceToMoveOrigin
+            @unknown default:
+                fatalError("Unknown user interface layout direction")
             }
         }
     }
-    
+
     /// Size and position subviews to equally take up all horizontal space.
     ///
     /// - parameter subviews: The subviews to lay out.
@@ -529,53 +582,64 @@ extension UIView : ViewDistributionSpecifying {
         guard subviewsCount > 0 else {
             return
         }
-        
+
         // Get some metrics and bail if there isn't enough room for the subviews.
         let subviewBounds = bounds ?? self.bounds
         let totalMarginSpace = margin * CGFloat(subviewsCount - 1)
         let totalSubviewSpace = axis.size(of: subviewBounds) - totalMarginSpace
-        
+
         guard totalSubviewSpace >= 0 else {
             fatalError(
                 "Cannot arrange \(subviewsCount) subviews with \(margin)-pt margins in \(subviewBounds.width) points "
                     + "of space!"
             )
         }
-        
+
         var unroundedFrame = subviewBounds
         axis.setSize(totalSubviewSpace / CGFloat(subviewsCount), ofRect: &unroundedFrame)
-        
+
+        let receiverLayoutDirection = effectiveUserInterfaceLayoutDirection
+
         for subview in subviews {
             let subviewTrailingEdge: CGFloat
             if subview == subviews.last {
                 // Make sure the last subview precisely lands on the far edge.
-                subviewTrailingEdge = axis.trailingEdge(of: subviewBounds)
+                subviewTrailingEdge = axis.trailingEdge(of: subviewBounds, layoutDirection: receiverLayoutDirection)
+
             } else {
                 // Compute the trailing edge of the *unrounded* frame, not the size, to avoid accumulation of rounding
                 // error.
-                subviewTrailingEdge = axis.trailingEdge(of: unroundedFrame).roundedToPixel(in: subview)
+                subviewTrailingEdge = axis
+                    .trailingEdge(of: unroundedFrame, layoutDirection: receiverLayoutDirection)
+                    .roundedToPixel(in: subview)
             }
-            
+
             var subviewFrame = unroundedFrame
             switch axis {
             case .horizontal:
-                subviewFrame.size.width = subviewTrailingEdge - axis.leadingEdge(of: subviewFrame)
+                let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection)
+                subviewFrame.size.width = abs(subviewTrailingEdge - subviewLeadingEdge)
                 if sizeToBounds {
                     subviewFrame.size.height = subviewBounds.height
                 }
-                
+
             case .vertical:
-                subviewFrame.size.height = subviewTrailingEdge - axis.leadingEdge(of: subviewFrame)
+                let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection)
+                subviewFrame.size.height = abs(subviewTrailingEdge - subviewLeadingEdge)
                 if sizeToBounds {
                     subviewFrame.size.width = subviewBounds.width
                 }
             }
-            
+
             subview.frame = subviewFrame
-            
-            axis.setLeadingEdge(axis.trailingEdge(of: subviewFrame), ofRect: &unroundedFrame)
+
+            axis.setLeadingEdge(
+                axis.trailingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection),
+                ofRect: &unroundedFrame,
+                layoutDirection: receiverLayoutDirection
+            )
         }
-        
+
     }
-    
+
 }
