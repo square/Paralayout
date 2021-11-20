@@ -39,15 +39,15 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
             axis: ViewDistributionAxis = .horizontal,
             margin: CGFloat = 0,
             inRect rect: CGRect? = nil,
-            sizeToBounds: Bool = true,
+            orthogonalBehavior: ViewSpreadingBehavior = .fill,
             layoutDirection: UIUserInterfaceLayoutDirection = .leftToRight,
             file: StaticString = #file,
             testName: String = #function,
             line: UInt = #line
         ) {
-            redView.frame = .init(x: 0, y: 0, width: 30, height: 30)
-            blueView.frame = .init(x: 0, y: 0, width: 30, height: 30)
-            greenView.frame = .init(x: 0, y: 0, width: 30, height: 30)
+            redView.frame = .init(x: 0, y: 0, width: 100, height: 30)
+            blueView.frame = .init(x: 0, y: 0, width: 50, height: 20)
+            greenView.frame = .init(x: 0, y: 0, width: 70, height: 40)
 
             container.semanticContentAttribute = .attributeToForce(layoutDirection)
             container.spreadOutSubviews(
@@ -55,7 +55,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
                 axis: axis,
                 margin: margin,
                 inRect: rect,
-                sizeToBounds: sizeToBounds
+                orthogonalBehavior: orthogonalBehavior
             )
 
             assertSnapshot(
@@ -66,7 +66,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
                         axis.testDescription,
                         (margin != 0 ? "nonZeroMargin" : nil),
                         (rect != nil ? "inLayoutRect" : nil),
-                        (!sizeToBounds ? "preserveSize" : nil),
+                        orthogonalBehavior.testDescription,
                         layoutDirection.testDescription,
                     ]
                 ),
@@ -77,7 +77,42 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         }
 
         verifySnapshot()
+        verifySnapshot(layoutDirection: .rightToLeft)
         verifySnapshot(inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
+
+        // Verify orthogonal behaviors in horizontal layout.
+        verifySnapshot(orthogonalBehavior: .centered(offset: 0))
+        verifySnapshot(orthogonalBehavior: .centered(offset: 20))
+        verifySnapshot(orthogonalBehavior: .leading(inset: 0))
+        verifySnapshot(orthogonalBehavior: .leading(inset: 10))
+        verifySnapshot(orthogonalBehavior: .trailing(inset: 0))
+        verifySnapshot(orthogonalBehavior: .trailing(inset: 10))
+        verifySnapshot(inRect: CGRect(x: 20, y: 10, width: 300, height: 50), orthogonalBehavior: .centered(offset: 0))
+
+        // Verify vertical layout.
+        verifySnapshot(axis: .vertical)
+        verifySnapshot(axis: .vertical, inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
+
+        // Verify orthogonal behaviors in vertical LTR layout.
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 0))
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 50))
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 0))
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 10))
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 0))
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 10))
+        verifySnapshot(
+            axis: .vertical,
+            inRect: CGRect(x: 20, y: 10, width: 300, height: 50),
+            orthogonalBehavior: .centered(offset: 0)
+        )
+
+        // Verify orthogonal behaviors in vertical RTL layout.
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 0), layoutDirection: .rightToLeft)
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 50), layoutDirection: .rightToLeft)
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 0), layoutDirection: .rightToLeft)
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 10), layoutDirection: .rightToLeft)
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 0), layoutDirection: .rightToLeft)
+        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 10), layoutDirection: .rightToLeft)
     }
 
 }
@@ -124,6 +159,35 @@ extension UIUserInterfaceLayoutDirection {
             return "RTL"
         @unknown default:
             fatalError("Unknown layout direction")
+        }
+    }
+
+}
+
+extension ViewSpreadingBehavior {
+
+    var testDescription: String? {
+        switch self {
+        case .fill:
+            return nil
+        case let .leading(inset) where inset < 0:
+            return "leadingWithNegativeInset"
+        case let .leading(inset) where inset > 0:
+            return "leadingWithPositiveInset"
+        case .leading:
+            return "leading"
+        case let .centered(offset) where offset < 0:
+            return "centeredWithNegativeOffset"
+        case let .centered(offset) where offset > 0:
+            return "centeredWithPositiveOffset"
+        case .centered:
+            return "centered"
+        case let .trailing(inset) where inset < 0:
+            return "trailingWithNegativeInset"
+        case let .trailing(inset) where inset > 0:
+            return "trailingWithPositiveInset"
+        case .trailing:
+            return "trailing"
         }
     }
 

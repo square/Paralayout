@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import SnapshotTesting
 import XCTest
 
 class SnapshotTestCase: XCTestCase {
@@ -56,6 +57,8 @@ class SnapshotTestCase: XCTestCase {
         guard SnapshotTestCase.testedDevices.contains(where: { $0.matchesCurrentDevice() }) else {
             fatalError("Attempting to run tests on a device for which we have not collected test data")
         }
+
+        isRecording = false
     }
 
     // MARK: - Public Methods
