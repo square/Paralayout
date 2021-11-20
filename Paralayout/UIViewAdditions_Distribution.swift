@@ -67,14 +67,18 @@ public enum ViewDistributionAxis {
         }
     }
 
-    fileprivate func trailingEdge(of rect: CGRect, layoutDirection: UIUserInterfaceLayoutDirection) -> CGFloat {
+    fileprivate func trailingEdge(
+        of rect: CGRect,
+        layoutDirection: UIUserInterfaceLayoutDirection,
+        extendedBy additionalDistance: CGFloat = 0
+    ) -> CGFloat {
         switch (self, layoutDirection) {
         case (.horizontal, .leftToRight):
-            return rect.maxX
+            return rect.maxX + additionalDistance
         case (.horizontal, .rightToLeft):
-            return rect.minX
+            return rect.minX - additionalDistance
         case (.vertical, _):
-            return rect.maxY
+            return rect.maxY + additionalDistance
         @unknown default:
             fatalError("Unknown user interface layout direction")
         }
@@ -609,22 +613,21 @@ extension UIView : ViewDistributionSpecifying {
         }
 
         // Get some metrics and bail if there isn't enough room for the subviews.
-        let subviewBounds = bounds ?? self.bounds
+        let contentBounds = bounds ?? self.bounds
         let totalMarginSpace = margin * CGFloat(subviewsCount - 1)
-        let totalSubviewSpace = axis.size(of: subviewBounds) - totalMarginSpace
+        let totalSubviewSpace = axis.size(of: contentBounds) - totalMarginSpace
 
         guard totalSubviewSpace >= 0 else {
             fatalError(
-                "Cannot arrange \(subviewsCount) subviews with \(margin)-pt margins in \(subviewBounds.width) points "
+                "Cannot arrange \(subviewsCount) subviews with \(margin)-pt margins in \(contentBounds.width) points "
                     + "of space!"
             )
         }
 
-        var unroundedFrame = subviewBounds
-        axis.setSize(totalSubviewSpace / CGFloat(subviewsCount), ofRect: &unroundedFrame)
-
         let receiverLayoutDirection = effectiveUserInterfaceLayoutDirection
 
+        // To simplify the logic below, spread the subviews using increasing coordinate values. This means we can treat
+        // the rest of the layout as always left-to-right.
         let increasingCoordinateSubviews: [UIView]
         switch (axis, receiverLayoutDirection) {
         case (.vertical, _), (.horizontal, .leftToRight):
@@ -635,24 +638,27 @@ extension UIView : ViewDistributionSpecifying {
             fatalError("Unknown user interface layout direction")
         }
 
+        var unroundedFrame = contentBounds
+        axis.setSize(totalSubviewSpace / CGFloat(subviewsCount), ofRect: &unroundedFrame)
+
         for subview in increasingCoordinateSubviews {
             let subviewTrailingEdge: CGFloat
             if subview == increasingCoordinateSubviews.last {
                 // Make sure the last subview precisely lands on the far edge.
-                subviewTrailingEdge = axis.trailingEdge(of: subviewBounds, layoutDirection: receiverLayoutDirection)
+                subviewTrailingEdge = axis.trailingEdge(of: contentBounds, layoutDirection: .leftToRight)
 
             } else {
                 // Compute the trailing edge of the *unrounded* frame, not the size, to avoid accumulation of rounding
                 // error.
                 subviewTrailingEdge = axis
-                    .trailingEdge(of: unroundedFrame, layoutDirection: receiverLayoutDirection)
+                    .trailingEdge(of: unroundedFrame, layoutDirection: .leftToRight)
                     .roundedToPixel(in: subview)
             }
 
             var subviewFrame = unroundedFrame
             switch axis {
             case .horizontal:
-                let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection)
+                let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: .leftToRight)
                 subviewFrame.size.width = abs(subviewTrailingEdge - subviewLeadingEdge)
 
                 switch orthogonalBehavior {
@@ -675,7 +681,7 @@ extension UIView : ViewDistributionSpecifying {
                 }
 
             case .vertical:
-                let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection)
+                let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: .leftToRight)
                 subviewFrame.size.height = abs(subviewTrailingEdge - subviewLeadingEdge)
 
                 switch (orthogonalBehavior, receiverLayoutDirection) {
@@ -710,9 +716,9 @@ extension UIView : ViewDistributionSpecifying {
             subview.untransformedFrame = subviewFrame
 
             axis.setLeadingEdge(
-                axis.trailingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection),
+                axis.trailingEdge(of: subviewFrame, layoutDirection: .leftToRight, extendedBy: margin),
                 ofRect: &unroundedFrame,
-                layoutDirection: receiverLayoutDirection
+                layoutDirection: .leftToRight
             )
         }
 
