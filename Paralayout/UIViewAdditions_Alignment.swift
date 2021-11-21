@@ -65,7 +65,7 @@ extension UIView {
         let srcPoint = superview.convert(point(at: position), from: self)
         let dstPoint = superview.convert(otherView.point(at: otherPosition), from: otherView)
         
-        return dstPoint - srcPoint
+        return srcPoint.offset(to: dstPoint)
     }
     
     /// Move the view to align it with another view.

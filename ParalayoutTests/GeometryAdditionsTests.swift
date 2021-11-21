@@ -55,8 +55,12 @@ final class GeometryAdditionsTests: XCTestCase {
             CGRect(x: 30, y: 20, width: 100, height: 100)
         )
         XCTAssertEqual(
-            CGPoint(x: 50, y: 20) - CGPoint(x: 40, y: 20),
+            CGPoint(x: 50, y: 20).offset(from: CGPoint(x: 40, y: 20)),
             UIOffset(horizontal: 10, vertical: 0)
+        )
+        XCTAssertEqual(
+            CGPoint(x: -40, y: 20).offset(to: CGPoint(x: 50, y: 10)),
+            UIOffset(horizontal: 90, vertical: -10)
         )
     }
 

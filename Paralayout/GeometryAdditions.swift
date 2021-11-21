@@ -43,11 +43,6 @@ public func +(lhs: CGRect, rhs: UIOffset) -> CGRect {
     return CGRect(origin: lhs.origin + rhs, size: lhs.size)
 }
 
-/// Get the offset between two points.
-public func -(lhs: CGPoint, rhs: CGPoint) -> UIOffset {
-    return UIOffset(horizontal: lhs.x - rhs.x, vertical: lhs.y - rhs.y)
-}
-
 // MARK: -
 
 extension CGPoint {
@@ -63,6 +58,19 @@ extension CGPoint {
     /// Returns the straight-line distance to another point.
     public func distance(to point: CGPoint) -> CGFloat {
         return hypot(point.y - y, point.x - x)
+    }
+
+    /// Returns the offset that would need to be applied to the receiver to reach the specified `point`.
+    public func offset(to point: CGPoint) -> UIOffset {
+        return UIOffset(
+            horizontal: point.x - self.x,
+            vertical: point.y - self.y
+        )
+    }
+
+    /// Returns the offset that would need to be applied to the `point` to reach the receiver.
+    public func offset(from point: CGPoint) -> UIOffset {
+        return point.offset(to: self)
     }
 
 }
