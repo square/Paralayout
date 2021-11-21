@@ -43,15 +43,15 @@ final class GeometryAdditionsTests: XCTestCase {
         
         // Apply and derive offsets.
         XCTAssertEqual(
-            CGPoint.zero + UIOffset(horizontal: 12, vertical: 8),
+            CGPoint.zero.offset(by: UIOffset(horizontal: 12, vertical: 8)),
             CGPoint(x: 12, y: 8)
         )
         XCTAssertEqual(
-            CGPoint(x: -4, y: -10) + UIOffset(horizontal: 12, vertical: 8),
+            CGPoint(x: -4, y: -10).offset(by: UIOffset(horizontal: 12, vertical: 8)),
             CGPoint(x: 8, y: -2)
         )
         XCTAssertEqual(
-            CGRect(x: 20, y: 20, width: 100, height: 100) + UIOffset(horizontal: 10, vertical: 0),
+            CGRect(x: 20, y: 20, width: 100, height: 100).offset(by: UIOffset(horizontal: 10, vertical: 0)),
             CGRect(x: 30, y: 20, width: 100, height: 100)
         )
         XCTAssertEqual(
