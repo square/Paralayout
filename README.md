@@ -47,15 +47,6 @@ Or, manually check out the submodule with `git submodule add git@github.com:Squa
 
 Paralayout is a set of *à la carte* utilities, of which you can use as much or as little functionality as you like.
 
-
-#### UILabel Subclass: Label
-
-The `Label` class makes text look its best, and takes less cumbersome code to configure:
-* Style text without directly interacting with `NSAttributedString` or `NSParagraphStyle` (any more than you want to)
-* Get "compact" line wrapping that makes it unnecessary to introduce artificial line breaks into your copy
-* Hyperlinks are tappable (no need to use a `UITextView`)
-
-
 #### UIView Subclass: Hairline
 
 A `Hairline` will size itself correctly on any screen resolution, and provides conveniences for positioning within its superview.
