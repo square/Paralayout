@@ -80,6 +80,38 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         verifySnapshot(inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
     }
 
+    func testDistributionUsingCapInsets() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 80))
+        containerView.backgroundColor = .white
+
+        let topView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
+        topView.backgroundColor = .red
+        containerView.addSubview(topView)
+
+        let bottomView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
+        bottomView.backgroundColor = .green
+        containerView.addSubview(bottomView)
+
+        let label = UILabel()
+        label.text = "HÉLLÖ Worldy"
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .black
+        label.sizeToFit()
+        containerView.addSubview(label)
+
+        containerView.applySubviewDistribution(
+            [
+                1.flexible,
+                topView,
+                label.distributionItemUsingCapInsets,
+                bottomView,
+                1.flexible,
+            ]
+        )
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
 }
 
 // MARK: -
