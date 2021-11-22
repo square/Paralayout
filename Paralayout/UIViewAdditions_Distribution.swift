@@ -129,6 +129,30 @@ public enum ViewDistributionAlignment {
 
 }
 
+/// Orthogonal alignment options for view spreading.
+public enum ViewSpreadingBehavior {
+
+    /// Expand the view to fill the available space.
+    case fill
+
+    /// Align to the leading edge (for vertical distribution) or top (for horizontal).
+    ///
+    /// - inset: An inset from the leading edge towards the center of the distribution axis.
+    case leading(inset: CGFloat)
+
+    /// Center-align along the distribution axis.
+    ///
+    /// - offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
+    /// trailing edge. Negative values indicate adjusting towards the leading edge.
+    case centered(offset: CGFloat)
+
+    /// Align to the trailing edge (for vertical distribution) or bottom (for horizontal).
+    ///
+    /// - inset: An inset from the trailing edge towards the center of the distribution axis.
+    case trailing(inset: CGFloat)
+
+}
+
 /// An element of a horizontal or vertical distribution.
 public enum ViewDistributionItem: ViewDistributionSpecifying {
 
@@ -560,8 +584,9 @@ extension UIView : ViewDistributionSpecifying {
 
     /// Size and position subviews to equally take up all horizontal space.
     ///
-    /// - parameter subviews: The subviews to lay out.
-    /// - parameter axis: The direction of layout.
+    /// - parameter subviews: The subviews to spread out, ordered from the leading/top edge to the trailing/bottom edge
+    /// of the receiver.
+    /// - parameter axis: The axis along which to spread the `subviews`.
     /// - parameter margin: The space between each subview.
     /// - parameter bounds: A custom area within which to layout the subviews, or `nil` to use the receiver's `bounds`
     /// (optional, defaults to `nil`).
@@ -576,7 +601,7 @@ extension UIView : ViewDistributionSpecifying {
         axis: ViewDistributionAxis = .horizontal,
         margin: CGFloat,
         inRect bounds: CGRect? = nil,
-        sizeToBounds: Bool = false
+        orthogonalBehavior: ViewSpreadingBehavior = .fill
     ) {
         let subviewsCount = subviews.count
         guard subviewsCount > 0 else {
@@ -600,9 +625,19 @@ extension UIView : ViewDistributionSpecifying {
 
         let receiverLayoutDirection = effectiveUserInterfaceLayoutDirection
 
-        for subview in subviews {
+        let increasingCoordinateSubviews: [UIView]
+        switch (axis, receiverLayoutDirection) {
+        case (.vertical, _), (.horizontal, .leftToRight):
+            increasingCoordinateSubviews = subviews
+        case (.horizontal, .rightToLeft):
+            increasingCoordinateSubviews = subviews.reversed()
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
+        }
+
+        for subview in increasingCoordinateSubviews {
             let subviewTrailingEdge: CGFloat
-            if subview == subviews.last {
+            if subview == increasingCoordinateSubviews.last {
                 // Make sure the last subview precisely lands on the far edge.
                 subviewTrailingEdge = axis.trailingEdge(of: subviewBounds, layoutDirection: receiverLayoutDirection)
 
@@ -619,19 +654,60 @@ extension UIView : ViewDistributionSpecifying {
             case .horizontal:
                 let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection)
                 subviewFrame.size.width = abs(subviewTrailingEdge - subviewLeadingEdge)
-                if sizeToBounds {
-                    subviewFrame.size.height = subviewBounds.height
+
+                switch orthogonalBehavior {
+                case .fill:
+                    // No-op. The `subviewFrame` has already been sized and positioned to fill the available vertical
+                    // space in the container.
+                    break
+
+                case let .leading(inset):
+                    subviewFrame.size.height = subview.bounds.height
+                    subviewFrame.origin.y = inset
+
+                case let .centered(offset):
+                    subviewFrame.size.height = subview.bounds.height
+                    subviewFrame.origin.y = (unroundedFrame.height - subviewFrame.height) / 2 + offset
+
+                case let .trailing(inset):
+                    subviewFrame.size.height = subview.bounds.height
+                    subviewFrame.origin.y = unroundedFrame.height - subviewFrame.height - inset
                 }
 
             case .vertical:
                 let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection)
                 subviewFrame.size.height = abs(subviewTrailingEdge - subviewLeadingEdge)
-                if sizeToBounds {
-                    subviewFrame.size.width = subviewBounds.width
+
+                switch (orthogonalBehavior, receiverLayoutDirection) {
+                case (.fill, _):
+                    // No-op. The `subviewFrame` has already been sized and positioned to fill the available horizontal
+                    // space in the container.
+                    break
+
+                case let (.leading(inset), .leftToRight),
+                     let (.trailing(inset), .rightToLeft):
+                    subviewFrame.size.width = subview.bounds.width
+                    subviewFrame.origin.x = inset
+
+                case let (.leading(inset), .rightToLeft),
+                     let (.trailing(inset), .leftToRight):
+                    subviewFrame.size.width = subview.bounds.width
+                    subviewFrame.origin.x = unroundedFrame.width - subviewFrame.width - inset
+
+                case let (.centered(offset), .leftToRight):
+                    subviewFrame.size.width = subview.bounds.width
+                    subviewFrame.origin.x = (unroundedFrame.width - subviewFrame.width) / 2 + offset
+
+                case let (.centered(offset), .rightToLeft):
+                    subviewFrame.size.width = subview.bounds.width
+                    subviewFrame.origin.x = (unroundedFrame.width - subviewFrame.width) / 2 - offset
+
+                @unknown default:
+                    fatalError("Unknown user interface layout direction")
                 }
             }
 
-            subview.frame = subviewFrame
+            subview.untransformedFrame = subviewFrame
 
             axis.setLeadingEdge(
                 axis.trailingEdge(of: subviewFrame, layoutDirection: receiverLayoutDirection),
