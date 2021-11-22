@@ -134,6 +134,7 @@ extension CGRect {
     }
     
     /// Divides the receiver in two.
+    ///
     /// - parameter from: The edge from which the amount is interpreted.
     /// - parameter amount: The size of the slice (absolute).
     /// - returns: A tuple (slice: A rect with a width/height of the `amount`, remainder: A rect with a width/height of
@@ -172,6 +173,11 @@ extension CGRect {
                 CGRect(x: minX, y: minY, width: width, height: height - amount)
             )
         }
+    }
+
+    /// Returns the point in the receiver at the specified position.
+    public func point(at position: Position, layoutDirection: UIUserInterfaceLayoutDirection) -> CGPoint {
+        return position.point(in: self, layoutDirection: layoutDirection)
     }
 
 }
