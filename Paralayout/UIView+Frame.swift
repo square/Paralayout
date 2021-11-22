@@ -18,6 +18,8 @@ import UIKit
 
 extension UIView {
 
+    // MARK: - Internal Properties
+
     var untransformedFrame: CGRect {
         get {
             return CGRect(
@@ -33,6 +35,57 @@ extension UIView {
             layer.position = CGPoint(
                 x: newValue.minX + newValue.width * layer.anchorPoint.x,
                 y: newValue.minY + newValue.height * layer.anchorPoint.y
+            )
+        }
+    }
+
+    // MARK: - Internal Methods
+
+    /// Converts a point from the coordinate system of a given view to that of the receiver, ignoring any non-identity
+    /// transforms in the view hierarchy.
+    ///
+    /// - complexity: O(*n* + *m*), where *n* is the depth of the receiver in the view hierarchy and *m* is the depth of
+    /// the `sourceView` in the view hierarchy.
+    func untransformedConvert(_ point: CGPoint, from sourceView: UIView) throws -> CGPoint {
+        enum Error: Swift.Error {
+            case noCommonAncestor
+        }
+
+        let sourceSuperviewChainSet = Set(sequence(first: sourceView, next: { $0.superview }))
+        let targetSuperviewChain = sequence(first: self, next: { $0.superview })
+
+        // Find the most recent common ancestor so we have a reference point from which to calculate the origins. If the
+        // views don't have a common ancestor (meaning they're not in the same window), there's no way to figure out
+        // their relative arrangement.
+        guard let commonAncestor = targetSuperviewChain.first(where: { sourceSuperviewChainSet.contains($0) }) else {
+            throw Error.noCommonAncestor
+        }
+
+        let sourceOriginInCommonAncestor = sourceView.originInCoordinateSpace(of: commonAncestor)
+        let targetOriginInCommonAncestor = self.originInCoordinateSpace(of: commonAncestor)
+
+        return CGPoint(
+            x: sourceOriginInCommonAncestor.x - targetOriginInCommonAncestor.x + point.x,
+            y: sourceOriginInCommonAncestor.y - targetOriginInCommonAncestor.y + point.y
+        )
+    }
+
+    // MARK: - Private Methods
+
+    private func originInCoordinateSpace(of ancestor: UIView) -> CGPoint {
+        let superviewChainToAncestor = sequence(first: self) { previous in
+            if previous == ancestor {
+                return nil
+            }
+            return previous.superview
+        }
+
+        return superviewChainToAncestor.reduce(.zero) {
+            let untransformedSuperviewFrame = $1.untransformedFrame
+            let supersuperviewBoundsOrigin = $1.superview?.bounds.origin ?? .zero
+            return CGPoint(
+                x: $0.x + untransformedSuperviewFrame.origin.x - supersuperviewBoundsOrigin.x,
+                y: $0.y + untransformedSuperviewFrame.origin.y - supersuperviewBoundsOrigin.y
             )
         }
     }

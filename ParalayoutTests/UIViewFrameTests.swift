@@ -107,6 +107,99 @@ final class UIViewFrameTests: XCTestCase {
         XCTAssertEqual(view.bounds.origin, boundsOrigin)
     }
 
+    func testUntransformedConvert_siblingViews() throws {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+
+        let view1 = UIView(frame: CGRect(x: 20, y: 30, width: 40, height: 50))
+        window.addSubview(view1)
+
+        let view2 = UIView(frame: CGRect(x: 90, y: 80, width: 70, height: 60))
+        window.addSubview(view2)
+
+        try assertUntransformedConvertIsAccurate(for: .zero, in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: .zero, in: view2, convertedTo: view1)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view2, convertedTo: view1)
+
+        let containerView = UIView(frame: CGRect(x: 4, y: 5, width: 100, height: 100))
+        containerView.addSubview(view1)
+        containerView.addSubview(view2)
+        window.addSubview(containerView)
+
+        try assertUntransformedConvertIsAccurate(for: .zero, in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: .zero, in: view2, convertedTo: view1)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view2, convertedTo: view1)
+
+        window.frame.origin = .init(x: -7, y: 8)
+
+        try assertUntransformedConvertIsAccurate(for: .zero, in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: .zero, in: view2, convertedTo: view1)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view2, convertedTo: view1)
+    }
+
+    func testUntransformedConvert_verticalHierarchy() throws {
+        let view1 = UIView(frame: CGRect(x: 1, y: 2, width: 10, height: 10))
+
+        let view2 = UIView(frame: CGRect(x: 3, y: 4, width: 10, height: 10))
+        view2.addSubview(view1)
+
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 5, y: -6), in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 5, y: -6), in: view2, convertedTo: view1)
+
+        let view3 = UIView(frame: CGRect(x: 5, y: 6, width: 10, height: 10))
+        view2.addSubview(view3)
+
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: -7, y: 8), in: view1, convertedTo: view3)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: -7, y: 8), in: view3, convertedTo: view1)
+    }
+
+    func testUntransformedConvert_nonZeroBounds() throws {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+
+        let view1 = UIView(frame: CGRect(x: 20, y: 30, width: 40, height: 50))
+        window.addSubview(view1)
+
+        let containerView = UIView(frame: CGRect(x: 40, y: 50, width: 60, height: 70))
+        containerView.bounds.origin = CGPoint(x: 3, y: 4)
+        window.addSubview(containerView)
+
+        let view2 = UIView(frame: CGRect(x: 90, y: 80, width: 70, height: 60))
+        containerView.addSubview(view2)
+
+        let view3 = UIView(frame: CGRect(x: 110, y: 120, width: 20, height: 30))
+        containerView.addSubview(view3)
+
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 1, y: 2), in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 1, y: 2), in: view2, convertedTo: view1)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 1, y: 2), in: view2, convertedTo: view3)
+    }
+
+    func testUntransformedConvert_nonIdentityTransforms() throws {
+        let view1 = UIView(frame: CGRect(x: 1, y: 2, width: 10, height: 10))
+        view1.transform = .init(rotationAngle: 0.1)
+
+        let view2 = UIView(frame: CGRect(x: 3, y: 4, width: 10, height: 10))
+        view2.transform = .init(rotationAngle: 0.2)
+        view2.addSubview(view1)
+
+        let view3 = UIView(frame: CGRect(x: 5, y: 6, width: 10, height: 10))
+        view3.transform = .init(rotationAngle: 0.3)
+
+        let containerView = UIView(frame: CGRect(x: 7, y: 8, width: 100, height: 100))
+        containerView.transform = .init(translationX: 50, y: 60)
+        containerView.addSubview(view2)
+        containerView.addSubview(view3)
+
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 8, y: -9), in: view1, convertedTo: view2)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 8, y: -9), in: view1, convertedTo: view3)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 8, y: -9), in: view2, convertedTo: view1)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 8, y: -9), in: view2, convertedTo: view3)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 8, y: -9), in: view3, convertedTo: view1)
+        try assertUntransformedConvertIsAccurate(for: CGPoint(x: 8, y: -9), in: view3, convertedTo: view2)
+    }
+
     // MARK: - Private Helper Methods
 
     func assertUntransformedFrameIsAccurate(for view: UIView, file: StaticString = #file, line: UInt = #line) {
@@ -118,6 +211,31 @@ final class UIViewFrameTests: XCTestCase {
         XCTAssertEqual(actualValue, view.frame, file: file, line: line)
 
         view.layer.transform = originalTransform
+    }
+
+    func assertUntransformedConvertIsAccurate(
+        for point: CGPoint,
+        in sourceView: UIView,
+        convertedTo targetView: UIView,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) throws {
+        let actualValue = try targetView.untransformedConvert(point, from: sourceView)
+
+        let viewsInHierarchyWithOriginalTransforms = Set(sequence(first: sourceView, next: { $0.superview }))
+            .union(sequence(first: targetView, next: { $0.superview }))
+            .map { ($0, $0.transform) }
+
+        viewsInHierarchyWithOriginalTransforms.forEach { view, _ in
+            view.transform = .identity
+        }
+
+        let expectedValue = targetView.convert(point, from: sourceView)
+        XCTAssertEqual(actualValue, expectedValue, file: file, line: line)
+
+        viewsInHierarchyWithOriginalTransforms.forEach { view, originalTransform in
+            view.transform = originalTransform
+        }
     }
 
 }
