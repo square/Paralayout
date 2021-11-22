@@ -142,7 +142,7 @@ final class AspectRatioTests: XCTestCase {
             // The rect needs to be positioned as requested (within a pixel).
             let actualFitPointAtPosition = position.point(in: rectToFit, layoutDirection: layoutDirection)
             let expectedFitPointAtPosition = position.point(in: rect, layoutDirection: layoutDirection)
-            let rectToFitOffset = actualFitPointAtPosition - expectedFitPointAtPosition
+            let rectToFitOffset = actualFitPointAtPosition.offset(from: expectedFitPointAtPosition)
             XCTAssert(rectToFitOffset.horizontal * scale < 1 && rectToFitOffset.vertical * scale < 1)
 
             if rectToFit.width == rect.width {
@@ -172,7 +172,7 @@ final class AspectRatioTests: XCTestCase {
             // The rect needs to be positioned as requested (within a pixel).
             let actualFillPointAtPosition = position.point(in: rectToFill, layoutDirection: layoutDirection)
             let expectedFillPointAtPosition = position.point(in: rect, layoutDirection: layoutDirection)
-            let rectToFillOffset = actualFillPointAtPosition - expectedFillPointAtPosition
+            let rectToFillOffset = actualFillPointAtPosition.offset(from: expectedFillPointAtPosition)
             XCTAssert(rectToFillOffset.horizontal * scale < 1 && rectToFillOffset.vertical * scale < 1)
 
             if rectToFill.width == rect.width {

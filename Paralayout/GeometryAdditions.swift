@@ -33,21 +33,6 @@ public func /(lhs: UIOffset, rhs: CGFloat) -> UIOffset {
     return UIOffset(horizontal: lhs.horizontal / rhs, vertical: lhs.vertical / rhs)
 }
 
-/// Apply an offset to a point.
-public func +(lhs: CGPoint, rhs: UIOffset) -> CGPoint {
-    return CGPoint(x: lhs.x + rhs.horizontal, y: lhs.y + rhs.vertical)
-}
-
-/// Apply an offset to a CGRect's origin.
-public func +(lhs: CGRect, rhs: UIOffset) -> CGRect {
-    return CGRect(origin: lhs.origin + rhs, size: lhs.size)
-}
-
-/// Get the offset between two points.
-public func -(lhs: CGPoint, rhs: CGPoint) -> UIOffset {
-    return UIOffset(horizontal: lhs.x - rhs.x, vertical: lhs.y - rhs.y)
-}
-
 // MARK: -
 
 extension CGPoint {
@@ -63,6 +48,24 @@ extension CGPoint {
     /// Returns the straight-line distance to another point.
     public func distance(to point: CGPoint) -> CGFloat {
         return hypot(point.y - y, point.x - x)
+    }
+
+    /// Returns the offset that would need to be applied to the receiver to reach the specified `point`.
+    public func offset(to point: CGPoint) -> UIOffset {
+        return UIOffset(
+            horizontal: point.x - self.x,
+            vertical: point.y - self.y
+        )
+    }
+
+    /// Returns the offset that would need to be applied to the `point` to reach the receiver.
+    public func offset(from point: CGPoint) -> UIOffset {
+        return point.offset(to: self)
+    }
+
+    /// Returns the point offset from the receiver by the specified `offset`.
+    public func offset(by offset: UIOffset) -> CGPoint {
+        return CGPoint(x: self.x + offset.horizontal, y: self.y + offset.vertical)
     }
 
 }
@@ -131,6 +134,12 @@ extension CGRect {
         )
 
         return inset(by: outsets)
+    }
+
+    /// Returns the rect of the same size of the receiver whose origin is offset from the receiver's origin by the
+    /// specified `offset`.
+    public func offset(by offset: UIOffset) -> CGRect {
+        return CGRect(origin: origin.offset(by: offset), size: size)
     }
     
     /// Divides the receiver in two.
