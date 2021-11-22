@@ -113,6 +113,12 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 10), layoutDirection: .rightToLeft)
         verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 0), layoutDirection: .rightToLeft)
         verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 10), layoutDirection: .rightToLeft)
+
+        // Verify margins between subviews.
+        verifySnapshot(margin: 40, layoutDirection: .leftToRight)
+        verifySnapshot(margin: 40, layoutDirection: .rightToLeft)
+        verifySnapshot(axis: .vertical, margin: 20)
+        verifySnapshot(margin: 40, inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
     }
 
 }
