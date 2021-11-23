@@ -19,15 +19,26 @@ import UIKit
 
 extension UIView {
 
-    // MARK: - View Alignment - Core
+    // MARK: - Public Types
 
-    /// The location of a position in the view in the view's `bounds`.
-    ///
-    /// - parameter position: The position to use.
-    /// - returns: The point at the specified position.
-    public func point(at position: Position) -> CGPoint {
-        return position.point(in: bounds, layoutDirection: effectiveUserInterfaceLayoutDirection)
+    public enum TargetAlignmentBehavior {
+
+        /// Align to the position in the target view's bounds, ignoring any origin offset. This is most commonly used
+        /// when aligning sibling views in a hierarchy.
+        case untransformedFrame
+
+        /// Align to the position in the target view's bounds, including any origin offset. This is most commonly used
+        /// when aligning a view to a view in its superview chain.
+        case bounds
+
+        /// Align views based on their relationship in the view hierarchy. If the target view is in the superview chain
+        /// of the view being aligned, this will align to the target view's untransformed bounds. Otherwise it will
+        /// align to the target view's untransformed frame.
+        case automatic
+
     }
+
+    // MARK: - View Alignment - Core
 
     /// Calculates the offset between two views' positions, ignoring any transforms in the view hierarchy.
     ///
@@ -40,7 +51,8 @@ extension UIView {
     public func untransformedFrameOffset(
         from position: Position,
         to otherView: UIView,
-        _ otherPosition: Position
+        _ otherPosition: Position,
+        alignmentBehavior: TargetAlignmentBehavior = .automatic
     ) throws -> UIOffset {
         // We can't be aligned to another view if we don't have a superview.
         guard let superview = superview else {
@@ -69,10 +81,29 @@ extension UIView {
             break
         }
 
-        let srcPoint = try superview.untransformedConvert(point(at: position), from: self)
-        let dstPoint = try superview.untransformedConvert(otherView.point(at: otherPosition), from: otherView)
+        let sourcePoint = try superview.untransformedConvert(pointInBounds(at: position), from: self)
+        let targetIsInSourceSuperviewChain = sequence(first: self, next: { $0.superview }).contains(otherView)
 
-        return srcPoint.offset(to: dstPoint)
+        let targetPoint: CGPoint
+        switch alignmentBehavior {
+        case .bounds,
+             .automatic where targetIsInSourceSuperviewChain:
+            targetPoint = try superview.untransformedConvert(
+                otherView
+                    .pointInBounds(at: otherPosition)
+                    .offset(by: UIOffset(horizontal: -otherView.bounds.origin.x, vertical: -otherView.bounds.origin.y)),
+                from: otherView
+            )
+
+        case .untransformedFrame,
+             .automatic /* where !targetIsInSourceSuperviewChain */:
+            targetPoint = try superview.untransformedConvert(
+                otherView.pointInBounds(at: otherPosition),
+                from: otherView
+            )
+        }
+
+        return sourcePoint.offset(to: targetPoint)
     }
 
     /// Move the view to align it with another view.
@@ -82,11 +113,27 @@ extension UIView {
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter otherView: The view to which the receiving view will be aligned.
     /// - parameter otherPosition: The position within `otherView` to use for alignment.
+    /// - parameter alignmentBehavior: Controls how the point at the `otherPosition` in the `otherView` should be
+    /// calculated. Defaults to `.automatic`, which will align the views in the most common way based on their
+    /// relationship in the view hierarchy.
     /// - parameter offset: An additional offset to apply to the alignment, e.g. to leave a space between the two views.
-    public func align(_ position: Position, with otherView: UIView, _ otherPosition: Position, offset: UIOffset) {
+    public func align(
+        _ position: Position,
+        with otherView: UIView,
+        _ otherPosition: Position,
+        alignmentBehavior: TargetAlignmentBehavior = .automatic,
+        offset: UIOffset
+    ) {
         do {
             untransformedFrame.origin = untransformedFrame.origin
-                .offset(by: try untransformedFrameOffset(from: position, to: otherView, otherPosition))
+                .offset(
+                    by: try untransformedFrameOffset(
+                        from: position,
+                        to: otherView,
+                        otherPosition,
+                        alignmentBehavior: alignmentBehavior
+                    )
+                )
                 .offset(by: offset)
                 .roundedToPixel(in: self)
 
@@ -97,32 +144,6 @@ extension UIView {
 
     // MARK: - View Alignment - Convenience
 
-    /// The insets of the view's positions relative to its superview's.
-    ///
-    /// - precondition: The view must have a superview.
-    public var positionInsetsFromSuperview: UIEdgeInsets {
-        // We can't have margins if we don't have a superview.
-        guard let superview = superview else {
-            ParalayoutAlertForInvalidViewHierarchy()
-            return .zero
-        }
-
-        do {
-            let topLeftOffset = try untransformedFrameOffset(from: .topLeft, to: superview, .topLeft)
-            let bottomRightOffset = try untransformedFrameOffset(from: .bottomRight, to: superview, .bottomRight)
-
-            return UIEdgeInsets(
-                top: -topLeftOffset.vertical,
-                left: -topLeftOffset.horizontal,
-                bottom: bottomRightOffset.vertical,
-                right: bottomRightOffset.horizontal
-            )
-        } catch {
-            ParalayoutAlertForInvalidViewHierarchy()
-            return .zero
-        }
-    }
-
     /// Move the view to align it with another view.
     ///
     /// - precondition: The receiver and the `otherView` must be in the same view hierarchy.
@@ -130,12 +151,16 @@ extension UIView {
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter otherView: The view to which the receiving view will be aligned.
     /// - parameter otherPosition: The position within `otherView` to use for alignment.
+    /// - parameter alignmentBehavior: Controls how the point at the `otherPosition` in the `otherView` should be
+    /// calculated. Defaults to `.automatic`, which will align the views in the most common way based on their
+    /// relationship in the view hierarchy.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
     public func align(
         _ position: Position,
         with otherView: UIView,
         _ otherPosition: Position,
+        alignmentBehavior: TargetAlignmentBehavior = .automatic,
         horizontalOffset: CGFloat = 0,
         verticalOffset: CGFloat = 0
     ) {
@@ -143,6 +168,7 @@ extension UIView {
             position,
             with: otherView,
             otherPosition,
+            alignmentBehavior: alignmentBehavior,
             offset: UIOffset(horizontal: horizontalOffset, vertical: verticalOffset)
         )
     }
@@ -239,6 +265,16 @@ extension UIView {
         }
         
         self.align(position, with: superview, position, offset: offset)
+    }
+
+    // MARK: - Private Methods
+
+    /// The location of a position in the view in the view's `bounds`.
+    ///
+    /// - parameter position: The position to use.
+    /// - returns: The point at the specified position.
+    private func pointInBounds(at position: Position) -> CGPoint {
+        return position.point(in: bounds, layoutDirection: effectiveUserInterfaceLayoutDirection)
     }
     
 }

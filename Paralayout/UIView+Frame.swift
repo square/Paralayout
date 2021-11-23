@@ -82,10 +82,10 @@ extension UIView {
 
         return superviewChainToAncestor.reduce(.zero) {
             let untransformedSuperviewFrame = $1.untransformedFrame
-            let supersuperviewBoundsOrigin = $1.superview?.bounds.origin ?? .zero
+            let boundsOrigin = $1.bounds.origin
             return CGPoint(
-                x: $0.x + untransformedSuperviewFrame.origin.x - supersuperviewBoundsOrigin.x,
-                y: $0.y + untransformedSuperviewFrame.origin.y - supersuperviewBoundsOrigin.y
+                x: $0.x + untransformedSuperviewFrame.origin.x - boundsOrigin.x,
+                y: $0.y + untransformedSuperviewFrame.origin.y - boundsOrigin.y
             )
         }
     }

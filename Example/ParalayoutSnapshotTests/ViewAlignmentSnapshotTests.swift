@@ -185,6 +185,34 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         verifySnapshot(receiverTransform: .identity, targetTransform: .init(scaleX: 2, y: 3))
     }
 
+    func testNonZeroBoundsOrigin() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        containerView.backgroundColor = .white
+
+        let scrollView = UIView(frame: CGRect(x: 50, y: 50, width: 100, height: 100))
+        scrollView.bounds.origin = CGPoint(x: 25, y: 25)
+        scrollView.backgroundColor = .lightGray
+        containerView.addSubview(scrollView)
+
+        for position in [Position.topLeft, .topRight, .bottomLeft, .bottomRight] {
+            let cornerView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            cornerView.backgroundColor = .red
+            containerView.addSubview(cornerView)
+
+            cornerView.align(position, with: scrollView, position)
+        }
+
+        for position in [Position.topLeft, .topRight, .bottomLeft, .bottomRight] {
+            let contentView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            contentView.backgroundColor = .blue
+            scrollView.addSubview(contentView)
+
+            contentView.align(position, with: scrollView, position)
+        }
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
 }
 
 // MARK: -
