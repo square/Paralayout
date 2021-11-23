@@ -181,7 +181,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
         var collapsedItems = [ViewDistributionItem]()
 
         func isViewVisible(_ view: UIView) -> Bool {
-            if view.superview == nil || view.isHidden || view.alpha == 0 || view.frame.isEmpty {
+            if view.superview == nil || view.isHidden || view.alpha == 0 {
                 return false
 
             } else if let label = view as? UILabel {
@@ -392,7 +392,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     fileprivate func layoutSize(along axis: ViewDistributionAxis, multiplier: CGFloat = 1) -> CGFloat {
         switch self {
         case .view(let view, let insets):
-            return axis.size(of: view.frame) - axis.amount(of: insets)
+            return axis.size(of: view.untransformedFrame) - axis.amount(of: insets)
 
         case .fixed(let margin):
             return margin
@@ -482,6 +482,9 @@ extension UIView : ViewDistributionSpecifying {
     /// horizontal positioning).
     /// `applySubviewDistribution([ 1.flexible, icon, 2.flexible ], orthogonalOffset: nil)`
     ///
+    /// - precondition: All views in the `distribution` must be subviews of the receiver.
+    /// - precondition: The `distribution` must not include any given view more than once.
+    ///
     /// - parameter distribution: An array of distribution specifiers, ordered from the leading/top edge to the
     /// trailing/bottom edge.
     /// - parameter axis: The axis upon which the items should be distributed. Defaults to `.vertical`.
@@ -489,9 +492,6 @@ extension UIView : ViewDistributionSpecifying {
     /// receiver's bounds. Defaults to `nil`.
     /// - parameter orthogonalAlignment: The alignment (orthogonal to the distribution axis) to apply to the views. If
     /// `nil`, views are not moved orthogonally. Defaults to centered with no offset.
-    ///
-    /// - precondition: All views in the `distribution` must be subviews of the receiver.
-    /// - precondition: The `distribution` must not include any given view more than once.
     public func applySubviewDistribution(
         _ distribution: [ViewDistributionSpecifying],
         axis: ViewDistributionAxis = .vertical,
@@ -519,7 +519,7 @@ extension UIView : ViewDistributionSpecifying {
         for item in items {
             switch item {
             case .view(let subview, let insets):
-                var frame = subview.frame
+                var frame = subview.untransformedFrame
 
                 switch axis {
                 case .horizontal:
@@ -559,7 +559,7 @@ extension UIView : ViewDistributionSpecifying {
                     }
                 }
 
-                subview.frame = frame
+                subview.untransformedFrame = frame
 
             case .fixed, .flexible:
                 break
@@ -588,6 +588,10 @@ extension UIView : ViewDistributionSpecifying {
 
     /// Size and position subviews to equally take up all horizontal space.
     ///
+    /// - precondition: The available space on the specified `axis` of the receiver must be at least as large as the
+    /// space required for the specified `margin` between each subview. In other words, the `subviews` may result in a
+    /// size of zero along the specified `axis`, but it may not be negative.
+    ///
     /// - parameter subviews: The subviews to spread out, ordered from the leading/top edge to the trailing/bottom edge
     /// of the receiver.
     /// - parameter axis: The axis along which to spread the `subviews`.
@@ -596,10 +600,6 @@ extension UIView : ViewDistributionSpecifying {
     /// (optional, defaults to `nil`).
     /// - parameter sizeToBounds: If `true`, also set the size of the subviews orthogonal to `axis` to match the size of
     /// the `bounds` (optional, defaults to `false`).
-    ///
-    /// - precondition: The available space on the specified `axis` of the receiver must be at least as large as the
-    /// space required for the specified `margin` between each subview. In other words, the `subviews` may result in a
-    /// size of zero along the specified `axis`, but it may not be negative.
     public func spreadOutSubviews(
         _ subviews: [UIView],
         axis: ViewDistributionAxis = .horizontal,
