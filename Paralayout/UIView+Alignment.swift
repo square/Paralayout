@@ -18,7 +18,7 @@ import os
 import UIKit
 
 extension UIView {
-    
+
     // MARK: - View Alignment - Core
 
     /// The location of a position in the view in the view's `bounds`.
@@ -28,15 +28,23 @@ extension UIView {
     public func point(at position: Position) -> CGPoint {
         return position.point(in: bounds, layoutDirection: effectiveUserInterfaceLayoutDirection)
     }
-    
-    /// The offset between two views' positions.
-    /// - parameter position: The position in the receiving view's `bounds`.
+
+    /// Calculates the offset between two views' positions, ignoring any transforms in the view hierarchy.
+    ///
+    /// - precondition: The receiver and `otherView` must be in the same view hierarchy.
+    ///
+    /// - parameter position: The position in the receiving view's untransformed frame.
     /// - parameter otherView: The other view for the measurement.
-    /// - parameter otherPosition: The position in the `otherView` to use for the measurement.
-    /// - returns: The distance between the two view's positions.
-    public func frameOffset(from position: Position, to otherView: UIView, _ otherPosition: Position) -> UIOffset {
+    /// - parameter otherPosition: The position in the `otherView`'s untransformed frame to use for the measurement.
+    /// - returns: The offset from the receiver's `position` to the `otherView`'s `otherPosition`.
+    public func untransformedFrameOffset(
+        from position: Position,
+        to otherView: UIView,
+        _ otherPosition: Position
+    ) throws -> UIOffset {
         // We can't be aligned to another view if we don't have a superview.
         guard let superview = superview else {
+            ParalayoutAlertForInvalidViewHierarchy()
             return .zero
         }
 
@@ -60,47 +68,65 @@ extension UIView {
         default:
             break
         }
-        
-        // Convert both points to the receiver's superview, since we are working with the frame (not the bounds).
-        let srcPoint = superview.convert(point(at: position), from: self)
-        let dstPoint = superview.convert(otherView.point(at: otherPosition), from: otherView)
-        
+
+        let srcPoint = try superview.untransformedConvert(point(at: position), from: self)
+        let dstPoint = try superview.untransformedConvert(otherView.point(at: otherPosition), from: otherView)
+
         return srcPoint.offset(to: dstPoint)
     }
-    
+
     /// Move the view to align it with another view.
+    ///
+    /// - precondition: The receiver and the `otherView` must be in the same view hierarchy.
+    ///
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter otherView: The view to which the receiving view will be aligned.
     /// - parameter otherPosition: The position within `otherView` to use for alignment.
     /// - parameter offset: An additional offset to apply to the alignment, e.g. to leave a space between the two views.
     public func align(_ position: Position, with otherView: UIView, _ otherPosition: Position, offset: UIOffset) {
-        let totalOffset = frameOffset(from: position, to: otherView, otherPosition) + offset
-        
-        // Apply the offset and round to the nearest pixel.
-        frame.origin = (frame.origin.offset(by: totalOffset)).roundedToPixel(in: self)
+        do {
+            untransformedFrame.origin = untransformedFrame.origin
+                .offset(by: try untransformedFrameOffset(from: position, to: otherView, otherPosition))
+                .offset(by: offset)
+                .roundedToPixel(in: self)
+
+        } catch {
+            ParalayoutAlertForInvalidViewHierarchy()
+        }
     }
-    
+
     // MARK: - View Alignment - Convenience
-    
+
     /// The insets of the view's positions relative to its superview's.
+    ///
+    /// - precondition: The view must have a superview.
     public var positionInsetsFromSuperview: UIEdgeInsets {
         // We can't have margins if we don't have a superview.
         guard let superview = superview else {
+            ParalayoutAlertForInvalidViewHierarchy()
             return .zero
         }
-        
-        let leadingOffset = frameOffset(from: .topLeft, to: superview, .topLeft)
-        let trailingOffset = frameOffset(from: .bottomRight, to: superview, .bottomRight)
-        
-        return UIEdgeInsets(
-            top: -leadingOffset.vertical,
-            left: -leadingOffset.horizontal,
-            bottom: trailingOffset.vertical,
-            right: trailingOffset.horizontal
-        )
+
+        do {
+            let topLeftOffset = try untransformedFrameOffset(from: .topLeft, to: superview, .topLeft)
+            let bottomRightOffset = try untransformedFrameOffset(from: .bottomRight, to: superview, .bottomRight)
+
+            return UIEdgeInsets(
+                top: -topLeftOffset.vertical,
+                left: -topLeftOffset.horizontal,
+                bottom: bottomRightOffset.vertical,
+                right: bottomRightOffset.horizontal
+            )
+        } catch {
+            ParalayoutAlertForInvalidViewHierarchy()
+            return .zero
+        }
     }
-    
+
     /// Move the view to align it with another view.
+    ///
+    /// - precondition: The receiver and the `otherView` must be in the same view hierarchy.
+    ///
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter otherView: The view to which the receiving view will be aligned.
     /// - parameter otherPosition: The position within `otherView` to use for alignment.
@@ -123,12 +149,12 @@ extension UIView {
     
     /// Move the view to align it within its superview, based on position.
     ///
+    /// - precondition: The receiver must have a superview.
+    ///
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter superviewPosition: The position within the view's `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    ///
-    /// - precondition: The receiver must have a superview.
     public func align(
         _ position: Position,
         withSuperviewPosition superviewPosition: Position,
@@ -149,12 +175,12 @@ extension UIView {
     
     /// Move the view to align it within its superview, based on coordinate.
     ///
+    /// - precondition: The receiver must have a superview.
+    ///
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter superviewPoint: The coordinate within the view's `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    ///
-    /// - precondition: The receiver must have a superview.
     public func align(
         _ position: Position,
         withSuperviewPoint superviewPoint: CGPoint,
@@ -180,11 +206,11 @@ extension UIView {
     
     /// Move the view to align it with another view.
     ///
+    /// - precondition: The receiver must have a superview.
+    ///
     /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
     /// - parameter inset: An optional inset (horizontal, vertical, or diagonal based on the position) to apply. An
     /// inset on .center is interpreted as a vertical offset.
-    ///
-    /// - precondition: The receiver must have a superview.
     public func alignToSuperview(_ position: Position, inset: CGFloat = 0.0) {
         guard let superview = self.superview else {
             fatalError("Can't align view without a superview!")
@@ -237,3 +263,18 @@ private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
     )
 }
 
+/// Triggered when an alignment method is called that involves two views that are not installed in the same view
+/// hierarchy. The behavior of aligning two views not in the same view hierarchy is undefined.
+private func ParalayoutAlertForInvalidViewHierarchy() {
+    os_log(
+        "%@",
+        log: ParalayoutLog,
+        type: .default,
+        """
+        Paralayout detected an alignment with an invalid view hierarchy. The views involved in alignment calls must \
+        be in the same view hierarchy. Set a symbolic breakpoint for \"ParalayoutAlertForInvalidViewHierarchy\" to \
+        debug. Call stack:
+        \(Thread.callStackSymbols.dropFirst(1).joined(separator: "\n"))
+        """
+    )
+}
