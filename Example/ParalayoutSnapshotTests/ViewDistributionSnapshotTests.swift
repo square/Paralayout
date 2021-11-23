@@ -121,6 +121,59 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         verifySnapshot(margin: 40, inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
     }
 
+    func testDistribution() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+        containerView.backgroundColor = .white
+
+        let secondView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 30))
+        secondView.backgroundColor = .blue
+        containerView.addSubview(secondView)
+
+        let firstView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        firstView.backgroundColor = .red
+        containerView.addSubview(firstView)
+
+        let thirdView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 10))
+        thirdView.backgroundColor = .green
+        containerView.addSubview(thirdView)
+
+        containerView.applySubviewDistribution(
+            [
+                firstView,
+                secondView,
+                thirdView,
+            ]
+        )
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["vertical"]))
+    }
+
+    func testDistributionIgnoresTransform() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+        containerView.backgroundColor = .white
+
+        let secondView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 30))
+        secondView.backgroundColor = .blue
+        secondView.transform = CGAffineTransform(scaleX: 3, y: 3).rotated(by: .pi / 3)
+        containerView.addSubview(secondView)
+
+        let firstView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        firstView.backgroundColor = .red
+        containerView.addSubview(firstView)
+
+        let thirdView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 10))
+        thirdView.backgroundColor = .green
+        containerView.addSubview(thirdView)
+
+        containerView.applySubviewDistribution(
+            [
+                firstView,
+                secondView,
+                thirdView,
+            ]
+        )
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
     func testDistributionUsingCapInsets() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 80))
         containerView.backgroundColor = .white
