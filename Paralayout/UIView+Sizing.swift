@@ -21,16 +21,6 @@ extension UIView {
     // MARK: - Public Types
 
     /// Constraints on the result of a call to `sizeThatFits(_:)`.
-    /// - `default`: no adjustment.
-    /// - `minWidth`: Use the supplied width or larger.
-    /// - `maxWidth`: Use the supplied width or smaller.
-    /// - `minHeight`: Use the supplied height or larger.
-    /// - `maxHeight`: Use the supplied height or smaller.
-    /// - `fixedWidth`: Use the supplied width regardless.
-    /// - `fixedHeight`: Use the supplied height regardless.
-    /// - `minSize`: Use the supplied size or larger.
-    /// - `maxSize`: Use the supplied size or smaller.
-    /// - `wrap`: Use the supplied width regardless, and the supplied height or smaller.
     public struct SizingConstraints: OptionSet {
 
         // MARK: - Life Cycle
@@ -45,23 +35,38 @@ extension UIView {
 
         // MARK: - Public Static Properties
 
+        /// The resulting width will be greater than or equal to the width of the size to fit.
         public static let minWidth = SizingConstraints(rawValue: 1 << 0)
+        /// The resulting width will be less than or equal to the width of the size to fit.
         public static let maxWidth = SizingConstraints(rawValue: 1 << 1)
+        /// The resulting height will be greater than or equal to the height of the size to fit.
         public static let minHeight = SizingConstraints(rawValue: 1 << 2)
+        /// The resulting height will be less than or equal to the height of the size to fit.
         public static let maxHeight = SizingConstraints(rawValue: 1 << 3)
 
+        /// The size will not be adjusted.
         public static let none: SizingConstraints = []
 
+        /// The resulting width will be exactly the width of the size to fit.
         public static let fixedWidth: SizingConstraints = [ minWidth, maxWidth ]
+        /// The resulting height will be exactly the height of the size to fit.
         public static let fixedHeight: SizingConstraints = [ minHeight, maxHeight ]
 
+        /// The resulting size will be greater than or equal to the size to fit in both dimensions.
         public static let minSize: SizingConstraints = [ minWidth, minHeight ]
+        /// The resulting size will be less than or equal to the size to fit in both dimensions.
         public static let maxSize: SizingConstraints = [ maxWidth, maxHeight ]
+
+        /// The resulting size will be equal in width and less than or equal in height to the size to fit.
+        ///
+        /// This is most commonly used for views like labels that fill the available width and expand vertically based
+        /// on number of lines up until a maximum height.
         public static let wrap: SizingConstraints = [ fixedWidth, maxHeight ]
 
         // MARK: - Internal Methods
 
         /// Apply the constraints to a given size.
+        ///
         /// - parameter sizeThatFits: The size to which the constraints should be applied.
         /// - parameter sizeToFit: The size with which to constrain the `sizeThatFits`.
         /// - returns: A size with the receiver's constraints applied.
@@ -93,21 +98,23 @@ extension UIView {
 
     // MARK: - Public Methods
 
-    /// The frame size that "best" fits the supplied bounding size, with constraints applied.
-    /// - parameter size: A bounding size within which the view should fit. Not a strict maximum.
-    /// - parameter constraints: Limits on the returned size (optional, defaults to `.none`).
-    /// - returns: A size for the receiver's `frame` that best fits its content.
+    /// Returns the bounds size that "best" fits the specified available size with specified constraints applied.
+    ///
+    /// - parameter size: The available size within which the view should fit. Note that this is not a strict maximum,
+    /// but can be enforced using the `constraints`.
+    /// - parameter constraints: Constraints to apply to the returned size. Defaults to no constraints.
+    /// - returns: A size for the receiver's `bounds` that best fits its content.
     public func sizeThatFits(_ size: CGSize, constraints: SizingConstraints = .none) -> CGSize {
         return constraints.apply(sizeThatFits: sizeThatFits(size), sizeToFit: size)
     }
 
-    /// The frame size that "best" fits the supplied bounding size, with constraints applied.
-    /// - parameter width: A bounding width within which the view should fit (optional, defaults to
-    /// `.greatestFiniteMagnitude`).
-    /// - parameter height: A bounding height within which the view should fit (optional, defaults to
-    /// `.greatestFiniteMagnitude`).
-    /// - parameter constraints: Limits on the returned size (optional, defaults to `.none`).
-    /// - returns: A size for the receiver's `frame` that best fits its content.
+    /// The bounds size that "best" fits the specified available size with the specified constraints applied.
+    ///
+    /// - parameter width: The available width within which the view should fit. Defaults to `.greatestFiniteMagnitude`.
+    /// - parameter height: The available height within which the view should fit. Defaults to
+    /// `.greatestFiniteMagnitude`.
+    /// - parameter constraints: Constraints to apply to the returned size. Defaults to no constraints.
+    /// - returns: A size for the receiver's `bounds` that best fits its content.
     public func sizeThatFits(
         width: CGFloat = .greatestFiniteMagnitude,
         height: CGFloat = .greatestFiniteMagnitude,
@@ -116,14 +123,15 @@ extension UIView {
         return sizeThatFits(CGSize(width: width, height: height), constraints: constraints)
     }
 
-    /// Set the "ideal" size for the receiver within the available space (the `sizeToFit`), applying the provided
+    /// Resizes the view to its "ideal" size within the available space (the `sizeToFit`), applying the specified
     /// constraints. The view's final size will never be less than zero in either dimension.
     ///
     /// This method updates the size of the receiver's `bounds`, and is therefore `center`-preserving. Note that this
-    /// means the receiver's `frame.origin` may change as a result of calling this method.
+    /// means the receiver's `frame.origin` may change as a result of calling this method. In a typical layout pass,
+    /// this method should be followed by setting the view's position (e.g. through alignment, distribution, etc.).
     ///
-    /// - parameter sizeToFit: The size within which to fit, passed through to `sizeThatFits(_:)`.
-    /// - parameter constraints: Limits on the size to actually set. Defaults to `.none`.
+    /// - parameter sizeToFit: The size within which to fit, passed through to the view's `sizeThatFits(_:)` method.
+    /// - parameter constraints: Constraints on the size to actually set. Defaults to no constraints.
     public func sizeToFit(_ sizeToFit: CGSize, constraints: SizingConstraints = .none) {
         let sizeThatFits = self.sizeThatFits(sizeToFit, constraints: constraints)
 
@@ -136,38 +144,23 @@ extension UIView {
         )
     }
 
-    /// Resize the view to fit a given width.
-    /// - parameter width: the width to fit, passed through to `frameSize(thatFits:)`.
-    /// - parameter height: the height to fit, passed through to `frameSize(thatFits:)` (optional, defaults to
-    /// `greatestFiniteMagnitude`).
-    /// - parameter constraints: Limits on the size to actually set (optional, defaults to `.none`).
+    /// Resizes the view to its "ideal" size within the available space (the specified `width` and `height`), applying
+    /// the specified constraints. The view's final size will never be less than zero in either dimension.
+    ///
+    /// This method updates the size of the receiver's `bounds`, and is therefore `center`-preserving. Note that this
+    /// means the receiver's `frame.origin` may change as a result of calling this method. In a typical layout pass,
+    /// this method should be followed by setting the view's position (e.g. through alignment, distribution, etc.).
+    ///
+    /// - parameter width: the width to fit, passed through to the view's `sizeThatFits(_:)` method.
+    /// - parameter height: the height to fit, passed through to the view's `sizeThatFits(_:)` method. Defaults to
+    /// `.greatestFiniteMagnitude`.
+    /// - parameter constraints: Constraints on the size to actually set. Defaults to no constraints.
     public func sizeToFit(
         width: CGFloat,
         height: CGFloat = .greatestFiniteMagnitude,
         constraints: SizingConstraints = .none
     ) {
         sizeToFit(CGSize(width: width, height: height), constraints: constraints)
-    }
-
-    /// Resize the view to fit a given size with insets.
-    /// - parameter size: The size to fit, typically the `superview.bounds`.
-    /// - parameter margins: An inset from the supplied size to use (optional, defaults to `0`).
-    public func wrapToFit(_ size: CGSize, margins: CGFloat = 0) {
-        sizeToFit(
-            CGSize(width: max(0, size.width - 2 * margins), height: max(0, size.height - 2 * margins)),
-            constraints: .wrap
-        )
-    }
-
-    /// Resize the view to a set width, and unlimited height (e.g. when in a scroll view).
-    /// - parameter width: the width to set.
-    /// - parameter height: the height to fit (optional, defaults to `greatestFiniteMagnitude`).
-    /// - parameter margins: An inset from the supplied width to use (optional, defaults to `0`).
-    public func wrapToFit(width: CGFloat, height: CGFloat = .greatestFiniteMagnitude, margins: CGFloat = 0) {
-        sizeToFit(
-            CGSize(width: max(0, width - 2 * margins), height: max(0, height - 2 * margins)),
-            constraints: .wrap
-        )
     }
 
 }
