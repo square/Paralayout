@@ -15,7 +15,7 @@
 //
 
 import Paralayout
-
+import UIKit
 
 final class TestScreen: UIScreen {
     static let at1x = TestScreen(testScaleFactor: 1)

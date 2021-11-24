@@ -13,33 +13,29 @@ Paralayout is a set of simple, useful, and straightforward utilities that enable
 
 ### CocoaPods
 
-Integrating Paralayout into your iOS project via [CocoaPods](http://cocoapods.org) is simple:
+To install Paralayout via [CocoaPods](http://cocoapods.org), add the following to your `Podfile`:
 
-```
-platform :ios, '9.0'
+```ruby
 pod 'Paralayout'
 ```
 
+### Swift Package Manager
+
+To install Paralayout via [Swift Package Manager](https://swift.org/package-manager/), add the following to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(name: "Paralayout", url: "https://github.com/square/Paralayout.git", from: "1.0.0"),
+]
+```
 
 ### Carthage
 
-[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
-
-You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
-
-```bash
-$ brew update
-$ brew install carthage
-```
-
-To integrate Paralayout into your Xcode project using Carthage, specify it in your `Cartfile`:
+To install Paralayout via [Carthage](https://github.com/Carthage/Carthage), add the following to your `Cartfile`:
 
 ```ogdl
 github "Square/Paralayout"
 ```
-
-Run `carthage` to build the framework and drag the built `Paralayout.framework` into your Xcode project.
-
 
 ### Submodules
 
@@ -50,15 +46,6 @@ Or, manually check out the submodule with `git submodule add git@github.com:Squa
 ## Usage
 
 Paralayout is a set of *à la carte* utilities, of which you can use as much or as little functionality as you like.
-
-
-#### UILabel Subclass: Label
-
-The `Label` class makes text look its best, and takes less cumbersome code to configure:
-* Style text without directly interacting with `NSAttributedString` or `NSParagraphStyle` (any more than you want to)
-* Get "compact" line wrapping that makes it unnecessary to introduce artificial line breaks into your copy
-* Hyperlinks are tappable (no need to use a `UITextView`)
-
 
 #### UIView Subclass: Hairline
 
@@ -156,8 +143,9 @@ Fixing layout issues is as simple as using the Xcode debugger. Remember that on 
 
 ## Requirements
 
-* Xcode 10 / Swift 4.2
-* iOS 9.0 or later
+* iOS 12.0 or later
+* Xcode 12.0 or later
+* Swift 5.0
 
 
 ## Contributing

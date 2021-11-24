@@ -1,0 +1,25 @@
+PODS:
+  - Paralayout (1.0.0-rc.1)
+  - Paralayout/Tests (1.0.0-rc.1)
+  - SnapshotTesting (1.8.2)
+
+DEPENDENCIES:
+  - Paralayout (from `../Paralayout.podspec`)
+  - Paralayout/Tests (from `../Paralayout.podspec`)
+  - SnapshotTesting (~> 1.8)
+
+SPEC REPOS:
+  trunk:
+    - SnapshotTesting
+
+EXTERNAL SOURCES:
+  Paralayout:
+    :path: "../Paralayout.podspec"
+
+SPEC CHECKSUMS:
+  Paralayout: 28813a5b55a0d289bb62067de46556cc43f26c69
+  SnapshotTesting: 38947050d13960d57a4a9c166fcf51bca7d56970
+
+PODFILE CHECKSUM: f0cdc6633e8d65e479af433fa427d7c0ce7c72b1
+
+COCOAPODS: 1.10.1
