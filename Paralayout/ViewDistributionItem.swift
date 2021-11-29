@@ -30,11 +30,11 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
 
     // MARK: - Public Static Methods
 
-    /// Filter invisible views (nil, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent
+    /// Filter invisible views (`nil`, uninstalled, hidden, or transparent) from a distribution, and collapse adjacent
     /// spacers (preferring larger ones).
-    /// - parameter distribution: An array of optional distribution specifiers: either a UIView, or a number as `.fixed`
-    /// or `.flexible`.
-    /// - returns: An array of DistributionItems, without any invisible views, or sequential `.fixed` or `.flexible`
+    ///
+    /// - parameter distribution: An array of optional distribution specifiers to be collapsed.
+    /// - returns: An array of `DistributionItem`s, without any invisible views or sequential `.fixed` or `.flexible`
     /// spacers.
     public static func collapsing(_ distribution: [ViewDistributionSpecifying?]) -> [ViewDistributionItem] {
         var collapsedItems = [ViewDistributionItem]()
@@ -175,11 +175,16 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     // MARK: - Internal Static Methods
 
     /// Maps the specifiers to their provided items, and adds implied flexible spacers as necessary.
-    /// If no spacers are included, equal flexible spacers are inserted between all views; if no `.flexible` spacers are
-    /// included, two equal ones are added to the beginning and end.
-    /// - returns: An array of DistributionItems suitable for layout and/or measurement, and tallies of all fixed and
-    /// flexible space. If the distribution is invalid (no views, any view not a subview of the superview, or any view
-    /// repeated in the distribution), returns an empty array.
+    ///
+    /// * If no spacers are included, equal flexible spacers are inserted between all views.
+    /// * If no `.flexible` spacers are included, two equal ones are added to the beginning and end.
+    ///
+    /// - precondition: All views in the `distribution` must be subviews of the `superview`.
+    /// - precondition: The `distribution` must not include any given view more than once.
+    ///
+    /// - returns: An array of `ViewDistributionItem`s suitable for layout and/or measurement, and tallies of all fixed
+    /// and flexible space. If the distribution is invalid (no views, any view not a subview of the superview, or any
+    /// view repeated in the distribution), returns an empty array.
     internal static func items(
         impliedIn distribution: [ViewDistributionSpecifying],
         axis: ViewDistributionAxis,

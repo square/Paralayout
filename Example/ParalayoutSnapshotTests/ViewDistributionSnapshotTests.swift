@@ -35,7 +35,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         thirdView.backgroundColor = .green
         containerView.addSubview(thirdView)
 
-        containerView.applySubviewDistribution(
+        containerView.applyVerticalSubviewDistribution(
             [
                 firstView,
                 secondView,
@@ -62,7 +62,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         thirdView.backgroundColor = .green
         containerView.addSubview(thirdView)
 
-        containerView.applySubviewDistribution(
+        containerView.applyVerticalSubviewDistribution(
             [
                 firstView,
                 secondView,
@@ -91,7 +91,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         label.sizeToFit()
         containerView.addSubview(label)
 
-        containerView.applySubviewDistribution(
+        containerView.applyVerticalSubviewDistribution(
             [
                 1.flexible,
                 topView,
