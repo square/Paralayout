@@ -19,108 +19,6 @@ import SnapshotTesting
 
 final class ViewDistributionSnapshotTests: SnapshotTestCase {
 
-    func testSpreadSubviews() {
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 100))
-        container.backgroundColor = .white
-
-        let redView = UIView()
-        redView.backgroundColor = .red
-        container.addSubview(redView)
-
-        let blueView = UIView()
-        blueView.backgroundColor = .blue
-        container.addSubview(blueView)
-
-        let greenView = UIView()
-        greenView.backgroundColor = .green
-        container.addSubview(greenView)
-
-        func verifySnapshot(
-            axis: ViewDistributionAxis = .horizontal,
-            margin: CGFloat = 0,
-            inRect rect: CGRect? = nil,
-            orthogonalBehavior: ViewSpreadingBehavior = .fill,
-            layoutDirection: UIUserInterfaceLayoutDirection = .leftToRight,
-            file: StaticString = #file,
-            testName: String = #function,
-            line: UInt = #line
-        ) {
-            redView.frame = .init(x: 0, y: 0, width: 100, height: 30)
-            blueView.frame = .init(x: 0, y: 0, width: 50, height: 20)
-            greenView.frame = .init(x: 0, y: 0, width: 70, height: 40)
-
-            container.semanticContentAttribute = .attributeToForce(layoutDirection)
-            container.spreadOutSubviews(
-                [redView, blueView, greenView],
-                axis: axis,
-                margin: margin,
-                inRect: rect,
-                orthogonalBehavior: orthogonalBehavior
-            )
-
-            assertSnapshot(
-                matching: container,
-                as: .image,
-                named: nameForSnapshot(
-                    with: [
-                        axis.testDescription,
-                        (margin != 0 ? "nonZeroMargin" : nil),
-                        (rect != nil ? "inLayoutRect" : nil),
-                        orthogonalBehavior.testDescription,
-                        layoutDirection.testDescription,
-                    ]
-                ),
-                file: file,
-                testName: testName,
-                line: line
-            )
-        }
-
-        verifySnapshot()
-        verifySnapshot(layoutDirection: .rightToLeft)
-        verifySnapshot(inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
-
-        // Verify orthogonal behaviors in horizontal layout.
-        verifySnapshot(orthogonalBehavior: .centered(offset: 0))
-        verifySnapshot(orthogonalBehavior: .centered(offset: 20))
-        verifySnapshot(orthogonalBehavior: .leading(inset: 0))
-        verifySnapshot(orthogonalBehavior: .leading(inset: 10))
-        verifySnapshot(orthogonalBehavior: .trailing(inset: 0))
-        verifySnapshot(orthogonalBehavior: .trailing(inset: 10))
-        verifySnapshot(inRect: CGRect(x: 20, y: 10, width: 300, height: 50), orthogonalBehavior: .centered(offset: 0))
-
-        // Verify vertical layout.
-        verifySnapshot(axis: .vertical)
-        verifySnapshot(axis: .vertical, inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
-
-        // Verify orthogonal behaviors in vertical LTR layout.
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 0))
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 50))
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 0))
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 10))
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 0))
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 10))
-        verifySnapshot(
-            axis: .vertical,
-            inRect: CGRect(x: 20, y: 10, width: 300, height: 50),
-            orthogonalBehavior: .centered(offset: 0)
-        )
-
-        // Verify orthogonal behaviors in vertical RTL layout.
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 0), layoutDirection: .rightToLeft)
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .centered(offset: 50), layoutDirection: .rightToLeft)
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 0), layoutDirection: .rightToLeft)
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .leading(inset: 10), layoutDirection: .rightToLeft)
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 0), layoutDirection: .rightToLeft)
-        verifySnapshot(axis: .vertical, orthogonalBehavior: .trailing(inset: 10), layoutDirection: .rightToLeft)
-
-        // Verify margins between subviews.
-        verifySnapshot(margin: 40, layoutDirection: .leftToRight)
-        verifySnapshot(margin: 40, layoutDirection: .rightToLeft)
-        verifySnapshot(axis: .vertical, margin: 20)
-        verifySnapshot(margin: 40, inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
-    }
-
     func testDistribution() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         containerView.backgroundColor = .white
@@ -137,7 +35,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         thirdView.backgroundColor = .green
         containerView.addSubview(thirdView)
 
-        containerView.applySubviewDistribution(
+        containerView.applyVerticalSubviewDistribution(
             [
                 firstView,
                 secondView,
@@ -164,7 +62,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         thirdView.backgroundColor = .green
         containerView.addSubview(thirdView)
 
-        containerView.applySubviewDistribution(
+        containerView.applyVerticalSubviewDistribution(
             [
                 firstView,
                 secondView,
@@ -193,7 +91,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         label.sizeToFit()
         containerView.addSubview(label)
 
-        containerView.applySubviewDistribution(
+        containerView.applyVerticalSubviewDistribution(
             [
                 1.flexible,
                 topView,
@@ -225,21 +123,6 @@ extension UISemanticContentAttribute {
 
 }
 
-// MARK: -
-
-extension ViewDistributionAxis {
-
-    var testDescription: String {
-        switch self {
-        case .horizontal:
-            return "horizontal"
-        case .vertical:
-            return "vertical"
-        }
-    }
-
-}
-
 extension UIUserInterfaceLayoutDirection {
 
     var testDescription: String {
@@ -250,35 +133,6 @@ extension UIUserInterfaceLayoutDirection {
             return "RTL"
         @unknown default:
             fatalError("Unknown layout direction")
-        }
-    }
-
-}
-
-extension ViewSpreadingBehavior {
-
-    var testDescription: String? {
-        switch self {
-        case .fill:
-            return nil
-        case let .leading(inset) where inset < 0:
-            return "leadingWithNegativeInset"
-        case let .leading(inset) where inset > 0:
-            return "leadingWithPositiveInset"
-        case .leading:
-            return "leading"
-        case let .centered(offset) where offset < 0:
-            return "centeredWithNegativeOffset"
-        case let .centered(offset) where offset > 0:
-            return "centeredWithPositiveOffset"
-        case .centered:
-            return "centered"
-        case let .trailing(inset) where inset < 0:
-            return "trailingWithNegativeInset"
-        case let .trailing(inset) where inset > 0:
-            return "trailingWithPositiveInset"
-        case .trailing:
-            return "trailing"
         }
     }
 

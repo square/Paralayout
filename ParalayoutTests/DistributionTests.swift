@@ -33,12 +33,15 @@ final class DistributionTests: XCTestCase {
             let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 50, height: 100))
             container.addSubview(secondSubview)
 
-            func test(alignment: ViewDistributionAlignment?, inRect layoutRect: CGRect? = nil, testBlock: () -> Void) {
-                container.applySubviewDistribution(
+            func test(
+                alignment: VerticalDistributionAlignment?,
+                inRect layoutRect: CGRect? = nil,
+                testBlock: () -> Void
+            ) {
+                container.applyHorizontalSubviewDistribution(
                     [firstSubview, secondSubview],
-                    axis: .horizontal,
                     inRect: layoutRect,
-                    alignment: alignment
+                    orthogonalAlignment: alignment
                 )
 
                 testBlock()
@@ -49,12 +52,12 @@ final class DistributionTests: XCTestCase {
                 XCTAssertEqual(secondSubview.frame.origin.y, 60)
             }
 
-            test(alignment: .leading(inset: 10)) {
+            test(alignment: .top(inset: 10)) {
                 XCTAssertEqual(firstSubview.frame.origin.y, 10)
                 XCTAssertEqual(secondSubview.frame.origin.y, 10)
             }
 
-            test(alignment: .trailing(inset: 10)) {
+            test(alignment: .bottom(inset: 10)) {
                 XCTAssertEqual(firstSubview.frame.origin.y, 140)
                 XCTAssertEqual(secondSubview.frame.origin.y, 90)
             }
@@ -72,12 +75,12 @@ final class DistributionTests: XCTestCase {
                 XCTAssertEqual(secondSubview.frame.origin.y, 1110)
             }
 
-            test(alignment: .leading(inset: 10), inRect: .init(x: 0, y: 1000, width: 1000, height: 300)) {
+            test(alignment: .top(inset: 10), inRect: .init(x: 0, y: 1000, width: 1000, height: 300)) {
                 XCTAssertEqual(firstSubview.frame.origin.y, 1010)
                 XCTAssertEqual(secondSubview.frame.origin.y, 1010)
             }
 
-            test(alignment: .trailing(inset: 10), inRect: .init(x: 0, y: 1000, width: 1000, height: 300)) {
+            test(alignment: .bottom(inset: 10), inRect: .init(x: 0, y: 1000, width: 1000, height: 300)) {
                 XCTAssertEqual(firstSubview.frame.origin.y, 1240)
                 XCTAssertEqual(secondSubview.frame.origin.y, 1190)
             }
@@ -93,12 +96,15 @@ final class DistributionTests: XCTestCase {
         let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 50))
         container.addSubview(secondSubview)
 
-        func test(alignment: ViewDistributionAlignment?, inRect layoutRect: CGRect? = nil, testBlock: () -> Void) {
-            container.applySubviewDistribution(
+        func test(
+            alignment: HorizontalDistributionAlignment?,
+            inRect layoutRect: CGRect? = nil,
+            testBlock: () -> Void
+        ) {
+            container.applyVerticalSubviewDistribution(
                 [firstSubview, secondSubview],
-                axis: .vertical,
                 inRect: layoutRect,
-                alignment: alignment
+                orthogonalAlignment: alignment
             )
 
             testBlock()
@@ -152,12 +158,15 @@ final class DistributionTests: XCTestCase {
         let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 50))
         container.addSubview(secondSubview)
 
-        func test(alignment: ViewDistributionAlignment?, inRect layoutRect: CGRect? = nil, testBlock: () -> Void) {
-            container.applySubviewDistribution(
+        func test(
+            alignment: HorizontalDistributionAlignment?,
+            inRect layoutRect: CGRect? = nil,
+            testBlock: () -> Void
+        ) {
+            container.applyVerticalSubviewDistribution(
                 [firstSubview, secondSubview],
-                axis: .vertical,
                 inRect: layoutRect,
-                alignment: alignment
+                orthogonalAlignment: alignment
             )
 
             testBlock()
