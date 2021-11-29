@@ -123,21 +123,6 @@ extension UISemanticContentAttribute {
 
 }
 
-// MARK: -
-
-extension ViewDistributionAxis {
-
-    var testDescription: String {
-        switch self {
-        case .horizontal:
-            return "horizontal"
-        case .vertical:
-            return "vertical"
-        }
-    }
-
-}
-
 extension UIUserInterfaceLayoutDirection {
 
     var testDescription: String {

@@ -16,13 +16,37 @@
 
 import UIKit
 
-/// Orthogonal alignment options for view spreading.
-public enum ViewSpreadingBehavior {
+/// Orthogonal alignment options for horizontal view spreading.
+public enum VerticalSpreadingBehavior {
 
     /// Expand the view to fill the available space.
     case fill
 
-    /// Align to the leading edge (for vertical distribution) or top (for horizontal).
+    /// Align to the top edge.
+    ///
+    /// - inset: An inset from the top edge towards the center of the distribution axis.
+    case top(inset: CGFloat)
+
+    /// Center-align along the distribution axis.
+    ///
+    /// - offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
+    /// bottom edge. Negative values indicate adjusting towards the top edge.
+    case centered(offset: CGFloat)
+
+    /// Align to the bottom edge.
+    ///
+    /// - inset: An inset from the bottom edge towards the center of the distribution axis.
+    case bottom(inset: CGFloat)
+
+}
+
+/// Orthogonal alignment options for vertical view spreading.
+public enum HorizontalSpreadingBehavior {
+
+    /// Expand the view to fill the available space.
+    case fill
+
+    /// Align to the leading edge.
     ///
     /// - inset: An inset from the leading edge towards the center of the distribution axis.
     case leading(inset: CGFloat)
@@ -33,7 +57,7 @@ public enum ViewSpreadingBehavior {
     /// trailing edge. Negative values indicate adjusting towards the leading edge.
     case centered(offset: CGFloat)
 
-    /// Align to the trailing edge (for vertical distribution) or bottom (for horizontal).
+    /// Align to the trailing edge.
     ///
     /// - inset: An inset from the trailing edge towards the center of the distribution axis.
     case trailing(inset: CGFloat)
@@ -44,26 +68,116 @@ public enum ViewSpreadingBehavior {
 
 extension UIView {
 
-    /// Size and position subviews to equally take up all horizontal space.
+    // MARK: - Public Methods
+
+    /// Sizes and positions subviews to equally take up all horizontal space.
     ///
-    /// - precondition: The available space on the specified `axis` of the receiver must be at least as large as the
-    /// space required for the specified `margin` between each subview. In other words, the `subviews` may result in a
-    /// size of zero along the specified `axis`, but it may not be negative.
+    /// - precondition: The available space on the horizontal axis of the receiver's bounds must be at least as large as
+    /// the space required for the specified `margin` between each subview. In other words, the `subviews` may each have
+    /// a size of zero along the horizontal axis, but their size may not be negative.
     ///
-    /// - parameter subviews: The subviews to spread out, ordered from the leading/top edge to the trailing/bottom edge
-    /// of the receiver.
-    /// - parameter axis: The axis along which to spread the `subviews`.
+    /// - parameter subviews: The subviews to spread out, ordered from the leading edge to the trailing edge of the
+    /// receiver.
     /// - parameter margin: The space between each subview.
-    /// - parameter bounds: A custom area within which to layout the subviews, or `nil` to use the receiver's `bounds`
-    /// (optional, defaults to `nil`).
-    /// - parameter sizeToBounds: If `true`, also set the size of the subviews orthogonal to `axis` to match the size of
-    /// the `bounds` (optional, defaults to `false`).
-    public func spreadOutSubviews(
+    /// - parameter bounds: A custom area within which to layout the subviews in the receiver's coordinate space, or
+    /// `nil` to use the receiver's `bounds`. Defaults to `nil`.
+    /// - parameter orthogonalBehavior: Controls how the view should be sized and positioned along the vertical axis.
+    /// Defaults to filling the vertical space of the `bounds`.
+    public func horizontallySpreadSubviews(
         _ subviews: [UIView],
-        axis: ViewDistributionAxis = .horizontal,
         margin: CGFloat,
         inRect bounds: CGRect? = nil,
-        orthogonalBehavior: ViewSpreadingBehavior = .fill
+        orthogonalBehavior: VerticalSpreadingBehavior = .fill
+    ) {
+        spreadOutSubviews(
+            subviews,
+            axis: .horizontal,
+            margin: margin,
+            inRect: bounds
+        ) { subviewFrame, subviewBounds, layoutBounds in
+            switch orthogonalBehavior {
+            case .fill:
+                // No-op. The `subviewFrame` has already been sized and positioned to fill the available vertical
+                // space in the container.
+                break
+
+            case let .top(inset):
+                subviewFrame.size.height = subviewBounds.height
+                subviewFrame.origin.y = inset
+
+            case let .centered(offset):
+                subviewFrame.size.height = subviewBounds.height
+                subviewFrame.origin.y = (layoutBounds.height - subviewFrame.height) / 2 + offset
+
+            case let .bottom(inset):
+                subviewFrame.size.height = subviewBounds.height
+                subviewFrame.origin.y = layoutBounds.height - subviewFrame.height - inset
+            }
+        }
+    }
+
+    /// Sizes and positions subviews to equally take up all vertical space.
+    ///
+    /// - precondition: The available space on the vertical axis of the receiver's bounds must be at least as large as
+    /// the space required for the specified `margin` between each subview. In other words, the `subviews` may each have
+    /// a size of zero along the vertical axis, but their size may not be negative.
+    ///
+    /// - parameter subviews: The subviews to spread out, ordered from the top edge to the bottom edge of the receiver.
+    /// - parameter margin: The space between each subview.
+    /// - parameter bounds: A custom area within which to layout the subviews in the receiver's coordinate space, or
+    /// `nil` to use the receiver's `bounds`. Defaults to `nil`.
+    /// - parameter orthogonalBehavior: Controls how the view should be sized and positioned along the horizontal axis.
+    /// Defaults to filling the horizontal space of the `bounds`.
+    public func verticallySpreadSubviews(
+        _ subviews: [UIView],
+        margin: CGFloat,
+        inRect bounds: CGRect? = nil,
+        orthogonalBehavior: HorizontalSpreadingBehavior = .fill
+    ) {
+        spreadOutSubviews(
+            subviews,
+            axis: .vertical,
+            margin: margin,
+            inRect: bounds
+        ) { subviewFrame, subviewBounds, layoutBounds in
+            switch (orthogonalBehavior, effectiveUserInterfaceLayoutDirection) {
+            case (.fill, _):
+                // No-op. The `subviewFrame` has already been sized and positioned to fill the available horizontal
+                // space in the container.
+                break
+
+            case let (.leading(inset), .leftToRight),
+                 let (.trailing(inset), .rightToLeft):
+                subviewFrame.size.width = subviewBounds.width
+                subviewFrame.origin.x = inset
+
+            case let (.leading(inset), .rightToLeft),
+                 let (.trailing(inset), .leftToRight):
+                subviewFrame.size.width = subviewBounds.width
+                subviewFrame.origin.x = layoutBounds.width - subviewFrame.width - inset
+
+            case let (.centered(offset), .leftToRight):
+                subviewFrame.size.width = subviewBounds.width
+                subviewFrame.origin.x = (layoutBounds.width - subviewFrame.width) / 2 + offset
+
+            case let (.centered(offset), .rightToLeft):
+                subviewFrame.size.width = subviewBounds.width
+                subviewFrame.origin.x = (layoutBounds.width - subviewFrame.width) / 2 - offset
+
+            @unknown default:
+                fatalError("Unknown user interface layout direction")
+            }
+        }
+    }
+
+    // MARK: - Private Methods
+
+    private func spreadOutSubviews(
+        _ subviews: [UIView],
+        axis: ViewDistributionAxis,
+        margin: CGFloat,
+        inRect bounds: CGRect?,
+        applyOrthogonalBehavior: (_ subviewFrame: inout CGRect, _ subviewBounds: CGRect, _ layoutBounds: CGRect) -> Void
     ) {
         let subviewsCount = subviews.count
         guard subviewsCount > 0 else {
@@ -114,62 +228,18 @@ extension UIView {
             }
 
             var subviewFrame = unroundedFrame
+
             switch axis {
             case .horizontal:
                 let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: .leftToRight)
                 subviewFrame.size.width = abs(subviewTrailingEdge - subviewLeadingEdge)
 
-                switch orthogonalBehavior {
-                case .fill:
-                    // No-op. The `subviewFrame` has already been sized and positioned to fill the available vertical
-                    // space in the container.
-                    break
-
-                case let .leading(inset):
-                    subviewFrame.size.height = subview.bounds.height
-                    subviewFrame.origin.y = inset
-
-                case let .centered(offset):
-                    subviewFrame.size.height = subview.bounds.height
-                    subviewFrame.origin.y = (unroundedFrame.height - subviewFrame.height) / 2 + offset
-
-                case let .trailing(inset):
-                    subviewFrame.size.height = subview.bounds.height
-                    subviewFrame.origin.y = unroundedFrame.height - subviewFrame.height - inset
-                }
-
             case .vertical:
                 let subviewLeadingEdge = axis.leadingEdge(of: subviewFrame, layoutDirection: .leftToRight)
                 subviewFrame.size.height = abs(subviewTrailingEdge - subviewLeadingEdge)
-
-                switch (orthogonalBehavior, receiverLayoutDirection) {
-                case (.fill, _):
-                    // No-op. The `subviewFrame` has already been sized and positioned to fill the available horizontal
-                    // space in the container.
-                    break
-
-                case let (.leading(inset), .leftToRight),
-                     let (.trailing(inset), .rightToLeft):
-                    subviewFrame.size.width = subview.bounds.width
-                    subviewFrame.origin.x = inset
-
-                case let (.leading(inset), .rightToLeft),
-                     let (.trailing(inset), .leftToRight):
-                    subviewFrame.size.width = subview.bounds.width
-                    subviewFrame.origin.x = unroundedFrame.width - subviewFrame.width - inset
-
-                case let (.centered(offset), .leftToRight):
-                    subviewFrame.size.width = subview.bounds.width
-                    subviewFrame.origin.x = (unroundedFrame.width - subviewFrame.width) / 2 + offset
-
-                case let (.centered(offset), .rightToLeft):
-                    subviewFrame.size.width = subview.bounds.width
-                    subviewFrame.origin.x = (unroundedFrame.width - subviewFrame.width) / 2 - offset
-
-                @unknown default:
-                    fatalError("Unknown user interface layout direction")
-                }
             }
+
+            applyOrthogonalBehavior(&subviewFrame, subview.bounds, unroundedFrame)
 
             subview.untransformedFrame = subviewFrame
 
