@@ -172,7 +172,7 @@ extension UIView {
             offset: UIOffset(horizontal: horizontalOffset, vertical: verticalOffset)
         )
     }
-    
+
     /// Move the view to align it within its superview, based on position.
     ///
     /// - precondition: The receiver must have a superview.
@@ -190,7 +190,7 @@ extension UIView {
         guard let superview = superview else {
             fatalError("Can't align view without a superview!")
         }
-        
+
         align(
             position,
             with: superview,
@@ -198,7 +198,7 @@ extension UIView {
             offset: .init(horizontal: horizontalOffset, vertical: verticalOffset)
         )
     }
-    
+
     /// Move the view to align it within its superview, based on coordinate.
     ///
     /// - precondition: The receiver must have a superview.
@@ -229,19 +229,35 @@ extension UIView {
             offset: .init(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.x + verticalOffset)
         )
     }
-    
-    /// Move the view to align it with another view.
+
+    /// Move the view to align it within its superview.
     ///
     /// - precondition: The receiver must have a superview.
     ///
     /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
-    /// - parameter inset: An optional inset (horizontal, vertical, or diagonal based on the position) to apply. An
-    /// inset on .center is interpreted as a vertical offset.
-    public func alignToSuperview(_ position: Position, inset: CGFloat = 0.0) {
+    /// - parameter horizontalOffset: An additional horizontal offset to apply to the receiver. Defaults to no offset.
+    /// - parameter verticalOffset: An additional vertical offset to apply to the receiver. Defaults to no offset.
+    public func alignToSuperview(_ position: Position, horizontalOffset: CGFloat = 0, verticalOffset: CGFloat = 0) {
+        align(
+            position,
+            withSuperviewPosition: position,
+            horizontalOffset: horizontalOffset,
+            verticalOffset: verticalOffset
+        )
+    }
+
+    /// Move the view to align it within its superview.
+    ///
+    /// - precondition: The receiver must have a superview.
+    ///
+    /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
+    /// - parameter inset: An inset (horizontal, vertical, or diagonal based on the position) to apply. An inset on
+    /// `.center` is interpreted as a vertical offset away from the top.
+    public func alignToSuperview(_ position: Position, inset: CGFloat) {
         guard let superview = self.superview else {
             fatalError("Can't align view without a superview!")
         }
-        
+
         let offset: UIOffset
         switch ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection) {
         case .topLeft:
@@ -263,7 +279,7 @@ extension UIView {
         case .bottomRight:
             offset = UIOffset(horizontal: -inset,   vertical: -inset)
         }
-        
+
         self.align(position, with: superview, position, offset: offset)
     }
 
@@ -276,7 +292,7 @@ extension UIView {
     private func pointInBounds(at position: Position) -> CGPoint {
         return position.point(in: bounds, layoutDirection: effectiveUserInterfaceLayoutDirection)
     }
-    
+
 }
 
 // MARK: -
