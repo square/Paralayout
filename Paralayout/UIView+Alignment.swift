@@ -199,6 +199,30 @@ extension UIView {
         )
     }
 
+    /// Move the view to align it within its superview, based on position.
+    ///
+    /// - precondition: The receiver must have a superview.
+    ///
+    /// - parameter position: The position within the receiving view to use for alignment.
+    /// - parameter superviewPosition: The position within the view's `superview` to use for alignment.
+    /// - parameter offset: An additional offset to apply to the alignment.
+    public func align(
+        _ position: Position,
+        withSuperviewPosition superviewPosition: Position,
+        offset: UIOffset
+    ) {
+        guard let superview = superview else {
+            fatalError("Can't align view without a superview!")
+        }
+
+        align(
+            position,
+            with: superview,
+            superviewPosition,
+            offset: offset
+        )
+    }
+
     /// Move the view to align it within its superview, based on coordinate.
     ///
     /// - precondition: The receiver must have a superview.
@@ -243,6 +267,20 @@ extension UIView {
             withSuperviewPosition: position,
             horizontalOffset: horizontalOffset,
             verticalOffset: verticalOffset
+        )
+    }
+
+    /// Move the view to align it within its superview.
+    ///
+    /// - precondition: The receiver must have a superview.
+    ///
+    /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
+    /// - parameter offset: An additional offset to apply to the receiver.
+    public func alignToSuperview(_ position: Position, offset: UIOffset) {
+        align(
+            position,
+            withSuperviewPosition: position,
+            offset: offset
         )
     }
 
