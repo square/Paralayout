@@ -16,7 +16,7 @@
 
 import UIKit
 
-extension UIView {
+extension Alignable {
 
     /// Move the view to align it with another view.
     ///
@@ -32,7 +32,7 @@ extension UIView {
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
     public func align(
         _ position: Position,
-        with otherView: UIView,
+        with otherView: Alignable,
         _ otherPosition: Position,
         alignmentBehavior: TargetAlignmentBehavior = .automatic,
         horizontalOffset: CGFloat = 0,
@@ -61,7 +61,7 @@ extension UIView {
         horizontalOffset: CGFloat = 0,
         verticalOffset: CGFloat = 0
     ) {
-        guard let superview = superview else {
+        guard let superview = viewForAlignment.superview else {
             fatalError("Can't align view without a superview!")
         }
 
@@ -85,7 +85,7 @@ extension UIView {
         withSuperviewPosition superviewPosition: Position,
         offset: UIOffset
     ) {
-        guard let superview = superview else {
+        guard let superview = viewForAlignment.superview else {
             fatalError("Can't align view without a superview!")
         }
 
@@ -111,14 +111,17 @@ extension UIView {
         horizontalOffset: CGFloat = 0,
         verticalOffset: CGFloat = 0
     ) {
-        guard let superview = superview else {
+        guard let superview = viewForAlignment.superview else {
             fatalError("Can't align view without a superview!")
         }
 
         // Resolve the position before aligning, since we always want to use the top left corner (i.e. the origin) of
         // superview, regardless of the layout direction. Without this, we'll hit the mismatched alignment positions
         // alert when using a leading/trailing position.
-        let resolvedPosition = ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection)
+        let resolvedPosition = ResolvedPosition(
+            resolving: position,
+            with: viewForAlignment.effectiveUserInterfaceLayoutDirection
+        )
 
         align(
             resolvedPosition.layoutDirectionAgnosticPosition,
@@ -166,12 +169,15 @@ extension UIView {
     /// - parameter inset: An inset (horizontal, vertical, or diagonal based on the position) to apply. An inset on
     /// `.center` is interpreted as a vertical offset away from the top.
     public func alignToSuperview(_ position: Position, inset: CGFloat) {
-        guard let superview = self.superview else {
+        guard let superview = self.viewForAlignment.superview else {
             fatalError("Can't align view without a superview!")
         }
 
         let offset: UIOffset
-        switch ResolvedPosition(resolving: position, with: effectiveUserInterfaceLayoutDirection) {
+        switch ResolvedPosition(
+            resolving: position,
+            with: viewForAlignment.effectiveUserInterfaceLayoutDirection
+        ) {
         case .topLeft:
             offset = UIOffset(horizontal: inset,    vertical: inset)
         case .topCenter:

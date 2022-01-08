@@ -90,7 +90,7 @@ extension Alignable {
         case .bounds,
              .automatic where targetIsInSourceSuperviewChain:
             targetPoint = try superview.untransformedConvert(
-                targetView
+                otherView
                     .pointInBounds(at: otherPosition)
                     .offset(by: UIOffset(horizontal: -targetView.bounds.origin.x, vertical: -targetView.bounds.origin.y)),
                 from: targetView
@@ -99,7 +99,7 @@ extension Alignable {
         case .untransformedFrame,
              .automatic /* where !targetIsInSourceSuperviewChain */:
             targetPoint = try superview.untransformedConvert(
-                targetView.pointInBounds(at: otherPosition),
+                otherView.pointInBounds(at: otherPosition),
                 from: targetView
             )
         }
