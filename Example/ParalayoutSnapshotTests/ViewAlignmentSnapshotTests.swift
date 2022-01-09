@@ -269,6 +269,62 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    func testAlignmentWithFrame() {
+        let targetTransform = CGAffineTransform(rotationAngle: .pi / 6)
+        let receiverTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        containerView.backgroundColor = .white
+
+        let targetFrameView = UIView()
+        targetFrameView.backgroundColor = .red.withAlphaComponent(0.15)
+        containerView.addSubview(targetFrameView)
+
+        let receiverFrameView = UIView()
+        receiverFrameView.backgroundColor = .green.withAlphaComponent(0.15)
+        containerView.addSubview(receiverFrameView)
+
+        let targetView = UIView(frame: CGRect(x: 30, y: 30, width: 140, height: 140))
+        targetView.backgroundColor = .red.withAlphaComponent(0.4)
+        targetView.transform = targetTransform
+        containerView.addSubview(targetView)
+
+        let receiverView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        receiverView.backgroundColor = .green.withAlphaComponent(0.4)
+        receiverView.transform = receiverTransform
+        containerView.addSubview(receiverView)
+
+        func updateMirrorViews() {
+            targetView.transform = .identity
+            targetFrameView.frame = targetView.frame.applying(targetView.transform.inverted())
+            targetView.transform = targetTransform
+
+            receiverView.transform = .identity
+            receiverFrameView.frame = receiverView.frame.applying(receiverView.transform.inverted())
+            receiverView.transform = receiverTransform
+        }
+
+        receiverView.align(.bottomRight, with: targetView, .bottomRight)
+        updateMirrorViews()
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["noProxies"]))
+
+        receiverView.align(.bottomRight, with: targetView.frameAlignmentProxy, .bottomRight)
+        updateMirrorViews()
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["targetProxy"]))
+
+        receiverView.frameAlignmentProxy.align(.bottomRight, with: targetView, .bottomRight)
+        updateMirrorViews()
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["receiverProxy"]))
+
+        receiverView.frameAlignmentProxy.align(
+            .bottomRight,
+            with: targetView.frameAlignmentProxy,
+            .bottomRight
+        )
+        updateMirrorViews()
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["bothProxies"]))
+    }
+
 }
 
 // MARK: -
