@@ -246,6 +246,29 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["bothLayoutMargins"]))
     }
 
+    func testAlignmentUsingCapInsets() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
+        containerView.backgroundColor = .white
+
+        let targetView = UIView(frame: containerView.bounds.insetAllSides(by: 20))
+        targetView.backgroundColor = .green.withAlphaComponent(0.1)
+        containerView.addSubview(targetView)
+
+        for position in [Position.topLeft, .topRight, .bottomRight, .bottomLeft] {
+            let label = UILabel()
+            label.text = "HÉLLÖ Worldy"
+            label.font = .systemFont(ofSize: 14)
+            label.textColor = .black
+            label.backgroundColor = .red.withAlphaComponent(0.1)
+            label.sizeToFit()
+            containerView.addSubview(label)
+
+            label.capInsetsAlignmentProxy.align(position, with: targetView, position)
+        }
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
 }
 
 // MARK: -
