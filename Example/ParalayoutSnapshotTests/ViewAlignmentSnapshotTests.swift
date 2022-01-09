@@ -219,14 +219,14 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
 
         let targetView = LayoutMarginsView(frame: CGRect(x: 25, y: 25, width: 150, height: 150))
         targetView.layoutMargins = .init(uniform: 20)
-        targetView.backgroundColor = .red.withAlphaComponent(0.2)
-        targetView.insetView.backgroundColor = .red.withAlphaComponent(0.2)
+        targetView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        targetView.insetView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
         containerView.addSubview(targetView)
 
         let receiverView = LayoutMarginsView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         receiverView.layoutMargins = .init(uniform: 10)
-        receiverView.backgroundColor = .green.withAlphaComponent(0.2)
-        receiverView.insetView.backgroundColor = .green.withAlphaComponent(0.2)
+        receiverView.backgroundColor = UIColor.green.withAlphaComponent(0.2)
+        receiverView.insetView.backgroundColor = UIColor.green.withAlphaComponent(0.2)
         containerView.addSubview(receiverView)
 
         receiverView.align(.bottomRight, with: targetView, .bottomRight)
@@ -251,7 +251,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         containerView.backgroundColor = .white
 
         let targetView = UIView(frame: containerView.bounds.insetAllSides(by: 20))
-        targetView.backgroundColor = .green.withAlphaComponent(0.1)
+        targetView.backgroundColor = UIColor.green.withAlphaComponent(0.1)
         containerView.addSubview(targetView)
 
         for position in [Position.topLeft, .topRight, .bottomRight, .bottomLeft] {
@@ -259,7 +259,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
             label.text = "HÉLLÖ Worldy"
             label.font = .systemFont(ofSize: 14)
             label.textColor = .black
-            label.backgroundColor = .red.withAlphaComponent(0.1)
+            label.backgroundColor = UIColor.red.withAlphaComponent(0.1)
             label.sizeToFit()
             containerView.addSubview(label)
 
