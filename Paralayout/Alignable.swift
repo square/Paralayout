@@ -19,9 +19,15 @@ import UIKit
 /// Describes an object that can participate in alignment. In practice, this represents a view.
 public protocol Alignable {
 
-    var viewForAlignment: UIView { get }
+    var alignmentContext: AlignmentContext { get }
 
-    var alignmentBounds: CGRect { get }
+}
+
+public struct AlignmentContext {
+
+    public var view: UIView
+
+    public var alignmentBounds: CGRect
 
 }
 
@@ -32,12 +38,8 @@ public protocol Alignable {
 
 extension UIView: Alignable {
 
-    public var viewForAlignment: UIView {
-        return self
-    }
-
-    public var alignmentBounds: CGRect {
-        return bounds
+    public var alignmentContext: AlignmentContext {
+        return AlignmentContext(view: self, alignmentBounds: bounds)
     }
 
 }
@@ -51,20 +53,23 @@ public struct InsetAlignmentProxy: Alignable {
     // MARK: - Life Cycle
 
     public init(proxiedView: UIView, insets: UIEdgeInsets) {
-        self.viewForAlignment = proxiedView
+        self.proxiedView = proxiedView
         self.insets = insets
     }
 
     // MARK: - Public Properties
 
+    public let proxiedView: UIView
+
     public var insets: UIEdgeInsets
 
     // MARK: - Alignable
 
-    public let viewForAlignment: UIView
-
-    public var alignmentBounds: CGRect {
-        return viewForAlignment.bounds.inset(by: insets)
+    public var alignmentContext: AlignmentContext {
+        return AlignmentContext(
+            view: proxiedView,
+            alignmentBounds: proxiedView.bounds.inset(by: insets)
+        )
     }
 
 }

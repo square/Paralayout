@@ -52,11 +52,14 @@ extension Alignable {
         _ otherPosition: Position,
         alignmentBehavior: TargetAlignmentBehavior = .automatic
     ) throws -> UIOffset {
-        let receiverView = viewForAlignment
-        let targetView = otherView.viewForAlignment
+        let receiverContext = alignmentContext
+        let receiverView = receiverContext.view
+
+        let targetContext = otherView.alignmentContext
+        let targetView = targetContext.view
 
         // We can't be aligned to another view if we don't have a superview.
-        guard let superview = receiverView.superview else {
+        guard let superview = receiverContext.view.superview else {
             ParalayoutAlertForInvalidViewHierarchy()
             return .zero
         }
@@ -82,7 +85,10 @@ extension Alignable {
             break
         }
 
-        let sourcePoint = try superview.untransformedConvert(pointInBounds(at: position), from: receiverView)
+        let sourcePoint = try superview.untransformedConvert(
+            receiverContext.pointInBounds(at: position),
+            from: receiverView
+        )
         let targetIsInSourceSuperviewChain = sequence(first: receiverView, next: { $0.superview }).contains(targetView)
 
         let targetPoint: CGPoint
@@ -90,16 +96,18 @@ extension Alignable {
         case .bounds,
              .automatic where targetIsInSourceSuperviewChain:
             targetPoint = try superview.untransformedConvert(
-                otherView
+                targetContext
                     .pointInBounds(at: otherPosition)
-                    .offset(by: UIOffset(horizontal: -targetView.bounds.origin.x, vertical: -targetView.bounds.origin.y)),
+                    .offset(
+                        by: UIOffset(horizontal: -targetView.bounds.origin.x, vertical: -targetView.bounds.origin.y)
+                    ),
                 from: targetView
             )
 
         case .untransformedFrame,
              .automatic /* where !targetIsInSourceSuperviewChain */:
             targetPoint = try superview.untransformedConvert(
-                otherView.pointInBounds(at: otherPosition),
+                targetContext.pointInBounds(at: otherPosition),
                 from: targetView
             )
         }
@@ -126,7 +134,7 @@ extension Alignable {
         offset: UIOffset
     ) {
         do {
-            let receiverView = viewForAlignment
+            let receiverView = alignmentContext.view
             receiverView.untransformedFrame.origin = receiverView.untransformedFrame.origin
                 .offset(
                     by: try untransformedFrameOffset(
@@ -144,14 +152,18 @@ extension Alignable {
         }
     }
 
-    // MARK: - Private Methods
+}
+
+// MARK: -
+
+extension AlignmentContext {
 
     /// The location of a position in the view in the view's `bounds`.
     ///
     /// - parameter position: The position to use.
     /// - returns: The point at the specified position.
-    private func pointInBounds(at position: Position) -> CGPoint {
-        return position.point(in: alignmentBounds, layoutDirection: viewForAlignment.effectiveUserInterfaceLayoutDirection)
+    fileprivate func pointInBounds(at position: Position) -> CGPoint {
+        return position.point(in: alignmentBounds, layoutDirection: view.effectiveUserInterfaceLayoutDirection)
     }
 
 }

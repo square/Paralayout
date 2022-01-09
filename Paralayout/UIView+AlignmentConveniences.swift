@@ -61,7 +61,7 @@ extension Alignable {
         horizontalOffset: CGFloat = 0,
         verticalOffset: CGFloat = 0
     ) {
-        guard let superview = viewForAlignment.superview else {
+        guard let superview = alignmentContext.view.superview else {
             fatalError("Can't align view without a superview!")
         }
 
@@ -85,7 +85,7 @@ extension Alignable {
         withSuperviewPosition superviewPosition: Position,
         offset: UIOffset
     ) {
-        guard let superview = viewForAlignment.superview else {
+        guard let superview = alignmentContext.view.superview else {
             fatalError("Can't align view without a superview!")
         }
 
@@ -111,7 +111,7 @@ extension Alignable {
         horizontalOffset: CGFloat = 0,
         verticalOffset: CGFloat = 0
     ) {
-        guard let superview = viewForAlignment.superview else {
+        guard let superview = alignmentContext.view.superview else {
             fatalError("Can't align view without a superview!")
         }
 
@@ -120,7 +120,7 @@ extension Alignable {
         // alert when using a leading/trailing position.
         let resolvedPosition = ResolvedPosition(
             resolving: position,
-            with: viewForAlignment.effectiveUserInterfaceLayoutDirection
+            with: alignmentContext.view.effectiveUserInterfaceLayoutDirection
         )
 
         align(
@@ -169,14 +169,14 @@ extension Alignable {
     /// - parameter inset: An inset (horizontal, vertical, or diagonal based on the position) to apply. An inset on
     /// `.center` is interpreted as a vertical offset away from the top.
     public func alignToSuperview(_ position: Position, inset: CGFloat) {
-        guard let superview = self.viewForAlignment.superview else {
+        guard let superview = alignmentContext.view.superview else {
             fatalError("Can't align view without a superview!")
         }
 
         let offset: UIOffset
         switch ResolvedPosition(
             resolving: position,
-            with: viewForAlignment.effectiveUserInterfaceLayoutDirection
+            with: alignmentContext.view.effectiveUserInterfaceLayoutDirection
         ) {
         case .topLeft:
             offset = UIOffset(horizontal: inset,    vertical: inset)
