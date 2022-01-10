@@ -277,20 +277,20 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         containerView.backgroundColor = .white
 
         let targetFrameView = UIView()
-        targetFrameView.backgroundColor = .red.withAlphaComponent(0.15)
+        targetFrameView.backgroundColor = UIColor.red.withAlphaComponent(0.15)
         containerView.addSubview(targetFrameView)
 
         let receiverFrameView = UIView()
-        receiverFrameView.backgroundColor = .green.withAlphaComponent(0.15)
+        receiverFrameView.backgroundColor = UIColor.green.withAlphaComponent(0.15)
         containerView.addSubview(receiverFrameView)
 
         let targetView = UIView(frame: CGRect(x: 30, y: 30, width: 140, height: 140))
-        targetView.backgroundColor = .red.withAlphaComponent(0.4)
+        targetView.backgroundColor = UIColor.red.withAlphaComponent(0.4)
         targetView.transform = targetTransform
         containerView.addSubview(targetView)
 
         let receiverView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
-        receiverView.backgroundColor = .green.withAlphaComponent(0.4)
+        receiverView.backgroundColor = UIColor.green.withAlphaComponent(0.4)
         receiverView.transform = receiverTransform
         containerView.addSubview(receiverView)
 
