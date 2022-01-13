@@ -213,6 +213,62 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    func testAlignmentWithLayoutMargins() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        containerView.backgroundColor = .white
+
+        let targetView = LayoutMarginsView(frame: CGRect(x: 25, y: 25, width: 150, height: 150))
+        targetView.layoutMargins = .init(uniform: 20)
+        targetView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        targetView.insetView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        containerView.addSubview(targetView)
+
+        let receiverView = LayoutMarginsView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        receiverView.layoutMargins = .init(uniform: 10)
+        receiverView.backgroundColor = UIColor.green.withAlphaComponent(0.2)
+        receiverView.insetView.backgroundColor = UIColor.green.withAlphaComponent(0.2)
+        containerView.addSubview(receiverView)
+
+        receiverView.align(.bottomRight, with: targetView, .bottomRight)
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["noLayoutMargins"]))
+
+        receiverView.align(.bottomRight, with: targetView.layoutMarginsAlignmentProxy, .bottomRight)
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["targetLayoutMargins"]))
+
+        receiverView.layoutMarginsAlignmentProxy.align(.bottomRight, with: targetView, .bottomRight)
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["receiverLayoutMargins"]))
+
+        receiverView.layoutMarginsAlignmentProxy.align(
+            .bottomRight,
+            with: targetView.layoutMarginsAlignmentProxy,
+            .bottomRight
+        )
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["bothLayoutMargins"]))
+    }
+
+    func testAlignmentUsingCapInsets() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
+        containerView.backgroundColor = .white
+
+        let targetView = UIView(frame: containerView.bounds.insetAllSides(by: 20))
+        targetView.backgroundColor = UIColor.green.withAlphaComponent(0.1)
+        containerView.addSubview(targetView)
+
+        for position in [Position.topLeft, .topRight, .bottomRight, .bottomLeft] {
+            let label = UILabel()
+            label.text = "HÉLLÖ Worldy"
+            label.font = .systemFont(ofSize: 14)
+            label.textColor = .black
+            label.backgroundColor = UIColor.red.withAlphaComponent(0.1)
+            label.sizeToFit()
+            containerView.addSubview(label)
+
+            label.capInsetsAlignmentProxy.align(position, with: targetView, position)
+        }
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
 }
 
 // MARK: -
@@ -252,6 +308,35 @@ extension Position {
         case .bottomTrailing:
             return "BottomTrailing"
         }
+    }
+
+}
+
+// MARK: -
+
+private final class LayoutMarginsView: UIView {
+
+    // MARK: - Life Cycle
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        addSubview(insetView)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public Properties
+
+    let insetView: UIView = .init()
+
+    // MARK: - UIView
+
+    override func layoutSubviews() {
+        insetView.frame = bounds.inset(by: layoutMargins)
     }
 
 }
