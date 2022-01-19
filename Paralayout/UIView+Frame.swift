@@ -18,9 +18,14 @@ import UIKit
 
 extension UIView {
 
-    // MARK: - Internal Properties
+    // MARK: - Public Properties
 
-    var untransformedFrame: CGRect {
+    /// A rect representing the view's `frame` (the rect representing its size and location in its superview's
+    /// coordinate space) as though the `transform3D` were always the identity transform.
+    ///
+    /// This rect is always well-defined, regardless of any transform that has been applied to the view, and so is safe
+    /// to use even when `frame` is not.
+    public var untransformedFrame: CGRect {
         get {
             return CGRect(
                 origin: CGPoint(
