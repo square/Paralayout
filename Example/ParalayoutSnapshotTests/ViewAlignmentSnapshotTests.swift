@@ -270,7 +270,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
     }
 
     func testAlignmentWithFrame() {
-        let targetTransform = CGAffineTransform(rotationAngle: .pi / 6)
+        let targetTransform = CGAffineTransform(translationX: -20, y: 10)
         let receiverTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
 
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
