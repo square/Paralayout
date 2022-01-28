@@ -94,7 +94,7 @@ The core positioning function (and its numerous derived convenience functions) a
 
 ```swift
 titleLabel.align(.leftCenter, with: icon, .rightCenter, horizontalOffset: 8)
-icon.alignToSuperview(.topCenter, inset: 20)
+icon.align(withSuperview: .topCenter, inset: 20)
 ```
 
 #### UIView Sizing Extensions
