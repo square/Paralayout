@@ -37,7 +37,7 @@ extension UIView {
         }
         set {
             bounds.size = newValue.size
-            layer.position = CGPoint(
+            center = CGPoint(
                 x: newValue.minX + newValue.width * layer.anchorPoint.x,
                 y: newValue.minY + newValue.height * layer.anchorPoint.y
             )
