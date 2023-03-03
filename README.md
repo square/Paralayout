@@ -117,20 +117,6 @@ selectionScreen.applySubviewDistribution([ 1.flexible, headerIcon, 8.fixed, head
 /// Left-align a pair of labels, one above the other, with equal space above the title and below the subtext (despite the subtext being a smaller font).
 cell.applySubviewDistribution([ 1.flexible, titleLabel, 8.fixed, subtextLabel, 1.flexible ], alignment: .leading(inset: 10))
 
-/// Adjust a "standard" distribution to filter out invisible views (hidden, alpha=0, uninstalled, or empty UILabels), and collapse adjacent spacers.
-let distribution = ViewDistributionItem.collapsing(
-    1.flexible,
-    iconFPOView,
-    Metrics.iconMargin.fixed,
-    
-    Metrics.titleTextMargin.fixed,
-    titleLabel,
-    Metrics.titleTextMargin.fixed,
-    
-    Metrics.subtextMargin.fixed,
-    subtextLabel,
-    1.flexible)
-
 /// Equally size a pair of buttons with a hairline divider between them, and size/position them at the bottom of the alert.
 alert.spreadOutSubviews([ cancelButton, acceptButton ], axis: .horizontal, margin: alert.hairlineWidth, inRect: alert.bounds.slice(from: .maxYEdge, amount: buttonHeight))
 ```
