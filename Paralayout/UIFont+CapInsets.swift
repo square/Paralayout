@@ -24,16 +24,14 @@ extension UIFont {
     /// label's bottom.
     public struct LabelCapInsets {
 
-        // MARK: - Internal Properties
-        
-        /// The amount of extra space above a font's cap height, as displayed in a UILabel.
-        var top: CGFloat
-        
-        /// The amount of extra space below a font's baseline, as displayed in a UILabel.
-        var bottom: CGFloat
-
         // MARK: - Public Properties
-        
+
+        /// The amount of extra space above a font's cap height, as displayed in a UILabel.
+        public let top: CGFloat
+
+        /// The amount of extra space below a font's baseline, as displayed in a UILabel.
+        public let bottom: CGFloat
+
         /// The total amount of extra space above and below a font's cap height and baseline, as displayed in a UILabel.
         public var totalInset: CGFloat {
             return top + bottom
