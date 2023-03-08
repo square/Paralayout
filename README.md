@@ -1,6 +1,6 @@
 # Paralayout
 
-[![CI Status](https://img.shields.io/github/workflow/status/square/paralayout/CI/master)](https://github.com/square/paralayout/actions?query=workflow%3ACI+branch%3Amaster)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/square/paralayout/ci.yml?branch=master)](https://github.com/square/paralayout/actions?query=workflow%3ACI+branch%3Amaster)
 [![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-e2c245.svg)](https://github.com/Carthage/Carthage/)
 [![Version](https://img.shields.io/cocoapods/v/Paralayout.svg)](http://cocoadocs.org/docsets/Paralayout)
 [![License](https://img.shields.io/cocoapods/l/Paralayout.svg)](http://cocoadocs.org/docsets/Paralayout)
