@@ -171,7 +171,7 @@ extension CGRect {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosing the original rect.
-    public func expandedToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
+    public func expandedToPixel(in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(
             left: minX.flooredToPixel(in: scaleFactor),
             top: minY.flooredToPixel(in: scaleFactor),
@@ -185,7 +185,7 @@ extension CGRect {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosed by the original rect.
-    public func contractedToPixel(_ scaleFactor: ScaleFactorProviding) -> CGRect {
+    public func contractedToPixel(in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(
             left: minX.ceiledToPixel(in: scaleFactor),
             top: minY.ceiledToPixel(in: scaleFactor),
