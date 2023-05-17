@@ -98,6 +98,37 @@ extension UIView {
 
 // MARK: -
 
+/// An alignment proxy that supports aligning to an arbitrary rect defined in the coordinate space of the proxied view.
+public struct RectAlignmentProxy: Alignable {
+
+    // MARK: - Life Cycle
+
+    /// - parameter proxiedView: The view in which the alignment is defined.
+    /// - parameter rect: A rect defined in the coordinate space of the `proxiedView`.
+    public init(proxiedView: UIView, rect: CGRect) {
+        self.proxiedView = proxiedView
+        self.rect = rect
+    }
+
+    // MARK: - Public Properties
+
+    public let proxiedView: UIView
+
+    public let rect: CGRect
+
+    // MARK: - Alignable
+
+    public var alignmentContext: AlignmentContext {
+        return AlignmentContext(
+            view: proxiedView,
+            alignmentBounds: rect
+        )
+    }
+
+}
+
+// MARK: -
+
 public struct FrameAlignmentProxy: Alignable {
 
     // MARK: - Life Cycle
