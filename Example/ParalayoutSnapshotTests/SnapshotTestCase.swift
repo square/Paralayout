@@ -45,8 +45,13 @@ class SnapshotTestCase: XCTestCase {
     // MARK: - Private Static Properties
 
     private static let testedDevices = [
+
+        // iPhone 12 Pro (14.4)
         TestDeviceConfig(systemVersion: "14.4", screenSize: CGSize(width: 390, height: 844), screenScale: 3),
+
+        // iPhone 11 Pro (13.7)
         TestDeviceConfig(systemVersion: "13.7", screenSize: CGSize(width: 375, height: 812), screenScale: 3),
+
     ]
 
     // MARK: - XCTestCase

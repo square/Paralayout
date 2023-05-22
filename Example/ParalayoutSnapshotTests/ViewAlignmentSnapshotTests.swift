@@ -269,6 +269,66 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    func testAlignmentUsingFirstLine() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
+        containerView.backgroundColor = .white
+
+        let targetView = UIView(frame: CGRect(x: 20, y: 20, width: 8, height: 8))
+        targetView.layer.cornerRadius = 4
+        targetView.backgroundColor = .blue
+        containerView.addSubview(targetView)
+
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 14)
+        label.text = "Some text that needs to wrap to multiple lines"
+        label.textColor = .black
+        label.backgroundColor = .lightGray
+        label.sizeToFit(width: 160, constraints: .maxWidth)
+        containerView.addSubview(label)
+
+        label.firstLineAlignmentProxy.align(.leftCenter, with: targetView, .leftCenter, horizontalOffset: 16)
+
+        for position in [Position.topLeft, .topRight, .bottomRight, .bottomLeft] {
+            let cornerView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+            cornerView.backgroundColor = .red
+            containerView.addSubview(cornerView)
+            cornerView.align(position, with: label.firstLineAlignmentProxy, position)
+        }
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
+    func testAlignmentUsingFirstLineCapInsets() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
+        containerView.backgroundColor = .white
+
+        let targetView = UIView(frame: CGRect(x: 20, y: 20, width: 8, height: 8))
+        targetView.layer.cornerRadius = 4
+        targetView.backgroundColor = .blue
+        containerView.addSubview(targetView)
+
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 14)
+        label.text = "Some text that needs to wrap to multiple lines"
+        label.textColor = .black
+        label.backgroundColor = .lightGray
+        label.sizeToFit(width: 160, constraints: .maxWidth)
+        containerView.addSubview(label)
+
+        label.firstLineCapInsetsAlignmentProxy.align(.leftCenter, with: targetView, .leftCenter, horizontalOffset: 16)
+
+        for position in [Position.topLeft, .topRight, .bottomRight, .bottomLeft] {
+            let cornerView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+            cornerView.backgroundColor = .red
+            containerView.addSubview(cornerView)
+            cornerView.align(position, with: label.firstLineCapInsetsAlignmentProxy, position)
+        }
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
     func testAlignmentWithFrame() {
         let targetTransform = CGAffineTransform(translationX: -20, y: 10)
         let receiverTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
