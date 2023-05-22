@@ -28,3 +28,79 @@ extension UILabel {
     }
 
 }
+
+// MARK: -
+
+public struct TextRectLayoutProxy: Alignable {
+
+    // MARK: - Life Cycle
+
+    public init(
+        proxiedLabel: UILabel,
+        limitedToNumberOfLines numberOfLines: Int? = nil,
+        insetByCapInsets: Bool = false
+    ) {
+        self.proxiedLabel = proxiedLabel
+        self.numberOfLines = numberOfLines
+        self.insetByCapInsets = insetByCapInsets
+    }
+
+    // MARK: - Private Properties
+
+    private let proxiedLabel: UILabel
+
+    private let numberOfLines: Int?
+
+    private let insetByCapInsets: Bool
+
+    // MARK: - Alignable
+
+    public var alignmentContext: AlignmentContext {
+        var alignmentBounds = proxiedLabel.textRect(
+            forBounds: proxiedLabel.bounds,
+            limitedToNumberOfLines: numberOfLines ?? proxiedLabel.numberOfLines
+        )
+
+        if insetByCapInsets {
+            let capInsets = proxiedLabel.font.labelCapInsets(in: proxiedLabel)
+            alignmentBounds = capInsets.inset(rect: alignmentBounds)
+        }
+
+        return AlignmentContext(
+            view: proxiedLabel,
+            alignmentBounds: alignmentBounds
+        )
+    }
+
+}
+
+extension UILabel {
+
+    /// An alignment proxy that supports aligning the label using the text rect of its first line.
+    ///
+    /// - Note: The text rect doesn't always accurately represent the text at the _end_ of the first line. It's most
+    /// accurate when used to align to the text at the _start_ of the first line (where the start of the line depends on
+    /// the text alignment).
+    public var firstLineAlignmentProxy: Alignable {
+        return TextRectLayoutProxy(
+            proxiedLabel: self,
+            limitedToNumberOfLines: 1,
+            insetByCapInsets: false
+        )
+    }
+
+    /// An alignment proxy that supports aligning the label using the text rect of its first line, inset by its cap
+    /// insets.
+    ///
+    /// - Note: The text rect doesn't always accurately represent the text at the _end_ of the first line. It's most
+    /// accurate when used to align to the text at the _start_ of the first line (where the start of the line depends on
+    /// the text alignment).
+    public var firstLineCapInsetsAlignmentProxy: Alignable {
+        return TextRectLayoutProxy(
+            proxiedLabel: self,
+            limitedToNumberOfLines: 1,
+            insetByCapInsets: true
+        )
+    }
+
+}
