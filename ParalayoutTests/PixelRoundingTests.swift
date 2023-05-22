@@ -87,20 +87,20 @@ final class PixelRoundingTests: XCTestCase {
 
     func testRectPixelRounding() {
         XCTAssertEqual(
-            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandedToPixel(TestScreen.at2x),
+            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandedToPixel(in: TestScreen.at2x),
             CGRect(left: 10.5, top: 10.0, right: 51, bottom: 51)
         )
         XCTAssertEqual(
-            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).expandedToPixel(TestScreen.at3x),
+            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).expandedToPixel(in: TestScreen.at3x),
             CGRect(left: CGFloat(10) + 2 / 3, top: CGFloat(10) + 1 / 3, right: CGFloat(50) + 2 / 3, bottom: 51)
         )
 
         XCTAssertEqual(
-            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).contractedToPixel(TestScreen.at2x),
+            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).contractedToPixel(in: TestScreen.at2x),
             CGRect(left: 11, top: 10.5, right: 50.5, bottom: 50.5)
         )
         XCTAssertEqual(
-            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).contractedToPixel(TestScreen.at3x),
+            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).contractedToPixel(in: TestScreen.at3x),
             CGRect(left: 11, top: CGFloat(10) + 2 / 3, right: CGFloat(50) + 1 / 3, bottom: CGFloat(50) + 2 / 3)
         )
     }

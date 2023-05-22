@@ -132,7 +132,7 @@ final class AspectRatioTests: XCTestCase {
             layoutDirections
         ) { ratio, rectangle, scale, position, layoutDirection in
             // Make sure the source rectangle matches the scale factor we're testing.
-            let rect = rectangle.expandedToPixel(scale)
+            let rect = rectangle.expandedToPixel(in: scale)
 
             // An AspectRatio's size that fits a rect of the same aspect ratio should also be the same as the size of
             // that rect.
