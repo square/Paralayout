@@ -329,6 +329,42 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    func testAlignmentWithRect() {
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        containerView.backgroundColor = .white
+
+        let alignmentProxy = RectAlignmentProxy(
+            proxiedView: containerView,
+            rect: CGRect(x: 40, y: 30, width: 150, height: 120)
+        )
+
+        let topLeftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        topLeftView.backgroundColor = UIColor.red
+        containerView.addSubview(topLeftView)
+        topLeftView.align(.topLeft, with: alignmentProxy, .topLeft)
+
+        let topRightView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        topRightView.backgroundColor = UIColor.green
+        containerView.addSubview(topRightView)
+        topRightView.align(.topRight, with: alignmentProxy, .topRight)
+
+        let bottomLeftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        bottomLeftView.backgroundColor = UIColor.blue
+        containerView.addSubview(bottomLeftView)
+        bottomLeftView.align(.bottomLeft, with: alignmentProxy, .bottomLeft)
+
+        let bottomRightView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        bottomRightView.backgroundColor = UIColor.yellow
+        containerView.addSubview(bottomRightView)
+        bottomRightView.align(.bottomRight, with: alignmentProxy, .bottomRight)
+
+        let overlayView = UIView(frame: CGRect(x: 40, y: 30, width: 150, height: 120))
+        overlayView.backgroundColor = .lightGray.withAlphaComponent(0.1)
+        containerView.addSubview(overlayView)
+
+        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
+    }
+
     func testAlignmentWithFrame() {
         let targetTransform = CGAffineTransform(translationX: -20, y: 10)
         let receiverTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
