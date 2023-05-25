@@ -104,6 +104,21 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    func testHorizontalDistributionFollowsLayoutDirection() {
+        let view = HorizontalDistributionView(frame: CGRect(x: 0, y: 0, width: 160, height: 60))
+
+        assertSnapshot(
+            matching: view,
+            as: .image,
+            named: nameForSnapshot(with: ["LTR"])
+        )
+        assertSnapshot(
+            matching: view,
+            as: .image(traits: .init(layoutDirection: .rightToLeft)),
+            named: nameForSnapshot(with: ["RTL"])
+        )
+    }
+
 }
 
 // MARK: -
@@ -134,6 +149,66 @@ extension UIUserInterfaceLayoutDirection {
         @unknown default:
             fatalError("Unknown layout direction")
         }
+    }
+
+}
+
+// MARK: -
+
+final class HorizontalDistributionView: UIView {
+
+    // MARK: - Life Cycle
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        firstView.bounds.size = .init(width: 40, height: 40)
+        firstView.backgroundColor = .red
+        addSubview(firstView)
+
+        secondView.bounds.size = .init(width: 40, height: 40)
+        secondView.backgroundColor = .green
+        addSubview(secondView)
+
+        thirdView.bounds.size = .init(width: 40, height: 40)
+        thirdView.backgroundColor = .blue
+        addSubview(thirdView)
+
+        // Set arbitrary semantic content attributes to ensure the layout relies on the _receiver's_ effective layout
+        // direction, not that of the distributed views.
+        firstView.semanticContentAttribute = .forceLeftToRight
+        secondView.semanticContentAttribute = .forceRightToLeft
+
+        backgroundColor = .white
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Private Properties
+
+    private let firstView: UIView = .init()
+
+    private let secondView: UIView = .init()
+
+    private let thirdView: UIView = .init()
+
+    // MARK: - UIView
+
+    override func layoutSubviews() {
+        applyHorizontalSubviewDistribution(
+            [
+                1.flexible,
+                firstView,
+                1.flexible,
+                secondView,
+                1.flexible,
+                thirdView,
+                1.flexible,
+            ]
+        )
     }
 
 }
