@@ -254,17 +254,21 @@ extension UIView {
         let receiverLayoutDirection = effectiveUserInterfaceLayoutDirection
 
         // Okay, ready to go!
-        var viewOrigin = axis.leadingEdge(of: layoutBounds, layoutDirection: receiverLayoutDirection)
+        var leadingEdgePosition = axis.leadingEdge(of: layoutBounds, layoutDirection: receiverLayoutDirection)
         for item in items {
             switch item {
             case .view(let subview, let insets):
                 var frame = subview.untransformedFrame
 
-                switch axis {
-                case .horizontal:
-                    frame.origin.x = (viewOrigin - insets.left).roundedToPixel(in: self)
-                case .vertical:
-                    frame.origin.y = (viewOrigin - insets.top).roundedToPixel(in: self)
+                switch (axis, receiverLayoutDirection) {
+                case (.horizontal, .leftToRight):
+                    frame.origin.x = (leadingEdgePosition - insets.left).roundedToPixel(in: self)
+                case (.horizontal, .rightToLeft):
+                    frame.origin.x = (leadingEdgePosition + insets.right - frame.width).roundedToPixel(in: self)
+                case (.vertical, _):
+                    frame.origin.y = (leadingEdgePosition - insets.top).roundedToPixel(in: self)
+                @unknown default:
+                    fatalError("Unknown user interface layout direction")
                 }
 
                 applyOrthogonalAlignment(&frame, layoutBounds)
@@ -287,9 +291,9 @@ extension UIView {
 
             switch (axis, receiverLayoutDirection) {
             case (.horizontal, .leftToRight), (.vertical, _):
-                viewOrigin += distanceToMoveOrigin
+                leadingEdgePosition += distanceToMoveOrigin
             case (.horizontal, .rightToLeft):
-                viewOrigin -= distanceToMoveOrigin
+                leadingEdgePosition -= distanceToMoveOrigin
             @unknown default:
                 fatalError("Unknown user interface layout direction")
             }
