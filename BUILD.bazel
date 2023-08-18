@@ -1,0 +1,44 @@
+load(
+    "@build_bazel_rules_swift//swift:swift.bzl",
+    "swift_library",
+    "swift_test",
+)
+
+load(
+    "@build_bazel_rules_apple//apple:ios.bzl",
+    "ios_framework",
+    "ios_unit_test",
+)
+
+swift_library(
+    name = "Paralayout.lib",
+    module_name = "Paralayout",
+    srcs = glob(["Paralayout/**/*.swift"]),
+    deps = [],
+)
+
+swift_library(
+    name = "ParalayoutTests.lib",
+    module_name = "ParalayoutTests",
+    deps = [":Paralayout.lib"],
+    srcs = glob(["ParalayoutTests/**/*.swift"]),
+    testonly = True,
+)
+
+ios_framework(
+    name = "Paralayout",
+    deps = [":Paralayout.lib"],
+    visibility = ["//visibility:public"],
+    bundle_id = "com.squareup.Paralayout",
+    infoplists = ["Paralayout/Info.plist"],
+    minimum_os_version = "12.0",
+    families = ["iphone", "ipad"],
+)
+
+ios_unit_test(
+    name = "ParalayoutTests",
+    deps = [":ParalayoutTests.lib"],
+    bundle_name = "ParalayoutTests",
+    minimum_os_version = "12.0",
+    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+)

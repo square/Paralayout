@@ -61,3 +61,11 @@ jobs:
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platform }}
       - name: Build
         run: Scripts/build.swift spm ${{ matrix.platform }} `which xcpretty`
+  bazel:
+    name: Bazel
+    runs-on: macOS-12
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Build and Test
+        run: bazel test ParalayoutTests

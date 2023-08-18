@@ -32,3 +32,6 @@ Pods/
 generated/
 .build/
 .swiftpm/
+
+# Bazel
+bazel-*
