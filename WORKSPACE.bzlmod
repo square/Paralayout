@@ -1,0 +1,1 @@
+"""Defines the WORKSPACE when using bzlmod, this should be empty. Use MODULE.bazel instead"""

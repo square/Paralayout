@@ -68,4 +68,4 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Build and Test
-        run: bazel test ParalayoutTests
+        run: bazel test //...
