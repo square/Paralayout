@@ -1,1 +1,8 @@
-build --apple_platform_type=ios
+# TODO: remove when using Bazel 7 where bzlmod is on by default
+common --enable_bzlmod
+
+# Use the apple_support macOS toolchains
+common --enable_platform_specific_config
+common:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
+common:macos --crosstool_top=@local_config_apple_cc//:toolchain
+common:macos --host_crosstool_top=@local_config_apple_cc//:toolchain

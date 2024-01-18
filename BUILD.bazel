@@ -1,44 +1,48 @@
 load(
-    "@build_bazel_rules_swift//swift:swift.bzl",
-    "swift_library",
-    "swift_test",
-)
-
-load(
-    "@build_bazel_rules_apple//apple:ios.bzl",
+    "@rules_apple//apple:ios.bzl",
     "ios_framework",
     "ios_unit_test",
+)
+load(
+    "@rules_swift//swift:swift.bzl",
+    "swift_library",
 )
 
 swift_library(
     name = "Paralayout.lib",
-    module_name = "Paralayout",
     srcs = glob(["Paralayout/**/*.swift"]),
+    module_name = "Paralayout",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
     deps = [],
 )
 
 swift_library(
     name = "ParalayoutTests.lib",
-    module_name = "ParalayoutTests",
-    deps = [":Paralayout.lib"],
-    srcs = glob(["ParalayoutTests/**/*.swift"]),
     testonly = True,
+    srcs = glob(["ParalayoutTests/**/*.swift"]),
+    module_name = "ParalayoutTests",
+    tags = ["manual"],
+    deps = [":Paralayout.lib"],
 )
 
 ios_framework(
     name = "Paralayout",
-    deps = [":Paralayout.lib"],
-    visibility = ["//visibility:public"],
     bundle_id = "com.squareup.Paralayout",
+    families = [
+        "iphone",
+        "ipad",
+    ],
     infoplists = ["Paralayout/Info.plist"],
     minimum_os_version = "12.0",
-    families = ["iphone", "ipad"],
+    visibility = ["//visibility:public"],
+    deps = [":Paralayout.lib"],
 )
 
 ios_unit_test(
     name = "ParalayoutTests",
-    deps = [":ParalayoutTests.lib"],
     bundle_name = "ParalayoutTests",
     minimum_os_version = "12.0",
-    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    runner = "@rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    deps = [":ParalayoutTests.lib"],
 )
