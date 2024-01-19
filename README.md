@@ -29,6 +29,14 @@ dependencies: [
 ]
 ```
 
+### Bazel
+
+To install Paralayout via [Bazel](https://github.com/bazelbuild/bazel), add the following to your `MODULE.bazel`:
+
+```starlark
+bazel_dep(name = "paralayout", version = "1.0.0")
+```
+
 ### Carthage
 
 To install Paralayout via [Carthage](https://github.com/Carthage/Carthage), add the following to your `Cartfile`:
