@@ -28,7 +28,7 @@ jobs:
       - name: Build and Test
         run: Scripts/build.swift xcode ${{ matrix.platform }} `which xcpretty`
       - name: Upload Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: Test Results
