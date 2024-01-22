@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app/Contents/Developer
       - name: Prepare Simulator Runtimes
@@ -28,7 +28,7 @@ jobs:
       - name: Build and Test
         run: Scripts/build.swift xcode ${{ matrix.platform }} `which xcpretty`
       - name: Upload Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: Test Results
@@ -38,7 +38,7 @@ jobs:
     runs-on: macOS-12
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -54,7 +54,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_14.1.app/Contents/Developer
       - name: Prepare Simulator Runtimes
@@ -66,6 +66,6 @@ jobs:
     runs-on: macOS-12
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build and Test
         run: bazel test //...
