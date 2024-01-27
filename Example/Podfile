@@ -1,6 +1,5 @@
-platform :ios, '12.0'
-
 target 'ParalayoutDemo' do
+  platform :ios, '12.0'
   use_frameworks!
 
   pod 'Paralayout', :path => '../Paralayout.podspec', :testspecs => ['Tests']
@@ -8,4 +7,11 @@ target 'ParalayoutDemo' do
   target 'ParalayoutSnapshotTests' do
   	pod 'SnapshotTesting', '~> 1.8'
   end
+end
+
+target 'ParalayoutTVDemo' do
+  platform :tvos, '17.0'
+  use_frameworks!
+
+  pod 'Paralayout', :path => '../Paralayout.podspec', :testspecs => ['Tests']
 end
