@@ -34,7 +34,17 @@ extension UIScreen: ScaleFactorProviding {
 extension UIView: ScaleFactorProviding {
 
     public var pixelsPerPoint: CGFloat {
+        let scaleFromTraits = traitCollection.displayScale
+
+        // The trait collection is the authority for display scale, but sometimes the trait collection does not have a
+        // value for the scale, in which case it will return 0, breaking all the things.
+        if scaleFromTraits > 0 {
+            return scaleFromTraits
+        }
+
+        #if os(iOS)
         return (window?.screen ?? UIScreen.main).pixelsPerPoint
+        #endif
     }
 
 }
