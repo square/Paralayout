@@ -23,6 +23,8 @@ public protocol ScaleFactorProviding {
 
 }
 
+#if os(iOS) || os(tvOS)
+
 extension UIScreen: ScaleFactorProviding {
 
     public var pixelsPerPoint: CGFloat {
@@ -30,6 +32,8 @@ extension UIScreen: ScaleFactorProviding {
     }
 
 }
+
+#endif
 
 extension UIView: ScaleFactorProviding {
 

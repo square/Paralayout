@@ -15,3 +15,10 @@ target 'ParalayoutTVDemo' do
 
   pod 'Paralayout', :path => '../Paralayout.podspec', :testspecs => ['Tests']
 end
+
+target 'ParalayoutVisionDemo' do
+  platform :visionos, '1.0'
+  use_frameworks!
+
+  pod 'Paralayout', :path => '../Paralayout.podspec', :testspecs => ['Tests']
+end
