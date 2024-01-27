@@ -1,7 +1,7 @@
-// swift-tools-version:5.0.1
+// swift-tools-version:5.4
 
 //
-//  Copyright 2020 Square Inc.
+//  Copyright 2024 Block Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ let package = Package(
 	name: "Paralayout",
 	platforms: [
 		.iOS(.v12),
+        .tvOS(.v14),
 	],
 	products: [
 		.library(

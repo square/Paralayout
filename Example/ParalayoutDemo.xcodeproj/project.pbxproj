@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,7 +17,13 @@
 		3D0BEEBB26047F6600C728FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D0BEEB926047F6600C728FA /* LaunchScreen.storyboard */; };
 		3D0BEED42604854C00C728FA /* ViewDistributionSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BEED32604854C00C728FA /* ViewDistributionSnapshotTests.swift */; };
 		3D0BEEF22605598500C728FA /* SnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BEEF12605598500C728FA /* SnapshotTestCase.swift */; };
+		3D2881A02B64920900F2A1EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D28819F2B64920900F2A1EA /* AppDelegate.swift */; };
+		3D2881A22B64920900F2A1EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2881A12B64920900F2A1EA /* ViewController.swift */; };
+		3D2881A52B64920900F2A1EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D2881A32B64920900F2A1EA /* Main.storyboard */; };
+		3D2881A72B64920A00F2A1EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D2881A62B64920A00F2A1EA /* Assets.xcassets */; };
+		3D2881AA2B64920A00F2A1EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D2881A82B64920A00F2A1EA /* LaunchScreen.storyboard */; };
 		BE56DECC24CB86EBC45FB81B /* Pods_ParalayoutDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B4977CFAD5319FFF0258BF8 /* Pods_ParalayoutDemo.framework */; };
+		F20FAA43E36DEA7EF7B2EF68 /* Pods_ParalayoutTVDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B3529D8CFFFE6ACBDF55FD /* Pods_ParalayoutTVDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,10 +52,19 @@
 		3D0BEED32604854C00C728FA /* ViewDistributionSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDistributionSnapshotTests.swift; sourceTree = "<group>"; };
 		3D0BEED52604854C00C728FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D0BEEF12605598500C728FA /* SnapshotTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTestCase.swift; sourceTree = "<group>"; };
+		3D28819D2B64920900F2A1EA /* ParalayoutTVDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParalayoutTVDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D28819F2B64920900F2A1EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3D2881A12B64920900F2A1EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3D2881A42B64920900F2A1EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3D2881A62B64920A00F2A1EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D2881A92B64920A00F2A1EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56BC1C4B5B8050608972ED18 /* Pods_ParalayoutDemo_ParalayoutSnapshotTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParalayoutDemo_ParalayoutSnapshotTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66DA0A22B6BAC3A9DB54080E /* Pods-ParalayoutDemo-ParalayoutSnapshotTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParalayoutDemo-ParalayoutSnapshotTests.release.xcconfig"; path = "Target Support Files/Pods-ParalayoutDemo-ParalayoutSnapshotTests/Pods-ParalayoutDemo-ParalayoutSnapshotTests.release.xcconfig"; sourceTree = "<group>"; };
 		A103ABF2C8967E513AA8A2A1 /* Pods-ParalayoutDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParalayoutDemo.debug.xcconfig"; path = "Target Support Files/Pods-ParalayoutDemo/Pods-ParalayoutDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		F0EE39C2249F3A3CBAE7BE68 /* Pods-ParalayoutDemo-ParalayoutSnapshotTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParalayoutDemo-ParalayoutSnapshotTests.debug.xcconfig"; path = "Target Support Files/Pods-ParalayoutDemo-ParalayoutSnapshotTests/Pods-ParalayoutDemo-ParalayoutSnapshotTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F1B27B87E98660865E37B7C1 /* Pods-ParalayoutTVDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParalayoutTVDemo.debug.xcconfig"; path = "Target Support Files/Pods-ParalayoutTVDemo/Pods-ParalayoutTVDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		F2B3529D8CFFFE6ACBDF55FD /* Pods_ParalayoutTVDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParalayoutTVDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8B97B440C6E1131045B90BF /* Pods-ParalayoutTVDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParalayoutTVDemo.release.xcconfig"; path = "Target Support Files/Pods-ParalayoutTVDemo/Pods-ParalayoutTVDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +84,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3D28819A2B64920900F2A1EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F20FAA43E36DEA7EF7B2EF68 /* Pods_ParalayoutTVDemo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,6 +100,7 @@
 			children = (
 				3D0BEEAD26047F6400C728FA /* ParalayoutDemo */,
 				3D0BEED22604854C00C728FA /* ParalayoutSnapshotTests */,
+				3D28819E2B64920900F2A1EA /* ParalayoutTVDemo */,
 				3D0BEEAC26047F6400C728FA /* Products */,
 				7E0941CD49D94306CE8399B6 /* Pods */,
 				A2A4EAD12583EFDA5AA16EAC /* Frameworks */,
@@ -88,6 +112,7 @@
 			children = (
 				3D0BEEAB26047F6400C728FA /* ParalayoutDemo.app */,
 				3D0BEED12604854C00C728FA /* ParalayoutSnapshotTests.xctest */,
+				3D28819D2B64920900F2A1EA /* ParalayoutTVDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +142,18 @@
 			path = ParalayoutSnapshotTests;
 			sourceTree = "<group>";
 		};
+		3D28819E2B64920900F2A1EA /* ParalayoutTVDemo */ = {
+			isa = PBXGroup;
+			children = (
+				3D28819F2B64920900F2A1EA /* AppDelegate.swift */,
+				3D2881A12B64920900F2A1EA /* ViewController.swift */,
+				3D2881A32B64920900F2A1EA /* Main.storyboard */,
+				3D2881A62B64920A00F2A1EA /* Assets.xcassets */,
+				3D2881A82B64920A00F2A1EA /* LaunchScreen.storyboard */,
+			);
+			path = ParalayoutTVDemo;
+			sourceTree = "<group>";
+		};
 		7E0941CD49D94306CE8399B6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +161,8 @@
 				098A230C2918ED70E7FB0FC5 /* Pods-ParalayoutDemo.release.xcconfig */,
 				F0EE39C2249F3A3CBAE7BE68 /* Pods-ParalayoutDemo-ParalayoutSnapshotTests.debug.xcconfig */,
 				66DA0A22B6BAC3A9DB54080E /* Pods-ParalayoutDemo-ParalayoutSnapshotTests.release.xcconfig */,
+				F1B27B87E98660865E37B7C1 /* Pods-ParalayoutTVDemo.debug.xcconfig */,
+				F8B97B440C6E1131045B90BF /* Pods-ParalayoutTVDemo.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -133,6 +172,7 @@
 			children = (
 				2B4977CFAD5319FFF0258BF8 /* Pods_ParalayoutDemo.framework */,
 				56BC1C4B5B8050608972ED18 /* Pods_ParalayoutDemo_ParalayoutSnapshotTests.framework */,
+				F2B3529D8CFFFE6ACBDF55FD /* Pods_ParalayoutTVDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -179,13 +219,32 @@
 			productReference = 3D0BEED12604854C00C728FA /* ParalayoutSnapshotTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		3D28819C2B64920900F2A1EA /* ParalayoutTVDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D2881AD2B64920A00F2A1EA /* Build configuration list for PBXNativeTarget "ParalayoutTVDemo" */;
+			buildPhases = (
+				3302584962989FA92B992771 /* [CP] Check Pods Manifest.lock */,
+				3D2881992B64920900F2A1EA /* Sources */,
+				3D28819A2B64920900F2A1EA /* Frameworks */,
+				3D28819B2B64920900F2A1EA /* Resources */,
+				7947B4CD2572DC4A609A1457 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ParalayoutTVDemo;
+			productName = ParalayoutTVDemo;
+			productReference = 3D28819D2B64920900F2A1EA /* ParalayoutTVDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		3D0BEEA326047F6400C728FA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					3D0BEEAA26047F6400C728FA = {
@@ -194,6 +253,9 @@
 					3D0BEED02604854C00C728FA = {
 						CreatedOnToolsVersion = 12.4;
 						TestTargetID = 3D0BEEAA26047F6400C728FA;
+					};
+					3D28819C2B64920900F2A1EA = {
+						CreatedOnToolsVersion = 15.2;
 					};
 				};
 			};
@@ -212,6 +274,7 @@
 			targets = (
 				3D0BEEAA26047F6400C728FA /* ParalayoutDemo */,
 				3D0BEED02604854C00C728FA /* ParalayoutSnapshotTests */,
+				3D28819C2B64920900F2A1EA /* ParalayoutTVDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -230,6 +293,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D28819B2B64920900F2A1EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D2881AA2B64920A00F2A1EA /* LaunchScreen.storyboard in Resources */,
+				3D2881A72B64920A00F2A1EA /* Assets.xcassets in Resources */,
+				3D2881A52B64920900F2A1EA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +326,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParalayoutDemo/Pods-ParalayoutDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3302584962989FA92B992771 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ParalayoutTVDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		43AAEBD75AF5387DC6D56563 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -268,6 +363,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParalayoutDemo-ParalayoutSnapshotTests/Pods-ParalayoutDemo-ParalayoutSnapshotTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7947B4CD2572DC4A609A1457 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParalayoutTVDemo/Pods-ParalayoutTVDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParalayoutTVDemo/Pods-ParalayoutTVDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParalayoutTVDemo/Pods-ParalayoutTVDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F763318CE664BA5D8B464D85 /* [CP] Check Pods Manifest.lock */ = {
@@ -338,6 +450,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3D2881992B64920900F2A1EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D2881A22B64920900F2A1EA /* ViewController.swift in Sources */,
+				3D2881A02B64920900F2A1EA /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -353,6 +474,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				3D0BEEBA26047F6600C728FA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		3D2881A32B64920900F2A1EA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D2881A42B64920900F2A1EA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		3D2881A82B64920A00F2A1EA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D2881A92B64920A00F2A1EA /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -556,6 +693,71 @@
 			};
 			name = Release;
 		};
+		3D2881AB2B64920A00F2A1EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F1B27B87E98660865E37B7C1 /* Pods-ParalayoutTVDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ParalayoutTVDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.2;
+			};
+			name = Debug;
+		};
+		3D2881AC2B64920A00F2A1EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8B97B440C6E1131045B90BF /* Pods-ParalayoutTVDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ParalayoutTVDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -582,6 +784,15 @@
 			buildConfigurations = (
 				3D0BEED92604854C00C728FA /* Debug */,
 				3D0BEEDA2604854C00C728FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D2881AD2B64920A00F2A1EA /* Build configuration list for PBXNativeTarget "ParalayoutTVDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D2881AB2B64920A00F2A1EA /* Debug */,
+				3D2881AC2B64920A00F2A1EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
