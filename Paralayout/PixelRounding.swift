@@ -34,7 +34,7 @@ extension UIScreen: ScaleFactorProviding {
 extension UIView: ScaleFactorProviding {
 
     public var pixelsPerPoint: CGFloat {
-        return (window?.screen ?? UIScreen.main).pixelsPerPoint
+        return traitCollection.displayScale
     }
 
 }
