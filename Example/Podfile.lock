@@ -1,6 +1,6 @@
 PODS:
-  - Paralayout (1.0.0-rc.5)
-  - Paralayout/Tests (1.0.0-rc.5)
+  - Paralayout (1.0.0)
+  - Paralayout/Tests (1.0.0)
   - SnapshotTesting (1.8.2)
 
 DEPENDENCIES:
@@ -17,9 +17,9 @@ EXTERNAL SOURCES:
     :path: "../Paralayout.podspec"
 
 SPEC CHECKSUMS:
-  Paralayout: 844978af530a061a31d849c7b554510190b9cddf
+  Paralayout: 63a087763d2c7a1b9c55843064e889aa27bdb56a
   SnapshotTesting: 38947050d13960d57a4a9c166fcf51bca7d56970
 
 PODFILE CHECKSUM: f0cdc6633e8d65e479af433fa427d7c0ce7c72b1
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
