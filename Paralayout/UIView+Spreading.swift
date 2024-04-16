@@ -24,19 +24,19 @@ public enum VerticalSpreadingBehavior {
 
     /// Align to the top edge.
     ///
-    /// - inset: An inset from the top edge towards the center of the distribution axis.
-    case top(inset: CGFloat)
+    /// - parameter inset: An inset from the top edge towards the center of the distribution axis. Defaults to zero.
+    case top(inset: CGFloat = .zero)
 
     /// Center-align along the distribution axis.
     ///
-    /// - offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
-    /// bottom edge. Negative values indicate adjusting towards the top edge.
-    case centered(offset: CGFloat)
+    /// - parameter offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
+    /// bottom edge. Negative values indicate adjusting towards the top edge. Defaults to zero.
+    case centered(offset: CGFloat = .zero)
 
     /// Align to the bottom edge.
     ///
-    /// - inset: An inset from the bottom edge towards the center of the distribution axis.
-    case bottom(inset: CGFloat)
+    /// - parameter inset: An inset from the bottom edge towards the center of the distribution axis. Defaults to zero.
+    case bottom(inset: CGFloat = .zero)
 
 }
 
@@ -48,19 +48,19 @@ public enum HorizontalSpreadingBehavior {
 
     /// Align to the leading edge.
     ///
-    /// - inset: An inset from the leading edge towards the center of the distribution axis.
-    case leading(inset: CGFloat)
+    /// - parameter inset: An inset from the leading edge towards the center of the distribution axis. Defaults to zero.
+    case leading(inset: CGFloat = .zero)
 
     /// Center-align along the distribution axis.
     ///
-    /// - offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
-    /// trailing edge. Negative values indicate adjusting towards the leading edge.
-    case centered(offset: CGFloat)
+    /// - parameter offset: An offset from the center of the distribution axis. Positive values indicate adjusting towards the
+    /// trailing edge. Negative values indicate adjusting towards the leading edge. Defaults to zero.
+    case centered(offset: CGFloat = .zero)
 
     /// Align to the trailing edge.
     ///
-    /// - inset: An inset from the trailing edge towards the center of the distribution axis.
-    case trailing(inset: CGFloat)
+    /// - parameter inset: An inset from the trailing edge towards the center of the distribution axis. Defaults to zero.
+    case trailing(inset: CGFloat = .zero)
 
 }
 
