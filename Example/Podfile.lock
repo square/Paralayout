@@ -17,9 +17,9 @@ EXTERNAL SOURCES:
     :path: "../Paralayout.podspec"
 
 SPEC CHECKSUMS:
-  Paralayout: fd8cc7ebb2647e3d82dce7ab18eac8984be31adf
+  Paralayout: b57ab73fd8359c4ea525da85e06f87f41b0cf5b0
   SnapshotTesting: 38947050d13960d57a4a9c166fcf51bca7d56970
 
 PODFILE CHECKSUM: ccd5bea90fc4594ec9092187c997b2c87d11c02c
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2
