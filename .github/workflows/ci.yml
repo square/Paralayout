@@ -37,6 +37,8 @@ jobs:
     name: Lint Pod
     runs-on: macOS-14
     steps:
+      - name: List Simulators
+        run: xcrun simctl list
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Bundle Install
