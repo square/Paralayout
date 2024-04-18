@@ -41,8 +41,6 @@ jobs:
         run: xcrun simctl list
       - name: Checkout Repo
         uses: actions/checkout@v4
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app/Contents/Developer
       - name: Bundle Install
         run: bundle install
       - name: Lint Podspec
