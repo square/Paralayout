@@ -48,6 +48,10 @@ extension UIView: ScaleFactorProviding {
 
         #if os(iOS)
         return (window?.screen ?? UIScreen.main).pixelsPerPoint
+        #elseif os(visionOS)
+        // The Apple Vision Pro has a scale factor of 2, so use that as the default since that's currently the only
+        // visionOS device.
+        return 2
         #endif
     }
 
