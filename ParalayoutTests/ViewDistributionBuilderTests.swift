@@ -18,7 +18,6 @@ import Paralayout
 import XCTest
 
 #if swift(>=5.4)
-
 final class ViewDistributionBuilderTests: XCTestCase {
 
     // MARK: - Tests
@@ -190,7 +189,6 @@ final class ViewDistributionBuilderTests: XCTestCase {
         builder()
     }
 }
-
 #endif
 
 extension ViewDistributionItem: Equatable {
@@ -209,5 +207,4 @@ extension ViewDistributionItem: Equatable {
             return false
         }
     }
-
 }
