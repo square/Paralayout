@@ -25,15 +25,6 @@ public struct ViewDistributionBuilder {
     public static func buildExpression(_ component: ViewDistributionSpecifying) -> [ViewDistributionSpecifying] {
         return [component]
     }
-    public static func buildExpression(_ component: CGFloat) -> [ViewDistributionSpecifying] {
-        return [ViewDistributionItem.fixed(component)]
-    }
-    public static func buildExpression(_ component: Double) -> [ViewDistributionSpecifying] {
-        return [ViewDistributionItem.fixed(component)]
-    }
-    public static func buildExpression(_ component: Int) -> [ViewDistributionSpecifying] {
-        return [ViewDistributionItem.fixed(CGFloat(component))]
-    }
     public static func buildExpression(_ component: [ViewDistributionSpecifying?]) -> [ViewDistributionSpecifying] {
         return component.compactMap { $0 }
     }
