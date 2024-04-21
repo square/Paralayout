@@ -45,6 +45,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["vertical"]))
     }
 
+#if swift(>=5.4)
     func testDistributionBuilder() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         containerView.backgroundColor = .white
@@ -68,6 +69,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         }
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["vertical"]))
     }
+#endif
 
     func testDistributionIgnoresTransform() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
@@ -96,6 +98,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+#if swift(>=5.4)
     func testDistributionBuilderIgnoresTransform() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         containerView.backgroundColor = .white
@@ -120,6 +123,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         }
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
+#endif
 
     func testDistributionUsingCapInsets() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 80))
@@ -153,6 +157,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+#if swift(>=5.4)
     func testDistributionBuilderUsingCapInsets() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 80))
         containerView.backgroundColor = .white
@@ -182,6 +187,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
 
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
+#endif
 
     func testHorizontalDistributionFollowsLayoutDirection() {
         let view = HorizontalDistributionView(frame: CGRect(x: 0, y: 0, width: 160, height: 60))
