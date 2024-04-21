@@ -74,6 +74,12 @@ public struct ViewDistributionBuilder {
         return component
     }
 
+    // Build for-loop statements
+
+    public static func buildArray(_ components: [[ViewDistributionSpecifying]]) -> [ViewDistributionSpecifying] {
+        return components.flatMap { $0 }
+    }
+
     // Build the blocks that turn into results.
 
     public static func buildBlock(_ components: [ViewDistributionSpecifying]...) -> [ViewDistributionSpecifying] {
