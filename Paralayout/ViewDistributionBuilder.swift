@@ -23,70 +23,70 @@ public struct ViewDistributionBuilder {
     // Build expressions, which are turned into partial results.
 
     public static func buildExpression(_ component: ViewDistributionSpecifying) -> [ViewDistributionSpecifying] {
-        [component]
+        return [component]
     }
     public static func buildExpression(_ component: CGFloat) -> [ViewDistributionSpecifying] {
-        [ViewDistributionItem.fixed(component)]
+        return [ViewDistributionItem.fixed(component)]
     }
     public static func buildExpression(_ component: Double) -> [ViewDistributionSpecifying] {
-        [ViewDistributionItem.fixed(component)]
+        return [ViewDistributionItem.fixed(component)]
     }
     public static func buildExpression(_ component: Int) -> [ViewDistributionSpecifying] {
-        [ViewDistributionItem.fixed(CGFloat(component))]
+        return [ViewDistributionItem.fixed(CGFloat(component))]
     }
     public static func buildExpression(_ component: [ViewDistributionSpecifying?]) -> [ViewDistributionSpecifying] {
-        component.compactMap { $0 }
+        return component.compactMap { $0 }
     }
     public static func buildExpression(_ component: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        component
+        return component
     }
     public static func buildExpression(_ component: ViewDistributionSpecifying?) -> [ViewDistributionSpecifying] {
-        [component].compactMap { $0 }
+        return [component].compactMap { $0 }
     }
 
     // Build partial results, which accumulate.
 
     public static func buildPartialBlock(first: ViewDistributionSpecifying) -> [ViewDistributionSpecifying] {
-        [first]
+        return [first]
     }
     public static func buildPartialBlock(first: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        first
+        return first
     }
     public static func buildPartialBlock(accumulated: ViewDistributionSpecifying, next: ViewDistributionSpecifying) -> [ViewDistributionSpecifying] {
-        [accumulated, next]
+        return [accumulated, next]
     }
     public static func buildPartialBlock(accumulated: ViewDistributionSpecifying, next: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        [accumulated] + next
+        return [accumulated] + next
     }
     public static func buildPartialBlock(accumulated: [ViewDistributionSpecifying], next: ViewDistributionSpecifying) -> [ViewDistributionSpecifying] {
-        accumulated + [next]
+        return accumulated + [next]
     }
     public static func buildPartialBlock(accumulated: [ViewDistributionSpecifying], next: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        accumulated + next
+        return accumulated + next
     }
 
     // Build if statements
 
     public static func buildOptional(_ component: [ViewDistributionSpecifying]?) -> [ViewDistributionSpecifying] {
-        component ?? []
+        return component ?? []
     }
     public static func buildOptional(_ component: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        component
+        return component
     }
 
     // Build if-else and switch statements
 
     public static func buildEither(first component: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        component
+        return component
     }
     public static func buildEither(second component: [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
-        component
+        return component
     }
 
     // Build the blocks that turn into results.
 
     public static func buildBlock(_ components: [ViewDistributionSpecifying]...) -> [ViewDistributionSpecifying] {
-        components.flatMap { $0 }
+        return components.flatMap { $0 }
     }
 }
 #endif
