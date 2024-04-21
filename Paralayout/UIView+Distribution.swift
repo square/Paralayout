@@ -150,6 +150,107 @@ extension UIView {
         }
     }
 
+    /// Arranges subviews along the vertical axis according to a distribution with fixed and/or flexible spacers.
+    ///
+    /// * If there are no flexible elements, this will treat the distribution as vertically centered (i.e. with two
+    /// flexible elements of equal weight at the top and bottom, respectively).
+    /// * If there are no spacers (fixed or flexible), this will treat the distribution as equal flexible spacing
+    /// at the top, bottom, and between each view.
+    ///
+    /// **Examples:**
+    ///
+    /// To stack two elements with a 10 pt margin between them:
+    /// ```
+    /// // This is effectively the same as [ 1.flexible, icon, 10.fixed, label, 1.flexible ].
+    /// applyVerticalSubviewDistribution {
+    ///     icon
+    ///     10.fixed
+    ///     label
+    /// }
+    /// ```
+    ///
+    /// To evenly spread out items:
+    /// ```
+    /// // This is effectively the same as [ 1.flexible, button1, 1.flexible, button2, 1.flexible, button3 ].
+    /// applyVerticalSubviewDistribution {
+    ///     button1
+    ///     button2
+    ///     button3
+    /// }
+    /// ```
+    ///
+    /// To stack two elements with 50% more space below than above:
+    /// ```
+    /// applyVerticalSubviewDistribution {
+    ///     2.flexible
+    ///     label
+    ///     12.fixed
+    ///     textField
+    ///     3.flexible
+    /// }
+    /// ```
+    ///
+    /// To arrange a pair of label on the top and bottom edges of a view, with another label centered between them:
+    /// ```
+    /// applyVerticalSubviewDistribution {
+    ///     8.fixed
+    ///     headerLabel
+    ///     1.flexible
+    ///     bodyLabel
+    ///     1.flexible
+    ///     footerLabel
+    ///     8.fixed
+    /// }
+    /// ```
+    ///
+    /// To arrange UI in a view with an interior margin:
+    /// ```
+    /// applyVerticalSubviewDistribution {
+    ///     icon
+    ///     10.fixed
+    ///     label
+    /// }, inRect: bounds.insetBy(dx: 20, dy: 40))
+    /// ```
+    ///
+    /// To arrange UI vertically aligned by their leading edge 10 pt in from the leading edge of their superview:
+    /// ```
+    /// applyVerticalSubviewDistribution {
+    ///     icon
+    ///     1.flexible
+    ///     button
+    /// }, orthogonalOffset: .leading(inset: 10))
+    /// ```
+    ///
+    /// To arrange UI vertically without simultaneously centering it horizontally (the `icon` would need independent
+    /// horizontal positioning):
+    /// ```
+    /// applyVerticalSubviewDistribution {
+    ///     1.flexible
+    ///     icon
+    ///     2.flexible
+    /// }, orthogonalOffset: nil)
+    /// ```
+    ///
+    /// - precondition: All views in the `distribution` must be subviews of the receiver.
+    /// - precondition: The `distribution` must not include any given view more than once.
+    ///
+    /// - parameter distribution: An array of distribution specifiers, ordered from the top edge to the bottom edge.
+    /// - parameter layoutBounds: The region in the receiver in which to distribute the view in the receiver's
+    /// coordinate space. Specify `nil` to use the receiver's bounds. Defaults to `nil`.
+    /// - parameter orthogonalAlignment: The horizontal alignment to apply to the views. If `nil`, views are left in
+    /// their horizontal position prior to the distribution. Defaults to centered with no offset.
+    public func applyVerticalSubviewDistribution(
+        @ViewDistributionBuilder _ distribution: () -> [ViewDistributionSpecifying],
+        inRect layoutBounds: CGRect? = nil,
+        orthogonalAlignment: HorizontalDistributionAlignment? = .centered(offset: 0)
+    ) {
+        applyVerticalSubviewDistribution(
+            distribution(),
+            inRect: layoutBounds,
+            orthogonalAlignment: orthogonalAlignment
+        )
+    }
+
     /// Arranges subviews along the horizontal axis according to a distribution with fixed and/or flexible spacers.
     ///
     /// * If there are no flexible elements, this will treat the distribution as horizontally centered (i.e. with two
@@ -227,6 +328,108 @@ extension UIView {
                 frame.origin.y = (layoutBounds.maxY - (frame.height + inset)).roundedToPixel(in: self)
             }
         }
+    }
+
+    /// Arranges subviews along the horizontal axis according to a distribution with fixed and/or flexible spacers.
+    ///
+    /// * If there are no flexible elements, this will treat the distribution as horizontally centered (i.e. with two
+    /// flexible elements of equal weight at the leading and trailing edges, respectively).
+    /// * If there are no spacers (fixed or flexible), this will treat the distribution as equal flexible spacing
+    /// at the leading edge, trailing edge, and between each view.
+    ///
+    /// **Examples:**
+    ///
+    /// To stack two elements with a 10 pt margin between them:
+    /// ```
+    /// // This is effectively the same as [ 1.flexible, icon, 10.fixed, label, 1.flexible ].
+    /// applyHorizontalSubviewDistribution {
+    ///     icon
+    ///     10.fixed
+    ///     label
+    /// }
+    /// ```
+    ///
+    /// To evenly spread out items:
+    /// ```
+    /// // This is effectively the same as [ 1.flexible, button1, 1.flexible, button2, 1.flexible, button3 ].
+    /// applyHorizontalSubviewDistribution {
+    ///     button1
+    ///     button2
+    ///     button3
+    /// }
+    /// ```
+    ///
+    /// To stack two elements with 50% more space after than before:
+    /// ```
+    /// applyHorizontalSubviewDistribution {
+    ///     2.flexible
+    ///     label
+    ///     12.fixed
+    ///     textField
+    ///     3.flexible
+    /// }
+    /// ```
+    ///
+    /// To arrange a pair of buttons on the left and right edges of a view, with a label centered between them:
+    /// ```
+    /// applyHorizontalSubviewDistribution {
+    ///     8.fixed
+    ///     backButton
+    ///     1.flexible
+    ///     titleLabel
+    ///     1.flexible
+    ///     nextButton
+    ///     8.fixed
+    /// }
+    /// ```
+    ///
+    /// To arrange UI in a view with an interior margin:
+    /// ```
+    /// applyHorizontalSubviewDistribution {
+    ///     icon
+    ///     10.fixed
+    ///     label
+    /// }, inRect: bounds.insetBy(dx: 20, dy: 40))
+    /// ```
+    ///
+    /// To arrange UI horizontally aligned by their top edge 10 pt in from the top edge of their superview:
+    /// ```
+    /// applyHorizontalSubviewDistribution {
+    ///     icon
+    ///     1.flexible
+    ///     button
+    /// }, orthogonalOffset: .top(inset: 10))
+    /// ```
+    ///
+    /// To arrange UI horizontally without simultaneously centering it vertically (the `icon` would need independent
+    /// vertical positioning):
+    /// ```
+    /// applyHorizontalSubviewDistribution {
+    ///     1.flexible
+    ///     icon
+    ///     2.flexible
+    /// }, orthogonalOffset: nil)
+    /// ```
+    ///
+    /// - precondition: All views in the `distribution` must be subviews of the receiver.
+    /// - precondition: The `distribution` must not include any given view more than once.
+    ///
+    /// - parameter distribution: An array of distribution specifiers, ordered from the leading edge to the trailing
+    /// edge.
+    /// - parameter layoutBounds: The region in the receiver in which to distribute the view in the receiver's
+    /// coordinate space. Specify `nil` to use the receiver's bounds. Defaults to `nil`.
+    /// - parameter orthogonalAlignment: The vertical alignment to apply to the views. If `nil`, views are left in
+    /// their vertical position prior to the distribution. Defaults to centered with no offset.
+    public func applyHorizontalSubviewDistribution(
+        @ViewDistributionBuilder _ distribution: () -> [ViewDistributionSpecifying],
+        inRect layoutBounds: CGRect? = nil,
+        orthogonalAlignment: VerticalDistributionAlignment? = .centered(offset: 0)
+    ) {
+        applyHorizontalSubviewDistribution(
+            distribution(),
+            inRect: layoutBounds,
+            orthogonalAlignment: orthogonalAlignment
+        )
     }
 
     // MARK: - Private Methods
