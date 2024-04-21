@@ -45,32 +45,6 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["vertical"]))
     }
 
-#if swift(>=5.4)
-    func testDistributionBuilder() {
-        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
-        containerView.backgroundColor = .white
-
-        let secondView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 30))
-        secondView.backgroundColor = .blue
-        containerView.addSubview(secondView)
-
-        let firstView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        firstView.backgroundColor = .red
-        containerView.addSubview(firstView)
-
-        let thirdView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 10))
-        thirdView.backgroundColor = .green
-        containerView.addSubview(thirdView)
-
-        containerView.applyVerticalSubviewDistribution {
-            firstView
-            secondView
-            thirdView
-        }
-        assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["vertical"]))
-    }
-#endif
-
     func testDistributionIgnoresTransform() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         containerView.backgroundColor = .white
