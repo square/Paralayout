@@ -1,5 +1,5 @@
 //
-//  Copyright © 2021 Square, Inc.
+//  Copyright © 2024 Block, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -70,6 +70,35 @@ extension UIView {
 
     // MARK: - Public Methods
 
+    #if swift(>=5.4)
+    /// Sizes and positions subviews to equally take up all horizontal space.
+    ///
+    /// - precondition: The available space on the horizontal axis of the receiver's bounds must be at least as large as
+    /// the space required for the specified `margin` between each subview. In other words, the `subviews` may each have
+    /// a size of zero along the horizontal axis, but their size may not be negative.
+    ///
+    /// - parameter subviews: The subviews to spread out, ordered from the leading edge to the trailing edge of the
+    /// receiver.
+    /// - parameter margin: The space between each subview.
+    /// - parameter bounds: A custom area within which to layout the subviews in the receiver's coordinate space, or
+    /// `nil` to use the receiver's `bounds`. Defaults to `nil`.
+    /// - parameter orthogonalBehavior: Controls how the view should be sized and positioned along the vertical axis.
+    /// Defaults to filling the vertical space of the `bounds`.
+    public func horizontallySpreadSubviews(
+        @ViewArrayBuilder _ subviews: () -> [UIView],
+        margin: CGFloat,
+        inRect bounds: CGRect? = nil,
+        orthogonalBehavior: VerticalSpreadingBehavior = .fill
+    ) {
+        horizontallySpreadSubviews(
+            subviews(),
+            margin: margin,
+            inRect: bounds,
+            orthogonalBehavior: orthogonalBehavior
+        )
+    }
+    #endif
+
     /// Sizes and positions subviews to equally take up all horizontal space.
     ///
     /// - precondition: The available space on the horizontal axis of the receiver's bounds must be at least as large as
@@ -115,6 +144,34 @@ extension UIView {
             }
         }
     }
+
+    #if swift(>=5.4)
+    /// Sizes and positions subviews to equally take up all vertical space.
+    ///
+    /// - precondition: The available space on the vertical axis of the receiver's bounds must be at least as large as
+    /// the space required for the specified `margin` between each subview. In other words, the `subviews` may each have
+    /// a size of zero along the vertical axis, but their size may not be negative.
+    ///
+    /// - parameter subviews: The subviews to spread out, ordered from the top edge to the bottom edge of the receiver.
+    /// - parameter margin: The space between each subview.
+    /// - parameter bounds: A custom area within which to layout the subviews in the receiver's coordinate space, or
+    /// `nil` to use the receiver's `bounds`. Defaults to `nil`.
+    /// - parameter orthogonalBehavior: Controls how the view should be sized and positioned along the horizontal axis.
+    /// Defaults to filling the horizontal space of the `bounds`.
+    public func verticallySpreadSubviews(
+        @ViewArrayBuilder _ subviews: () -> [UIView],
+        margin: CGFloat,
+        inRect bounds: CGRect? = nil,
+        orthogonalBehavior: HorizontalSpreadingBehavior = .fill
+    ) {
+        verticallySpreadSubviews(
+            subviews(),
+            margin: margin,
+            inRect: bounds,
+            orthogonalBehavior: orthogonalBehavior
+        )
+    }
+    #endif
 
     /// Sizes and positions subviews to equally take up all vertical space.
     ///
