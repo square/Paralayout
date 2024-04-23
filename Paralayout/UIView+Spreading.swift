@@ -77,18 +77,18 @@ extension UIView {
     /// the space required for the specified `margin` between each subview. In other words, the `subviews` may each have
     /// a size of zero along the horizontal axis, but their size may not be negative.
     ///
-    /// - parameter subviews: The subviews to spread out, ordered from the leading edge to the trailing edge of the
-    /// receiver.
     /// - parameter margin: The space between each subview.
     /// - parameter bounds: A custom area within which to layout the subviews in the receiver's coordinate space, or
     /// `nil` to use the receiver's `bounds`. Defaults to `nil`.
     /// - parameter orthogonalBehavior: Controls how the view should be sized and positioned along the vertical axis.
     /// Defaults to filling the vertical space of the `bounds`.
+    /// - parameter subviews: The subviews to spread out, ordered from the leading edge to the trailing edge of the
+    /// receiver.
     public func horizontallySpreadSubviews(
-        @ViewArrayBuilder _ subviews: () -> [UIView],
         margin: CGFloat,
         inRect bounds: CGRect? = nil,
-        orthogonalBehavior: VerticalSpreadingBehavior = .fill
+        orthogonalBehavior: VerticalSpreadingBehavior = .fill,
+        @ViewArrayBuilder _ subviews: () -> [UIView]
     ) {
         horizontallySpreadSubviews(
             subviews(),
@@ -152,17 +152,17 @@ extension UIView {
     /// the space required for the specified `margin` between each subview. In other words, the `subviews` may each have
     /// a size of zero along the vertical axis, but their size may not be negative.
     ///
-    /// - parameter subviews: The subviews to spread out, ordered from the top edge to the bottom edge of the receiver.
     /// - parameter margin: The space between each subview.
     /// - parameter bounds: A custom area within which to layout the subviews in the receiver's coordinate space, or
     /// `nil` to use the receiver's `bounds`. Defaults to `nil`.
     /// - parameter orthogonalBehavior: Controls how the view should be sized and positioned along the horizontal axis.
     /// Defaults to filling the horizontal space of the `bounds`.
+    /// - parameter subviews: The subviews to spread out, ordered from the top edge to the bottom edge of the receiver.
     public func verticallySpreadSubviews(
-        @ViewArrayBuilder _ subviews: () -> [UIView],
         margin: CGFloat,
         inRect bounds: CGRect? = nil,
-        orthogonalBehavior: HorizontalSpreadingBehavior = .fill
+        orthogonalBehavior: HorizontalSpreadingBehavior = .fill,
+        @ViewArrayBuilder _ subviews: () -> [UIView]
     ) {
         verticallySpreadSubviews(
             subviews(),
