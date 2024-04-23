@@ -44,7 +44,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast --platforms=ios,visionos
+        run: bundle exec pod lib lint --verbose --fail-fast
   spm:
     name: SPM Build
     runs-on: macOS-12
