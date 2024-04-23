@@ -161,7 +161,7 @@ extension UIView {
     /// **Examples:**
     ///
     /// To stack two elements with a 10 pt margin between them:
-    /// ```
+    /// ```swift
     /// // This is effectively the same as [ 1.flexible, icon, 10.fixed, label, 1.flexible ].
     /// applyVerticalSubviewDistribution {
     ///     icon
@@ -171,7 +171,7 @@ extension UIView {
     /// ```
     ///
     /// To evenly spread out items:
-    /// ```
+    /// ```swift
     /// // This is effectively the same as [ 1.flexible, button1, 1.flexible, button2, 1.flexible, button3 ].
     /// applyVerticalSubviewDistribution {
     ///     button1
@@ -181,7 +181,7 @@ extension UIView {
     /// ```
     ///
     /// To stack two elements with 50% more space below than above:
-    /// ```
+    /// ```swift
     /// applyVerticalSubviewDistribution {
     ///     2.flexible
     ///     label
@@ -192,7 +192,7 @@ extension UIView {
     /// ```
     ///
     /// To arrange a pair of label on the top and bottom edges of a view, with another label centered between them:
-    /// ```
+    /// ```swift
     /// applyVerticalSubviewDistribution {
     ///     8.fixed
     ///     headerLabel
@@ -205,45 +205,45 @@ extension UIView {
     /// ```
     ///
     /// To arrange UI in a view with an interior margin:
-    /// ```
-    /// applyVerticalSubviewDistribution {
+    /// ```swift
+    /// applyVerticalSubviewDistribution(inRect: bounds.insetBy(dx: 20, dy: 40)) {
     ///     icon
     ///     10.fixed
     ///     label
-    /// }, inRect: bounds.insetBy(dx: 20, dy: 40))
+    /// }
     /// ```
     ///
     /// To arrange UI vertically aligned by their leading edge 10 pt in from the leading edge of their superview:
-    /// ```
-    /// applyVerticalSubviewDistribution {
+    /// ```swift
+    /// applyVerticalSubviewDistribution(orthogonalOffset: .leading(inset: 10)) {
     ///     icon
     ///     1.flexible
     ///     button
-    /// }, orthogonalOffset: .leading(inset: 10))
+    /// }
     /// ```
     ///
     /// To arrange UI vertically without simultaneously centering it horizontally (the `icon` would need independent
     /// horizontal positioning):
-    /// ```
-    /// applyVerticalSubviewDistribution {
+    /// ```swift
+    /// applyVerticalSubviewDistribution(orthogonalOffset: nil) {
     ///     1.flexible
     ///     icon
     ///     2.flexible
-    /// }, orthogonalOffset: nil)
+    /// }
     /// ```
     ///
     /// - precondition: All views in the `distribution` must be subviews of the receiver.
     /// - precondition: The `distribution` must not include any given view more than once.
     ///
-    /// - parameter distribution: An array of distribution specifiers, ordered from the top edge to the bottom edge.
     /// - parameter layoutBounds: The region in the receiver in which to distribute the view in the receiver's
     /// coordinate space. Specify `nil` to use the receiver's bounds. Defaults to `nil`.
     /// - parameter orthogonalAlignment: The horizontal alignment to apply to the views. If `nil`, views are left in
     /// their horizontal position prior to the distribution. Defaults to centered with no offset.
+    /// - parameter distribution: An array of distribution specifiers, ordered from the top edge to the bottom edge.
     public func applyVerticalSubviewDistribution(
-        @ViewDistributionBuilder _ distribution: () -> [ViewDistributionSpecifying],
         inRect layoutBounds: CGRect? = nil,
-        orthogonalAlignment: HorizontalDistributionAlignment? = .centered(offset: 0)
+        orthogonalAlignment: HorizontalDistributionAlignment? = .centered(offset: 0),
+        @ViewDistributionBuilder _ distribution: () -> [ViewDistributionSpecifying]
     ) {
         applyVerticalSubviewDistribution(
             distribution(),
@@ -343,7 +343,7 @@ extension UIView {
     /// **Examples:**
     ///
     /// To stack two elements with a 10 pt margin between them:
-    /// ```
+    /// ```swift
     /// // This is effectively the same as [ 1.flexible, icon, 10.fixed, label, 1.flexible ].
     /// applyHorizontalSubviewDistribution {
     ///     icon
@@ -353,7 +353,7 @@ extension UIView {
     /// ```
     ///
     /// To evenly spread out items:
-    /// ```
+    /// ```swift
     /// // This is effectively the same as [ 1.flexible, button1, 1.flexible, button2, 1.flexible, button3 ].
     /// applyHorizontalSubviewDistribution {
     ///     button1
@@ -363,7 +363,7 @@ extension UIView {
     /// ```
     ///
     /// To stack two elements with 50% more space after than before:
-    /// ```
+    /// ```swift
     /// applyHorizontalSubviewDistribution {
     ///     2.flexible
     ///     label
@@ -374,7 +374,7 @@ extension UIView {
     /// ```
     ///
     /// To arrange a pair of buttons on the left and right edges of a view, with a label centered between them:
-    /// ```
+    /// ```swift
     /// applyHorizontalSubviewDistribution {
     ///     8.fixed
     ///     backButton
@@ -387,46 +387,46 @@ extension UIView {
     /// ```
     ///
     /// To arrange UI in a view with an interior margin:
-    /// ```
-    /// applyHorizontalSubviewDistribution {
+    /// ```swift
+    /// applyHorizontalSubviewDistribution(inRect: bounds.insetBy(dx: 20, dy: 40)) {
     ///     icon
     ///     10.fixed
     ///     label
-    /// }, inRect: bounds.insetBy(dx: 20, dy: 40))
+    /// }
     /// ```
     ///
     /// To arrange UI horizontally aligned by their top edge 10 pt in from the top edge of their superview:
-    /// ```
-    /// applyHorizontalSubviewDistribution {
+    /// ```swift
+    /// applyHorizontalSubviewDistribution(orthogonalOffset: .top(inset: 10)) {
     ///     icon
     ///     1.flexible
     ///     button
-    /// }, orthogonalOffset: .top(inset: 10))
+    /// }
     /// ```
     ///
     /// To arrange UI horizontally without simultaneously centering it vertically (the `icon` would need independent
     /// vertical positioning):
-    /// ```
-    /// applyHorizontalSubviewDistribution {
+    /// ```swift
+    /// applyHorizontalSubviewDistribution(orthogonalOffset: nil) {
     ///     1.flexible
     ///     icon
     ///     2.flexible
-    /// }, orthogonalOffset: nil)
+    /// }
     /// ```
     ///
     /// - precondition: All views in the `distribution` must be subviews of the receiver.
     /// - precondition: The `distribution` must not include any given view more than once.
     ///
-    /// - parameter distribution: An array of distribution specifiers, ordered from the leading edge to the trailing
-    /// edge.
     /// - parameter layoutBounds: The region in the receiver in which to distribute the view in the receiver's
     /// coordinate space. Specify `nil` to use the receiver's bounds. Defaults to `nil`.
     /// - parameter orthogonalAlignment: The vertical alignment to apply to the views. If `nil`, views are left in
     /// their vertical position prior to the distribution. Defaults to centered with no offset.
+    /// - parameter distribution: An array of distribution specifiers, ordered from the leading edge to the trailing
+    /// edge.
     public func applyHorizontalSubviewDistribution(
-        @ViewDistributionBuilder _ distribution: () -> [ViewDistributionSpecifying],
         inRect layoutBounds: CGRect? = nil,
-        orthogonalAlignment: VerticalDistributionAlignment? = .centered(offset: 0)
+        orthogonalAlignment: VerticalDistributionAlignment? = .centered(offset: 0),
+        @ViewDistributionBuilder _ distribution: () -> [ViewDistributionSpecifying]
     ) {
         applyHorizontalSubviewDistribution(
             distribution(),
