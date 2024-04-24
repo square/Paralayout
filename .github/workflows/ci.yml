@@ -46,7 +46,7 @@ jobs:
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
       - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast
+        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.9
   spm:
     name: SPM Build
     runs-on: macOS-12
