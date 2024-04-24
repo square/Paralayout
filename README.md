@@ -88,7 +88,7 @@ firstSubview.align(
 
 Alignments are automatically snapped to the nearest pixel, saving you from fuzzy edges on your views due to bad layout math.
 
-There are also conveniences for aligning views to their superview, one of the most common alignment scenarios. For example, we can center a subview in our superview using this simple call:
+There are also conveniences for aligning views to their superview, one of the most common alignment scenarios. For example, we can centre a subview in our superview using this simple call:
 
 ```swift
 someSubview.align(withSuperview: .center)
