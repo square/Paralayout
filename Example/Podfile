@@ -9,3 +9,10 @@ target 'ParalayoutDemo' do
   	pod 'SnapshotTesting', '~> 1.8'
   end
 end
+
+target 'ParalayoutVisionDemo' do
+  platform :visionos, '1.0'
+  use_frameworks!
+
+  pod 'Paralayout', :path => '../Paralayout.podspec', :testspecs => ['Tests']
+end

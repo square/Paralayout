@@ -23,6 +23,8 @@ public protocol ScaleFactorProviding {
 
 }
 
+#if os(iOS) || os(tvOS)
+
 extension UIScreen: ScaleFactorProviding {
 
     public var pixelsPerPoint: CGFloat {
@@ -30,6 +32,8 @@ extension UIScreen: ScaleFactorProviding {
     }
 
 }
+
+#endif
 
 extension UIView: ScaleFactorProviding {
 
@@ -44,6 +48,10 @@ extension UIView: ScaleFactorProviding {
 
         #if os(iOS)
         return (window?.screen ?? UIScreen.main).pixelsPerPoint
+        #elseif os(visionOS)
+        // The Apple Vision Pro has a scale factor of 2, so use that as the default since that's currently the only
+        // visionOS device.
+        return 2
         #endif
     }
 

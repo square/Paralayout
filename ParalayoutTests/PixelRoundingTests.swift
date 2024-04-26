@@ -39,22 +39,22 @@ final class PixelRoundingTests: XCTestCase {
 
     func testFloatPixelRounding() {
         XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: 0), 1.75)
-        XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: TestScreen.at1x), 1)
-        XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: TestScreen.at2x), 1.5)
-        XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: TestScreen.at3x), CGFloat(2) - 1 / 3)
-        XCTAssertEqual(CGFloat(-1.6).flooredToPixel(in: TestScreen.at2x), -2)
+        XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: 1), 1)
+        XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: 2), 1.5)
+        XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: 3), CGFloat(2) - 1 / 3)
+        XCTAssertEqual(CGFloat(-1.6).flooredToPixel(in: 2), -2)
 
         XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: 0), 1.75)
-        XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: TestScreen.at1x), 2)
-        XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: TestScreen.at2x), 2)
-        XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: TestScreen.at3x), CGFloat(2) - 1 / 3)
-        XCTAssertEqual(CGFloat(-1.6).roundedToPixel(in: TestScreen.at3x), CGFloat(-2) + 1 / 3)
+        XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: 1), 2)
+        XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: 2), 2)
+        XCTAssertEqual(CGFloat(1.75).roundedToPixel(in: 3), CGFloat(2) - 1 / 3)
+        XCTAssertEqual(CGFloat(-1.6).roundedToPixel(in: 3), CGFloat(-2) + 1 / 3)
 
         XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: 0), 1.25)
-        XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: TestScreen.at1x), 2)
-        XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: TestScreen.at2x), 1.5)
-        XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: TestScreen.at3x), CGFloat(1) + 1 / 3)
-        XCTAssertEqual(CGFloat(-1.75).ceiledToPixel(in: TestScreen.at2x), -1.5)
+        XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: 1), 2)
+        XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: 2), 1.5)
+        XCTAssertEqual(CGFloat(1.25).ceiledToPixel(in: 3), CGFloat(1) + 1 / 3)
+        XCTAssertEqual(CGFloat(-1.75).ceiledToPixel(in: 2), -1.5)
     }
 
     func testPointPixelRounding() {
@@ -87,20 +87,20 @@ final class PixelRoundingTests: XCTestCase {
 
     func testRectPixelRounding() {
         XCTAssertEqual(
-            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandedToPixel(in: TestScreen.at2x),
+            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandedToPixel(in: 2),
             CGRect(left: 10.5, top: 10.0, right: 51, bottom: 51)
         )
         XCTAssertEqual(
-            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).expandedToPixel(in: TestScreen.at3x),
+            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).expandedToPixel(in: 3),
             CGRect(left: CGFloat(10) + 2 / 3, top: CGFloat(10) + 1 / 3, right: CGFloat(50) + 2 / 3, bottom: 51)
         )
 
         XCTAssertEqual(
-            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).contractedToPixel(in: TestScreen.at2x),
+            CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).contractedToPixel(in: 2),
             CGRect(left: 11, top: 10.5, right: 50.5, bottom: 50.5)
         )
         XCTAssertEqual(
-            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).contractedToPixel(in: TestScreen.at3x),
+            CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).contractedToPixel(in: 3),
             CGRect(left: 11, top: CGFloat(10) + 2 / 3, right: CGFloat(50) + 1 / 3, bottom: CGFloat(50) + 2 / 3)
         )
     }
@@ -108,27 +108,32 @@ final class PixelRoundingTests: XCTestCase {
     // MARK: - Tests - Scale Factor
 
     func testViewScaleFactor() {
-        // A view should inherit the scale factor of its parent screen.
-        for screen in screensToTest() {
-            Samples.window.screen = screen
-            XCTAssertEqual(Samples.view.pixelsPerPoint, screen.pixelsPerPoint)
-        }
+        let viewController = UIViewController()
 
-        // With no superview, the main screen's scale should be used.
-        Samples.view.removeFromSuperview()
-        XCTAssert(Samples.view.pixelsPerPoint == UIScreen.main.pixelsPerPoint)
-    }
+        #if os(iOS)
+        XCTAssertEqual(viewController.view.pixelsPerPoint, UIScreen.main.pixelsPerPoint)
+        #elseif os(visionOS)
+        XCTAssertEqual(viewController.view.pixelsPerPoint, 2)
+        #endif
 
-    // MARK: - Private Methods
+        let parentViewController = UIViewController()
+        parentViewController.addChild(viewController)
+        parentViewController.view.addSubview(viewController.view)
 
-    private func screensToTest() -> [UIScreen] {
-        if #available(iOS 13, *) {
-            // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
-            // multiple screens (FB8674601).
-            return [.main]
+        let window = UIWindow()
+        window.makeKeyAndVisible()
+        window.rootViewController = parentViewController
 
-        } else {
-            return TestScreen.all
+        for scale in Array<CGFloat>([1, 2, 3]) {
+            if #available(iOS 17.0, visionOS 1.0, *) {
+                parentViewController.traitOverrides.displayScale = scale
+            } else {
+                parentViewController.setOverrideTraitCollection(.init(displayScale: scale), forChild: viewController)
+            }
+
+            RunLoop.current.run(until: Date())
+
+            XCTAssertEqual(viewController.view.pixelsPerPoint, scale)
         }
     }
 
