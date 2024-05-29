@@ -34,6 +34,7 @@ final class DistributionTests: XCTestCase {
             let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 50, height: 100))
             container.addSubview(secondSubview)
 
+            @MainActor
             func test(
                 alignment: VerticalDistributionAlignment?,
                 inRect layoutRect: CGRect? = nil,
@@ -98,6 +99,7 @@ final class DistributionTests: XCTestCase {
         let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 50))
         container.addSubview(secondSubview)
 
+        @MainActor
         func test(
             alignment: HorizontalDistributionAlignment?,
             inRect layoutRect: CGRect? = nil,
@@ -161,6 +163,7 @@ final class DistributionTests: XCTestCase {
         let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 50))
         container.addSubview(secondSubview)
 
+        @MainActor
         func test(
             alignment: HorizontalDistributionAlignment?,
             inRect layoutRect: CGRect? = nil,
