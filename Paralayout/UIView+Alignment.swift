@@ -46,7 +46,7 @@ extension Alignable {
     /// - parameter otherView: The other view for the measurement.
     /// - parameter otherPosition: The position in the `otherView`'s untransformed frame to use for the measurement.
     /// - returns: The offset from the receiver's `position` to the `otherView`'s `otherPosition`.
-    public func untransformedFrameOffset(
+    @MainActor public func untransformedFrameOffset(
         from position: Position,
         to otherView: Alignable,
         _ otherPosition: Position,
@@ -126,7 +126,7 @@ extension Alignable {
     /// calculated. Defaults to `.automatic`, which will align the views in the most common way based on their
     /// relationship in the view hierarchy.
     /// - parameter offset: An additional offset to apply to the alignment, e.g. to leave a space between the two views.
-    public func align(
+    @MainActor public func align(
         _ position: Position,
         with otherView: Alignable,
         _ otherPosition: Position,
@@ -170,7 +170,8 @@ extension AlignmentContext {
 
 // MARK: -
 
-private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category: "layout")
+private let ParalayoutLogSubsystem = "com.squareup.Paralayout"
+private let ParalayoutLogCategory = "layout"
 
 /// Triggered when an alignment method is called that uses mismatched position types, i.e. aligning a view's leading or
 /// trailing edge to another view's left or right edge, or vice versa. This type of mismatch is likely to look correct
@@ -178,7 +179,7 @@ private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category
 private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
     os_log(
         "%@",
-        log: ParalayoutLog,
+        log: OSLog(subsystem: ParalayoutLogSubsystem, category: ParalayoutLogCategory),
         type: .default,
         """
         Paralayout detected an alignment with mismatched position types. Set a symbolic breakpoint for \
@@ -193,7 +194,7 @@ private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
 private func ParalayoutAlertForInvalidViewHierarchy() {
     os_log(
         "%@",
-        log: ParalayoutLog,
+        log: OSLog(subsystem: ParalayoutLogSubsystem, category: ParalayoutLogCategory),
         type: .default,
         """
         Paralayout detected an alignment with an invalid view hierarchy. The views involved in alignment calls must \

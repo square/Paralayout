@@ -22,6 +22,7 @@ final class DistributionTests: XCTestCase {
 
     // MARK: - Tests - Orthogonal Alignment
 
+    @MainActor
     func testOrthogonalAlignmentInHorizontalDistribution() {
         // The layout direction shouldn't affect the orthogonal alignment in a horizontal distribution.
         for forcedLayoutDirection in [UISemanticContentAttribute.forceLeftToRight, .forceRightToLeft] {
@@ -33,6 +34,7 @@ final class DistributionTests: XCTestCase {
             let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 50, height: 100))
             container.addSubview(secondSubview)
 
+            @MainActor
             func test(
                 alignment: VerticalDistributionAlignment?,
                 inRect layoutRect: CGRect? = nil,
@@ -87,6 +89,7 @@ final class DistributionTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testOrthogonalAlignmentInVerticalDistribution_leftToRightLayout() {
         let container = UIView(frame: .init(x: 0, y: 0, width: 200, height: 1000))
         container.semanticContentAttribute = .forceLeftToRight
@@ -96,6 +99,7 @@ final class DistributionTests: XCTestCase {
         let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 50))
         container.addSubview(secondSubview)
 
+        @MainActor
         func test(
             alignment: HorizontalDistributionAlignment?,
             inRect layoutRect: CGRect? = nil,
@@ -149,6 +153,7 @@ final class DistributionTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testOrthogonalAlignmentInVerticalDistribution_rightToLeftLayout() {
         let container = UIView(frame: .init(x: 0, y: 0, width: 200, height: 1000))
         container.semanticContentAttribute = .forceRightToLeft
@@ -158,6 +163,7 @@ final class DistributionTests: XCTestCase {
         let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 50))
         container.addSubview(secondSubview)
 
+        @MainActor
         func test(
             alignment: HorizontalDistributionAlignment?,
             inRect layoutRect: CGRect? = nil,

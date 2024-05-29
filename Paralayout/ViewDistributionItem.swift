@@ -58,7 +58,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
     /// - returns: An array of `ViewDistributionItem`s suitable for layout and/or measurement, and tallies of all fixed
     /// and flexible space. If the distribution is invalid (no views, any view not a subview of the superview, or any
     /// view repeated in the distribution), returns an empty array.
-    internal static func items(
+    @MainActor internal static func items(
         impliedIn distribution: [ViewDistributionSpecifying],
         axis: ViewDistributionAxis,
         superview: UIView?
@@ -128,7 +128,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
 
     /// Returns the length of the DistributionItem (`axis` and `multiplier` are relevant only for `.view` and
     /// `.flexible` items, respectively).
-    internal func layoutSize(along axis: ViewDistributionAxis, multiplier: CGFloat = 1) -> CGFloat {
+    @MainActor internal func layoutSize(along axis: ViewDistributionAxis, multiplier: CGFloat = 1) -> CGFloat {
         switch self {
         case .view(let view, let insets):
             return axis.size(of: view.untransformedFrame) - axis.amount(of: insets)
@@ -148,6 +148,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
 /// A means of getting a `ViewDistributionItem`: either a UIView, or a number as `.fixed` or `.flexible`.
 public protocol ViewDistributionSpecifying {
 
+    @MainActor
     var distributionItem: ViewDistributionItem { get }
 
 }

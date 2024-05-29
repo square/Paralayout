@@ -55,6 +55,7 @@ public struct TextRectLayoutProxy: Alignable {
 
     // MARK: - Alignable
 
+    @MainActor
     public var alignmentContext: AlignmentContext {
         var alignmentBounds = proxiedLabel.textRect(
             forBounds: proxiedLabel.bounds,

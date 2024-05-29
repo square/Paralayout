@@ -19,6 +19,7 @@ import SnapshotTesting
 
 final class ViewSpeadingSnapshotTests: SnapshotTestCase {
 
+    @MainActor
     func testHorizontallySpreadSubviews() {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 100))
         container.backgroundColor = .white
@@ -35,6 +36,7 @@ final class ViewSpeadingSnapshotTests: SnapshotTestCase {
         greenView.backgroundColor = .green
         container.addSubview(greenView)
 
+        @MainActor
         func verifySnapshot(
             margin: CGFloat = 0,
             inRect rect: CGRect? = nil,
@@ -92,6 +94,7 @@ final class ViewSpeadingSnapshotTests: SnapshotTestCase {
         verifySnapshot(margin: 40, inRect: CGRect(x: 20, y: 10, width: 300, height: 50))
     }
 
+    @MainActor
     func testVerticallySpreadSubviews() {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 100))
         container.backgroundColor = .white
@@ -108,6 +111,7 @@ final class ViewSpeadingSnapshotTests: SnapshotTestCase {
         greenView.backgroundColor = .green
         container.addSubview(greenView)
 
+        @MainActor
         func verifySnapshot(
             margin: CGFloat = 0,
             inRect rect: CGRect? = nil,

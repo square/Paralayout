@@ -16,7 +16,7 @@
 
 import CoreGraphics
 
-public struct Angle: Comparable {
+public struct Angle: Comparable, Sendable {
 
     // MARK: - Public Static Properties
 

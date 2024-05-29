@@ -23,6 +23,7 @@ final class UIViewFrameTests: XCTestCase {
 
     // MARK: - Tests
 
+    @MainActor
     func testUntransformedFrameGetter_simpleFrames() {
         let view = UIView()
 
@@ -36,6 +37,7 @@ final class UIViewFrameTests: XCTestCase {
         assertUntransformedFrameIsAccurate(for: view)
     }
 
+    @MainActor
     func testUntransformedFrameSetter_simpleFrames() {
         let view = UIView()
 
@@ -44,6 +46,7 @@ final class UIViewFrameTests: XCTestCase {
         XCTAssertEqual(view.untransformedFrame, newValue)
     }
 
+    @MainActor
     func testUntransformedFrameGetter_nonIdentityTransform() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 
@@ -54,6 +57,7 @@ final class UIViewFrameTests: XCTestCase {
         assertUntransformedFrameIsAccurate(for: view)
     }
 
+    @MainActor
     func testUntransformedFrameSetter_nonIdentityTransform() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 
@@ -66,6 +70,7 @@ final class UIViewFrameTests: XCTestCase {
         XCTAssertEqual(view.transform, transform)
     }
 
+    @MainActor
     func testUntransformedFrameGetter_nonCenterAnchorPoint() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 
@@ -76,6 +81,7 @@ final class UIViewFrameTests: XCTestCase {
         assertUntransformedFrameIsAccurate(for: view)
     }
 
+    @MainActor
     func testUntransformedFrameSetter_nonCenterAnchorPoint() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 
@@ -88,6 +94,7 @@ final class UIViewFrameTests: XCTestCase {
         XCTAssertEqual(view.layer.anchorPoint, anchorPoint)
     }
 
+    @MainActor
     func testUntransformedFrameGetter_nonZeroOriginBounds() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 
@@ -95,6 +102,7 @@ final class UIViewFrameTests: XCTestCase {
         assertUntransformedFrameIsAccurate(for: view)
     }
 
+    @MainActor
     func testUntransformedFrameSetter_nonZeroOriginBounds() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 
@@ -107,6 +115,7 @@ final class UIViewFrameTests: XCTestCase {
         XCTAssertEqual(view.bounds.origin, boundsOrigin)
     }
 
+    @MainActor
     func testUntransformedConvert_siblingViews() throws {
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 
@@ -139,6 +148,7 @@ final class UIViewFrameTests: XCTestCase {
         try assertUntransformedConvertIsAccurate(for: CGPoint(x: 2, y: 3), in: view2, convertedTo: view1)
     }
 
+    @MainActor
     func testUntransformedConvert_verticalHierarchy() throws {
         let view1 = UIView(frame: CGRect(x: 1, y: 2, width: 10, height: 10))
 
@@ -155,6 +165,7 @@ final class UIViewFrameTests: XCTestCase {
         try assertUntransformedConvertIsAccurate(for: CGPoint(x: -7, y: 8), in: view3, convertedTo: view1)
     }
 
+    @MainActor
     func testUntransformedConvert_nonZeroBounds() throws {
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 
@@ -176,6 +187,7 @@ final class UIViewFrameTests: XCTestCase {
         try assertUntransformedConvertIsAccurate(for: CGPoint(x: 1, y: 2), in: view2, convertedTo: view3)
     }
 
+    @MainActor
     func testUntransformedConvert_nonIdentityTransforms() throws {
         let view1 = UIView(frame: CGRect(x: 1, y: 2, width: 10, height: 10))
         view1.transform = .init(rotationAngle: 0.1)
@@ -202,6 +214,7 @@ final class UIViewFrameTests: XCTestCase {
 
     // MARK: - Private Helper Methods
 
+    @MainActor
     func assertUntransformedFrameIsAccurate(for view: UIView, file: StaticString = #file, line: UInt = #line) {
         let actualValue = view.untransformedFrame
 
@@ -213,6 +226,7 @@ final class UIViewFrameTests: XCTestCase {
         view.layer.transform = originalTransform
     }
 
+    @MainActor
     func assertUntransformedConvertIsAccurate(
         for point: CGPoint,
         in sourceView: UIView,

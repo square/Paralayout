@@ -19,6 +19,7 @@ import SnapshotTesting
 
 final class ViewDistributionSnapshotTests: SnapshotTestCase {
 
+    @MainActor
     func testDistribution() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         containerView.backgroundColor = .white
@@ -45,6 +46,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["vertical"]))
     }
 
+    @MainActor
     func testDistributionIgnoresTransform() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         containerView.backgroundColor = .white
@@ -72,6 +74,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testDistributionUsingCapInsets() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 80))
         containerView.backgroundColor = .white
@@ -104,6 +107,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testHorizontalDistributionFollowsLayoutDirection() {
         let view = HorizontalDistributionView(frame: CGRect(x: 0, y: 0, width: 160, height: 60))
 

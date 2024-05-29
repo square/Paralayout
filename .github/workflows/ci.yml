@@ -63,9 +63,11 @@ jobs:
         run: Scripts/build.swift spm ${{ matrix.platform }} `which xcpretty`
   bazel:
     name: Bazel
-    runs-on: macOS-12
+    runs-on: macOS-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_15.4.app/Contents/Developer
       - name: Build and Test
-        run: bazel test //...
+        run: bazel test //... --xcode_version=15.4.0

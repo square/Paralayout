@@ -22,6 +22,7 @@ final class UIViewSizingTests: XCTestCase {
 
     // MARK: - Tests - Size That Fits
 
+    @MainActor
     func testSizeThatFitsWithNoConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -31,6 +32,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeThatFitsWithMaxWidthConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -40,6 +42,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeThatFitsWithMaxHeightConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -49,6 +52,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeThatFitsWithMaxSizeConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -58,6 +62,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeThatFitsWithMinWidthConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -67,6 +72,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeThatFitsWithMinHeightConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -76,6 +82,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeThatFitsWithMinSizeConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
 
@@ -87,6 +94,7 @@ final class UIViewSizingTests: XCTestCase {
 
     // MARK: - Tests - Size To Fit
 
+    @MainActor
     func testSizeToFitWithNoConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
         testView.sizeToFit(.zero)
@@ -97,6 +105,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeToFitWithMaxSizeConstraints() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
         testView.sizeToFit(.init(width: 100, height: 50), constraints: .maxSize)
@@ -107,6 +116,7 @@ final class UIViewSizingTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSizeToFitWithTransform() {
         let testView = TestView(sizeThatFits: .init(width: 300, height: 200))
         testView.transform = .init(scaleX: 2, y: 2)
@@ -117,6 +127,7 @@ final class UIViewSizingTests: XCTestCase {
         XCTAssertEqual(testView.frame.size, .init(width: 200, height: 100))
     }
 
+    @MainActor
     func testSizeToFitWithNegativeWidth() {
         let testView = TestView(sizeThatFits: .init(width: -50, height: 200))
         testView.sizeToFit(.init(width: 100, height: 50))
@@ -124,6 +135,7 @@ final class UIViewSizingTests: XCTestCase {
         XCTAssertEqual(testView.bounds.size, .init(width: 0, height: 200))
     }
 
+    @MainActor
     func testSizeToFitWithNegativeHeight() {
         let testView = TestView(sizeThatFits: .init(width: 200, height: -50))
         testView.sizeToFit(.init(width: 100, height: 50))

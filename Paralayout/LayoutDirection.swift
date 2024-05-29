@@ -19,6 +19,7 @@ import UIKit
 /// Defines an object that vends its current user interface layout direction.
 public protocol LayoutDirectionProviding {
 
+    @MainActor
     var effectiveUserInterfaceLayoutDirection: UIUserInterfaceLayoutDirection { get }
 
 }
