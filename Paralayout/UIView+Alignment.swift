@@ -170,7 +170,8 @@ extension AlignmentContext {
 
 // MARK: -
 
-private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category: "layout")
+private let ParalayoutLogSubsystem = "com.squareup.Paralayout"
+private let ParalayoutLogCategory = "layout"
 
 /// Triggered when an alignment method is called that uses mismatched position types, i.e. aligning a view's leading or
 /// trailing edge to another view's left or right edge, or vice versa. This type of mismatch is likely to look correct
@@ -178,7 +179,7 @@ private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category
 private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
     os_log(
         "%@",
-        log: ParalayoutLog,
+        log: OSLog(subsystem: ParalayoutLogSubsystem, category: ParalayoutLogCategory),
         type: .default,
         """
         Paralayout detected an alignment with mismatched position types. Set a symbolic breakpoint for \
@@ -193,7 +194,7 @@ private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
 private func ParalayoutAlertForInvalidViewHierarchy() {
     os_log(
         "%@",
-        log: ParalayoutLog,
+        log: OSLog(subsystem: ParalayoutLogSubsystem, category: ParalayoutLogCategory),
         type: .default,
         """
         Paralayout detected an alignment with an invalid view hierarchy. The views involved in alignment calls must \
