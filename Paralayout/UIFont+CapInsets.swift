@@ -61,7 +61,7 @@ extension UIFont {
     /// The space above and below the receiver's capHeight and baseline, as displayed in a UILabel.
     /// - parameter scaleFactor: The UI scale factor for pixel rounding.
     /// - returns: The insets.
-    public func labelCapInsets(in scaleFactor: ScaleFactorProviding) -> LabelCapInsets {
+    @MainActor public func labelCapInsets(in scaleFactor: ScaleFactorProviding) -> LabelCapInsets {
         // One would expect ceil(ascender) - floor(descender) so that the baseline would land on a pixel boundary, but
         // sadly no--this is what `UILabel.sizeToFit()` does.
         let lineHeight = (ascender - descender).ceiledToPixel(in: scaleFactor)

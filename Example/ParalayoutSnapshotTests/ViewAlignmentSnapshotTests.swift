@@ -19,6 +19,7 @@ import SnapshotTesting
 
 final class ViewAlignmentSnapshotTests: SnapshotTestCase {
 
+    @MainActor
     func testSiblingAlignment() {
         let containerView = UIView(frame: .init(x: 0, y: 0, width: 200, height: 200))
         containerView.backgroundColor = .white
@@ -31,6 +32,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         secondSubview.backgroundColor = .red
         containerView.addSubview(secondSubview)
 
+        @MainActor
         func verifySnapshot(
             receiverPosition: Position,
             targetPosition: Position,
@@ -80,6 +82,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         verifySnapshot(receiverPosition: .center, targetPosition: .topRight, verticalOffset: -15)
     }
 
+    @MainActor
     func testLayoutDirection() {
         let containerView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
         containerView.backgroundColor = .white
@@ -140,6 +143,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testTransformHasNoEffect() {
         let containerView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
         containerView.backgroundColor = .white
@@ -152,6 +156,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         secondSubview.backgroundColor = .red
         containerView.addSubview(secondSubview)
 
+        @MainActor
         func verifySnapshot(
             receiverTransform: CGAffineTransform,
             targetTransform: CGAffineTransform,
@@ -185,6 +190,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         verifySnapshot(receiverTransform: .identity, targetTransform: .init(scaleX: 2, y: 3))
     }
 
+    @MainActor
     func testNonZeroBoundsOrigin() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
         containerView.backgroundColor = .white
@@ -213,6 +219,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testAlignmentWithLayoutMargins() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
         containerView.backgroundColor = .white
@@ -246,6 +253,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: ["bothLayoutMargins"]))
     }
 
+    @MainActor
     func testAlignmentUsingCapInsets() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
         containerView.backgroundColor = .white
@@ -269,6 +277,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testAlignmentUsingFirstLine() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
         containerView.backgroundColor = .white
@@ -299,6 +308,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testAlignmentUsingFirstLineCapInsets() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 100))
         containerView.backgroundColor = .white
@@ -329,6 +339,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testAlignmentWithRect() {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
         containerView.backgroundColor = .white
@@ -365,6 +376,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         assertSnapshot(matching: containerView, as: .image, named: nameForSnapshot(with: []))
     }
 
+    @MainActor
     func testAlignmentWithFrame() {
         let targetTransform = CGAffineTransform(translationX: -20, y: 10)
         let receiverTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)

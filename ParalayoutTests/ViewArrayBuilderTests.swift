@@ -22,6 +22,7 @@ final class ViewArrayBuilderTests: XCTestCase {
 
     // MARK: - Tests
 
+    @MainActor
     func testSimpleResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -37,6 +38,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfTrueResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -58,6 +60,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfFalseResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -78,6 +81,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfElseFirstBranchResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -102,6 +106,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfElseSecondBranchResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -126,6 +131,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSwitchCaseResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -150,6 +156,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSwitchDefaultResultBuilder() throws {
         let view1 = UIView()
         let view2 = UIView()
@@ -173,6 +180,7 @@ final class ViewArrayBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testForLoopResultBuilder() throws {
         let views = [UIView(), UIView(), UIView()]
         XCTAssertEqual(

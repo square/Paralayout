@@ -46,7 +46,7 @@ extension Alignable {
     /// - parameter otherView: The other view for the measurement.
     /// - parameter otherPosition: The position in the `otherView`'s untransformed frame to use for the measurement.
     /// - returns: The offset from the receiver's `position` to the `otherView`'s `otherPosition`.
-    public func untransformedFrameOffset(
+    @MainActor public func untransformedFrameOffset(
         from position: Position,
         to otherView: Alignable,
         _ otherPosition: Position,
@@ -126,7 +126,7 @@ extension Alignable {
     /// calculated. Defaults to `.automatic`, which will align the views in the most common way based on their
     /// relationship in the view hierarchy.
     /// - parameter offset: An additional offset to apply to the alignment, e.g. to leave a space between the two views.
-    public func align(
+    @MainActor public func align(
         _ position: Position,
         with otherView: Alignable,
         _ otherPosition: Position,

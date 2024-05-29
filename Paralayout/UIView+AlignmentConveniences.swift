@@ -30,7 +30,7 @@ extension Alignable {
     /// relationship in the view hierarchy.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    public func align(
+    @MainActor public func align(
         _ position: Position,
         with otherView: Alignable,
         _ otherPosition: Position,
@@ -55,7 +55,7 @@ extension Alignable {
     /// - parameter superviewPosition: The position within the view's `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    public func align(
+    @MainActor public func align(
         _ position: Position,
         withSuperviewPosition superviewPosition: Position,
         horizontalOffset: CGFloat = 0,
@@ -80,7 +80,7 @@ extension Alignable {
     /// - parameter position: The position within the receiving view to use for alignment.
     /// - parameter superviewPosition: The position within the view's `superview` to use for alignment.
     /// - parameter offset: An additional offset to apply to the alignment.
-    public func align(
+    @MainActor public func align(
         _ position: Position,
         withSuperviewPosition superviewPosition: Position,
         offset: UIOffset
@@ -105,7 +105,7 @@ extension Alignable {
     /// - parameter superviewPoint: The coordinate within the view's `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the alignment (defaults to 0).
     /// - parameter verticalOffset: An additional vertical offset to apply to the alignment (defaults to 0).
-    public func align(
+    @MainActor public func align(
         _ position: Position,
         withSuperviewPoint superviewPoint: CGPoint,
         horizontalOffset: CGFloat = 0,
@@ -138,7 +138,7 @@ extension Alignable {
     /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
     /// - parameter horizontalOffset: An additional horizontal offset to apply to the receiver. Defaults to no offset.
     /// - parameter verticalOffset: An additional vertical offset to apply to the receiver. Defaults to no offset.
-    public func align(withSuperview position: Position, horizontalOffset: CGFloat = 0, verticalOffset: CGFloat = 0) {
+    @MainActor public func align(withSuperview position: Position, horizontalOffset: CGFloat = 0, verticalOffset: CGFloat = 0) {
         align(
             position,
             withSuperviewPosition: position,
@@ -153,7 +153,7 @@ extension Alignable {
     ///
     /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
     /// - parameter offset: An additional offset to apply to the receiver.
-    public func align(withSuperview position: Position, offset: UIOffset) {
+    @MainActor public func align(withSuperview position: Position, offset: UIOffset) {
         align(
             position,
             withSuperviewPosition: position,
@@ -168,7 +168,7 @@ extension Alignable {
     /// - parameter position: The position in both the receiving view and its `superview` to use for alignment.
     /// - parameter inset: An inset (horizontal, vertical, or diagonal based on the position) to apply. An inset on
     /// `.center` is interpreted as a vertical offset away from the top.
-    public func align(withSuperview position: Position, inset: CGFloat) {
+    @MainActor public func align(withSuperview position: Position, inset: CGFloat) {
         guard let superview = alignmentContext.view.superview else {
             fatalError("Can't align view without a superview!")
         }

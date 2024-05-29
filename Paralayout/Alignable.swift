@@ -19,10 +19,12 @@ import UIKit
 /// Describes an object that can participate in alignment. In practice, this represents a view.
 public protocol Alignable {
 
+    @MainActor
     var alignmentContext: AlignmentContext { get }
 
 }
 
+@MainActor
 public struct AlignmentContext {
 
     // MARK: - Life Cycle
@@ -47,6 +49,7 @@ public struct AlignmentContext {
 
 extension UIView: Alignable {
 
+    @MainActor
     public var alignmentContext: AlignmentContext {
         return AlignmentContext(view: self, alignmentBounds: bounds)
     }
@@ -168,6 +171,7 @@ public struct FrameAlignmentProxy: Alignable {
 
     // MARK: - Private Methods
 
+    @MainActor
     private func withViewInSuperview<T>(view: UIView, perform: (_ superview: UIView) -> T) -> T {
         if let superview = view.superview {
             return perform(superview)
