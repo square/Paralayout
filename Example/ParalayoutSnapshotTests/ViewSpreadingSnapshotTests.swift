@@ -36,6 +36,7 @@ final class ViewSpeadingSnapshotTests: SnapshotTestCase {
         greenView.backgroundColor = .green
         container.addSubview(greenView)
 
+        @MainActor
         func verifySnapshot(
             margin: CGFloat = 0,
             inRect rect: CGRect? = nil,
@@ -110,6 +111,7 @@ final class ViewSpeadingSnapshotTests: SnapshotTestCase {
         greenView.backgroundColor = .green
         container.addSubview(greenView)
 
+        @MainActor
         func verifySnapshot(
             margin: CGFloat = 0,
             inRect rect: CGRect? = nil,

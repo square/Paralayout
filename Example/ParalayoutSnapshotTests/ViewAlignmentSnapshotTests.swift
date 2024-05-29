@@ -91,6 +91,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         targetView.backgroundColor = .lightGray
         containerView.addSubview(targetView)
 
+        @MainActor
         func addAlignedSubview(
             receiverPosition: Position,
             receiverLayoutDirection: UIUserInterfaceLayoutDirection,
@@ -402,6 +403,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         receiverView.transform = receiverTransform
         containerView.addSubview(receiverView)
 
+        @MainActor
         func updateMirrorViews() {
             targetView.transform = .identity
             targetFrameView.frame = targetView.frame.applying(targetView.transform.inverted())
