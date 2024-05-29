@@ -102,7 +102,7 @@ public enum Clamp {
 
 // MARK: -
 
-public struct Interpolation: Comparable {
+public struct Interpolation: Comparable, Sendable {
 
     // MARK: - Public Types
     

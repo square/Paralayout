@@ -17,7 +17,7 @@
 import UIKit
 
 /// A value type representing the ratio between a width and a height.
-public struct AspectRatio: Comparable, CustomDebugStringConvertible {
+public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
 
     // MARK: - Public Static Properties
 
