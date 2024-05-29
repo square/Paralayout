@@ -12,6 +12,7 @@ swift_library(
     name = "Paralayout.lib",
     srcs = glob(["Paralayout/**/*.swift"]),
     module_name = "Paralayout",
+    copts = ["-strict-concurrency=complete"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = [],
@@ -22,6 +23,7 @@ swift_library(
     testonly = True,
     srcs = glob(["ParalayoutTests/**/*.swift"]),
     module_name = "ParalayoutTests",
+    copts = ["-strict-concurrency=complete"],
     tags = ["manual"],
     deps = [":Paralayout.lib"],
 )
