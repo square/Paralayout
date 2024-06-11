@@ -66,6 +66,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying, Sendable {
         var distributionItems = [ViewDistributionItem]()
         var totalViewSize: CGFloat = 0
         var totalFixedSpace: CGFloat = 0
+        var hasFixedSpacers: Bool = false
         var totalFlexibleSpace: CGFloat = 0
 
         var subviewsToDistribute = Set<UIView>()
@@ -92,6 +93,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying, Sendable {
 
             case .fixed:
                 totalFixedSpace += layoutSize
+                hasFixedSpacers = true
 
             case .flexible:
                 totalFlexibleSpace += layoutSize
@@ -107,7 +109,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying, Sendable {
 
         // Insert flexible space if necessary.
         if totalFlexibleSpace == 0 {
-            if totalFixedSpace == 0 {
+            if !hasFixedSpacers {
                 // No spacers at all: insert `1.flexible` between all items.
                 for i in 0 ..< (distributionItems.count + 1) {
                     distributionItems.insert(1.flexible, at: i * 2)
