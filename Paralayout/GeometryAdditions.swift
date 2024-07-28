@@ -91,6 +91,13 @@ extension CGSize {
 
 // MARK: -
 
+public enum DirectionalEdge {
+    case top
+    case bottom
+    case leading
+    case trailing
+}
+
 extension CGRect {
     
     /// Initialize a CGRect with bounding coordinates (always with non-negative size).
@@ -141,10 +148,35 @@ extension CGRect {
     public func offset(by offset: UIOffset) -> CGRect {
         return CGRect(origin: origin.offset(by: offset), size: size)
     }
-    
+
     /// Divides the receiver in two.
     ///
-    /// - parameter from: The edge from which the amount is interpreted.
+    /// - parameter edge: The edge from which the amount is interpreted.
+    /// - parameter amount: The size of the slice (absolute).
+    /// - returns: A tuple (slice: A rect with a width/height of the `amount`, remainder: A rect with a width/height of
+    /// the receiver reduced by `amount`).
+    public func slice(
+        from edge: DirectionalEdge,
+        amount: CGFloat,
+        in layoutDirectionProvider: LayoutDirectionProviding
+    ) -> (slice: CGRect, remainder: CGRect) {
+        switch (edge, layoutDirectionProvider.effectiveUserInterfaceLayoutDirection) {
+        case (.top, _):
+            slice(from: .minYEdge, amount: amount)
+        case (.bottom, _):
+            slice(from: .maxYEdge, amount: amount)
+        case (.leading, .leftToRight), (.trailing, .rightToLeft):
+            slice(from: .minXEdge, amount: amount)
+        case (.trailing, .leftToRight), (.leading, .rightToLeft):
+            slice(from: .maxXEdge, amount: amount)
+        @unknown default:
+            fatalError("Unknown user interface layout direction")
+        }
+    }
+
+    /// Divides the receiver in two.
+    ///
+    /// - parameter edge: The edge from which the amount is interpreted.
     /// - parameter amount: The size of the slice (absolute).
     /// - returns: A tuple (slice: A rect with a width/height of the `amount`, remainder: A rect with a width/height of
     /// the receiver reduced by `amount`).
