@@ -17,7 +17,7 @@
 import UIKit
 
 /// An element of a horizontal or vertical distribution.
-public enum ViewDistributionItem: ViewDistributionSpecifying {
+public enum ViewDistributionItem: ViewDistributionSpecifying, Sendable {
 
     /// A UIView, with adjustments to how much space it should take up.
     case view(UIView, UIEdgeInsets)
@@ -146,6 +146,7 @@ public enum ViewDistributionItem: ViewDistributionSpecifying {
 // MARK: -
 
 /// A means of getting a `ViewDistributionItem`: either a UIView, or a number as `.fixed` or `.flexible`.
+@MainActor
 public protocol ViewDistributionSpecifying {
 
     var distributionItem: ViewDistributionItem { get }

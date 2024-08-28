@@ -1,4 +1,4 @@
-// swift-tools-version:5.0.1
+// swift-tools-version:5.9
 
 //
 //  Copyright 2020 Square Inc.
@@ -21,19 +21,22 @@ import PackageDescription
 let package = Package(
 	name: "Paralayout",
 	platforms: [
-		.iOS(.v12),
+		.iOS(.v13),
 	],
 	products: [
 		.library(
 			name: "Paralayout",
-			targets: ["Paralayout"]
+            targets: ["Paralayout"]
 		),
 	],
 	targets: [
 		.target(
 			name: "Paralayout",
 			dependencies: [],
-			path: "Paralayout"
+			path: "Paralayout",
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
 		),
 		.testTarget(
             name: "ParalayoutTests",

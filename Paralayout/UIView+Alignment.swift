@@ -170,11 +170,13 @@ extension AlignmentContext {
 
 // MARK: -
 
+@MainActor
 private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category: "layout")
 
 /// Triggered when an alignment method is called that uses mismatched position types, i.e. aligning a view's leading or
 /// trailing edge to another view's left or right edge, or vice versa. This type of mismatch is likely to look correct
 /// under certain circumstance, but may look incorrect when using a different user interface layout direction.
+@MainActor
 private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
     os_log(
         "%@",
@@ -190,6 +192,7 @@ private func ParalayoutAlertForMismatchedAlignmentPositionTypes() {
 
 /// Triggered when an alignment method is called that involves two views that are not installed in the same view
 /// hierarchy. The behavior of aligning two views not in the same view hierarchy is undefined.
+@MainActor
 private func ParalayoutAlertForInvalidViewHierarchy() {
     os_log(
         "%@",

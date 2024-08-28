@@ -17,6 +17,7 @@
 import UIKit
 
 /// The ratio of pixels to points, either of a UIScreen, a UIView's screen, or an explicit value.
+@MainActor
 public protocol ScaleFactorProviding {
 
     var pixelsPerPoint: CGFloat { get }
@@ -76,6 +77,7 @@ extension CGFloat {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func flooredToPixel(in scaleFactor: ScaleFactorProviding) -> CGFloat {
         return adjustedToPixel(scaleFactor) { floor($0) }
     }
@@ -85,6 +87,7 @@ extension CGFloat {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func ceiledToPixel(in scaleFactor: ScaleFactorProviding) -> CGFloat {
         return adjustedToPixel(scaleFactor) { ceil($0) }
     }
@@ -94,6 +97,7 @@ extension CGFloat {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func roundedToPixel(in scaleFactor: ScaleFactorProviding) -> CGFloat {
         // Invoke the namespaced Darwin.round() function since round() is ambiguous (it's also a mutating instance
         // method).
@@ -102,6 +106,7 @@ extension CGFloat {
 
     // MARK: - Private Methods
 
+    @MainActor
     private func adjustedToPixel(_ scaleFactor: ScaleFactorProviding, _ adjustment: (CGFloat) -> CGFloat) -> CGFloat {
         let scale = scaleFactor.pixelsPerPoint
         return (scale > 0.0) ? (adjustment(self * scale) / scale) : self
@@ -117,6 +122,7 @@ extension CGPoint {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func flooredToPixel(in scaleFactor: ScaleFactorProviding) -> CGPoint {
         return CGPoint(x: x.flooredToPixel(in: scaleFactor), y: y.flooredToPixel(in: scaleFactor))
     }
@@ -127,6 +133,7 @@ extension CGPoint {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func ceiledToPixel(in scaleFactor: ScaleFactorProviding) -> CGPoint {
         return CGPoint(x: x.ceiledToPixel(in: scaleFactor), y: y.ceiledToPixel(in: scaleFactor))
     }
@@ -137,6 +144,7 @@ extension CGPoint {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func roundedToPixel(in scaleFactor: ScaleFactorProviding) -> CGPoint {
         return CGPoint(x: x.roundedToPixel(in: scaleFactor), y: y.roundedToPixel(in: scaleFactor))
     }
@@ -150,6 +158,7 @@ extension CGSize {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func flooredToPixel(in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(width: width.flooredToPixel(in: scaleFactor), height: height.flooredToPixel(in: scaleFactor))
     }
@@ -159,6 +168,7 @@ extension CGSize {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func ceiledToPixel(in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(width: width.ceiledToPixel(in: scaleFactor), height: height.ceiledToPixel(in: scaleFactor))
     }
@@ -168,6 +178,7 @@ extension CGSize {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: The adjusted coordinate.
+    @MainActor
     public func roundedToPixel(in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(width: width.roundedToPixel(in: scaleFactor), height: height.roundedToPixel(in: scaleFactor))
     }
@@ -181,6 +192,7 @@ extension CGRect {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosing the original rect.
+    @MainActor
     public func expandedToPixel(in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(
             left: minX.flooredToPixel(in: scaleFactor),
@@ -195,6 +207,7 @@ extension CGRect {
     /// - parameter scaleFactor: The pixel scale to use, e.g. a UIScreen, UIView, or explicit value (pass `0` to *not*
     /// snap to pixel).
     /// - returns: A new rect with pixel-aligned boundaries, enclosed by the original rect.
+    @MainActor
     public func contractedToPixel(in scaleFactor: ScaleFactorProviding) -> CGRect {
         return CGRect(
             left: minX.ceiledToPixel(in: scaleFactor),

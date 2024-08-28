@@ -22,6 +22,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
 
     // MARK: - Tests
 
+    @MainActor
     func testSimpleResultBuilder() throws {
         let view = UIView()
         XCTAssertEqual(
@@ -38,6 +39,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfTrueResultBuilder() throws {
         let view = UIView()
         let condition = true
@@ -57,6 +59,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfFalseResultBuilder() throws {
         let view = UIView()
         let condition = false
@@ -75,6 +78,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfElseFirstBranchResultBuilder() throws {
         let view = UIView()
         view.tag = 1
@@ -99,6 +103,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testIfElseSecondBranchResultBuilder() throws {
         let view = UIView()
         view.tag = 1
@@ -123,6 +128,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSwitchCaseResultBuilder() throws {
         let view = UIView()
         let value = 1
@@ -145,6 +151,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSwitchDefaultResultBuilder() throws {
         let view = UIView()
         let value = 2
@@ -166,6 +173,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testForLoopResultBuilder() throws {
         XCTAssertEqual(
             viewDistribution({
@@ -185,6 +193,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
 
     // MARK: - Private Methods
 
+    @MainActor
     private func viewDistribution(@ViewDistributionBuilder _ builder: () -> [ViewDistributionSpecifying]) -> [ViewDistributionSpecifying] {
         builder()
     }

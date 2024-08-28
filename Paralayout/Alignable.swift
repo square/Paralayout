@@ -17,12 +17,14 @@
 import UIKit
 
 /// Describes an object that can participate in alignment. In practice, this represents a view.
+@MainActor
 public protocol Alignable {
 
     var alignmentContext: AlignmentContext { get }
 
 }
 
+@MainActor
 public struct AlignmentContext {
 
     // MARK: - Life Cycle

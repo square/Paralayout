@@ -20,6 +20,7 @@ import XCTest
 
 final class AspectRatioTests: XCTestCase {
 
+    @MainActor
     func testStatics() {
         XCTAssert(AspectRatio.square.height(forWidth: 1, in: 0) == 1)
         XCTAssert(AspectRatio.square.width(forHeight: 1, in: 0) == 1)
@@ -32,6 +33,7 @@ final class AspectRatioTests: XCTestCase {
         XCTAssert(AspectRatio.widescreen.height(forWidth: 16, in: 0) == 9)
     }
 
+    @MainActor
     func testCreation() {
         XCTAssert(AspectRatio(width: 1, height: 1) == AspectRatio.square)
         XCTAssert(AspectRatio(width: 2, height: 2) == AspectRatio.square)
@@ -43,6 +45,7 @@ final class AspectRatioTests: XCTestCase {
         XCTAssert(CGRect(x: 25, y: 50, width: 100, height: 100).aspectRatio == AspectRatio.square)
     }
 
+    @MainActor
     func testInverted() {
         XCTAssert(AspectRatio.square.inverted == AspectRatio.square)
         XCTAssert(AspectRatio(width: 100, height: 50).inverted == AspectRatio(width: 5, height: 10))
@@ -53,6 +56,7 @@ final class AspectRatioTests: XCTestCase {
         XCTAssert(AspectRatio.widescreen.inverted.height(forWidth: 9, in: 0) == 16)
     }
 
+    @MainActor
     func testComparison() {
         // Aspect ratios in sorted order.
         let ratios = [
@@ -78,6 +82,7 @@ final class AspectRatioTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testSizes() {
         // The core sizing methods round the resulting dimension.
         XCTAssert(AspectRatio.square.width(forHeight: 10.5, in: 1) == 11)
@@ -97,6 +102,7 @@ final class AspectRatioTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testRects() {
         // Use a set of rectangles with varying aspect ratios (square, landscape, portrait; origin offsets;
         // non-integral).

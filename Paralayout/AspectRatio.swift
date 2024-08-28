@@ -17,7 +17,7 @@
 import UIKit
 
 /// A value type representing the ratio between a width and a height.
-public struct AspectRatio: Comparable, CustomDebugStringConvertible {
+public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
 
     // MARK: - Public Static Properties
 
@@ -105,6 +105,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     ///
     /// - parameter width: The desired width.
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
+    @MainActor
     public func height(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
         return (ratioHeight * width / ratioWidth).roundedToPixel(in: scaleFactor)
     }
@@ -113,6 +114,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     ///
     /// - parameter height: The desired height.
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
+    @MainActor
     public func width(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
         return (ratioWidth * height / ratioHeight).roundedToPixel(in: scaleFactor)
     }
@@ -122,6 +124,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     ///
     /// - parameter width: The desired width.
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
+    @MainActor
     public func size(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(
             width: width,
@@ -134,6 +137,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     ///
     /// - parameter height: The desired height.
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
+    @MainActor
     public func size(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
         return CGSize(
             width: width(forHeight: height, in: scaleFactor),
@@ -147,6 +151,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter size: The bounding size.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A size with the receiver's aspect ratio, no larger than the bounding size.
+    @MainActor
     public func size(toFit size: CGSize, in scaleFactor: ScaleFactorProviding) -> CGSize {
         if size.aspectRatio <= self {
             // Match width, narrow the height.
@@ -169,6 +174,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
+    @MainActor
     public func rect(
         toFit rect: CGRect,
         at position: Position,
@@ -193,6 +199,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
     /// which the rect should be positioned.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
+    @MainActor
     public func rect(
         toFit rect: CGRect,
         at position: Position,
@@ -212,6 +219,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter size: The bounding size.
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - returns: A size with the receiver's aspect ratio, at least as large as the bounding size.
+    @MainActor
     public func size(toFill size: CGSize, in scaleFactor: ScaleFactorProviding) -> CGSize {
         if size.aspectRatio <= self {
             // Match height, expand the width.
@@ -234,6 +242,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
     /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
+    @MainActor
     public func rect(
         toFill rect: CGRect,
         at position: Position,
@@ -257,6 +266,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible {
     /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
     /// which the rect should be positioned.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
+    @MainActor
     public func rect(
         toFill rect: CGRect,
         at position: Position,
@@ -294,6 +304,7 @@ extension CGRect {
 
     // MARK: - Life Cycle
 
+    @MainActor
     fileprivate init(
         size newSize: CGSize,
         at position: Position,
