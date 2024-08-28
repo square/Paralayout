@@ -26,7 +26,7 @@ let package = Package(
 	products: [
 		.library(
 			name: "Paralayout",
-            targets: ["Paralayout"]
+			targets: ["Paralayout"]
 		),
 	],
 	targets: [
@@ -34,15 +34,15 @@ let package = Package(
 			name: "Paralayout",
 			dependencies: [],
 			path: "Paralayout",
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]
+			swiftSettings: [
+				.enableExperimentalFeature("StrictConcurrency")
+			]
 		),
 		.testTarget(
-            name: "ParalayoutTests",
-            dependencies: ["Paralayout"],
-            path: "ParalayoutTests"
-        ),
+			name: "ParalayoutTests",
+			dependencies: ["Paralayout"],
+			path: "ParalayoutTests"
+		),
 	],
 	swiftLanguageVersions: [.v5]
 )
