@@ -66,4 +66,4 @@ jobs:
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_15.4.app/Contents/Developer
       - name: Build and Test
-        run: bazel test //...
+        run: bazel test //... --xcode_version=15.4.0
