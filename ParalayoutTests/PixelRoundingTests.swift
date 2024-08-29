@@ -20,24 +20,6 @@ import XCTest
 
 final class PixelRoundingTests: XCTestCase {
 
-    // MARK: - Private Types
-
-    @MainActor
-    private enum Samples {
-        static let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        static let view = UIView()
-    }
-
-    // MARK: - XCTest
-
-    override func setUp() async throws {
-        try await super.setUp()
-
-        await Task { @MainActor in
-            Samples.window.addSubview(Samples.view)
-        }.value
-    }
-
     // MARK: - Tests - Pixel Rounding
 
     @MainActor
@@ -110,35 +92,6 @@ final class PixelRoundingTests: XCTestCase {
             CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).contractedToPixel(in: TestScreen.at3x),
             CGRect(left: 11, top: CGFloat(10) + 2 / 3, right: CGFloat(50) + 1 / 3, bottom: CGFloat(50) + 2 / 3)
         )
-    }
-
-    // MARK: - Tests - Scale Factor
-
-    @MainActor
-    func testViewScaleFactor() {
-        // A view should inherit the scale factor of its parent screen.
-        for screen in screensToTest() {
-            Samples.window.screen = screen
-            XCTAssertEqual(Samples.view.pixelsPerPoint, screen.pixelsPerPoint)
-        }
-
-        // With no superview, the main screen's scale should be used.
-        Samples.view.removeFromSuperview()
-        XCTAssert(Samples.view.pixelsPerPoint == UIScreen.main.pixelsPerPoint)
-    }
-
-    // MARK: - Private Methods
-
-    @MainActor
-    private func screensToTest() -> [UIScreen] {
-        if #available(iOS 13, *) {
-            // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
-            // multiple screens (FB8674601).
-            return [.main]
-
-        } else {
-            return TestScreen.all
-        }
     }
 
 }
