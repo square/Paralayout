@@ -22,6 +22,7 @@ final class PixelRoundingTests: XCTestCase {
 
     // MARK: - Private Types
 
+    @MainActor
     private enum Samples {
         static let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         static let view = UIView()
@@ -29,6 +30,7 @@ final class PixelRoundingTests: XCTestCase {
 
     // MARK: - XCTest
 
+    @MainActor
     override func setUp() {
         super.setUp()
 
