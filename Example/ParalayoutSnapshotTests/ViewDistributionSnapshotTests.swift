@@ -123,6 +123,7 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         )
     }
 
+    @MainActor
     func testHorizontalDistributionAlongBaseline() {
         final class TestView: UIView {
 
