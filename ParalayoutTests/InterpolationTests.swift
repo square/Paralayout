@@ -22,6 +22,7 @@ final class InterpolationTests: XCTestCase {
 
     // MARK: - CGRect
 
+    @MainActor
     func testCGRectInterpolation() {
         let startRect = CGRect(x: 1, y: 2, width: 5, height: 6)
         let endRect = CGRect(x: 3, y: 4, width: 7, height: 8)
@@ -33,6 +34,7 @@ final class InterpolationTests: XCTestCase {
 
     // MARK: - Float
 
+    @MainActor
     func testLinearFloatInterpolation_fromMinToMax() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -43,6 +45,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 3)
     }
 
+    @MainActor
     func testEaseInFloatInterpolation_fromMinToMax() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -53,6 +56,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseOutFloatInterpolation_fromMinToMax() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -63,6 +67,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 4)
     }
 
+    @MainActor
     func testEaseInOutFloatInterpolation_fromMinToMax() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -73,6 +78,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 3)
     }
 
+    @MainActor
     func testLinearFloatInterpolation_ofUnit() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -82,6 +88,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testEaseInFloatInterpolation_ofUnit() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -91,6 +98,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testEaseOutFloatInterpolation_ofUnit() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -100,6 +108,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testEaseInOutFloatInterpolation_ofUnit() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -109,6 +118,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testLinearFloatInterpolation_fromMinToMax_withMidpoint() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -120,6 +130,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseInFloatInterpolation_fromMinToMax_withMidpoint() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -131,6 +142,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseOutFloatInterpolation_fromMinToMax_withMidpoint() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -142,6 +154,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseInOutFloatInterpolation_fromMinToMax_withMidpoint() {
         let value: Float = 3.0
         let min: Float = 1.0
@@ -155,6 +168,7 @@ final class InterpolationTests: XCTestCase {
 
     // MARK: - Double
 
+    @MainActor
     func testLinearDoubleInterpolation_fromMinToMax() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -165,6 +179,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 3)
     }
 
+    @MainActor
     func testEaseInDoubleInterpolation_fromMinToMax() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -175,6 +190,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseOutDoubleInterpolation_fromMinToMax() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -185,6 +201,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 4)
     }
 
+    @MainActor
     func testEaseInOutDoubleInterpolation_fromMinToMax() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -195,6 +212,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 3)
     }
 
+    @MainActor
     func testLinearDoubleInterpolation_ofUnit() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -204,6 +222,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testEaseInDoubleInterpolation_ofUnit() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -213,6 +232,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testEaseOutDoubleInterpolation_ofUnit() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -222,6 +242,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testEaseInOutDoubleInterpolation_ofUnit() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -231,6 +252,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 5)
     }
 
+    @MainActor
     func testLinearDoubleInterpolation_fromMinToMax_withMidpoint() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -242,6 +264,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseInDoubleInterpolation_fromMinToMax_withMidpoint() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -253,6 +276,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseOutDoubleInterpolation_fromMinToMax_withMidpoint() {
         let value: Double = 3.0
         let min: Double = 1.0
@@ -264,6 +288,7 @@ final class InterpolationTests: XCTestCase {
         XCTAssertEqual(interpolation, 2)
     }
 
+    @MainActor
     func testEaseInOutDoubleInterpolation_fromMinToMax_withMidpoint() {
         let value: Double = 3.0
         let min: Double = 1.0

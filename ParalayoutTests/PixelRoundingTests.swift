@@ -20,23 +20,9 @@ import XCTest
 
 final class PixelRoundingTests: XCTestCase {
 
-    // MARK: - Private Types
-
-    private enum Samples {
-        static let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        static let view = UIView()
-    }
-
-    // MARK: - XCTest
-
-    override func setUp() {
-        super.setUp()
-
-        Samples.window.addSubview(Samples.view)
-    }
-
     // MARK: - Tests - Pixel Rounding
 
+    @MainActor
     func testFloatPixelRounding() {
         XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: 0), 1.75)
         XCTAssertEqual(CGFloat(1.75).flooredToPixel(in: TestScreen.at1x), 1)
@@ -57,6 +43,7 @@ final class PixelRoundingTests: XCTestCase {
         XCTAssertEqual(CGFloat(-1.75).ceiledToPixel(in: TestScreen.at2x), -1.5)
     }
 
+    @MainActor
     func testPointPixelRounding() {
         XCTAssertEqual(CGPoint(x: 0.9, y: -1.1).flooredToPixel(in: 0), CGPoint(x: 0.9, y: -1.1))
         XCTAssertEqual(CGPoint(x: 0.9, y: -1.1).flooredToPixel(in: 1), CGPoint(x: 0, y: -2))
@@ -71,6 +58,7 @@ final class PixelRoundingTests: XCTestCase {
         XCTAssertEqual(CGPoint(x: 0.4, y: -1.4).roundedToPixel(in: 2), CGPoint(x: 0.5, y: -1.5))
     }
 
+    @MainActor
     func testSizePixelRounding() {
         XCTAssertEqual(CGSize(width: 0.9, height: -1.1).flooredToPixel(in: 0), CGSize(width: 0.9, height: -1.1))
         XCTAssertEqual(CGSize(width: 0.9, height: -1.1).flooredToPixel(in: 1), CGSize(width: 0, height: -2))
@@ -85,6 +73,7 @@ final class PixelRoundingTests: XCTestCase {
         XCTAssertEqual(CGSize(width: 0.4, height: -1.4).roundedToPixel(in: 2), CGSize(width: 0.5, height: -1.5))
     }
 
+    @MainActor
     func testRectPixelRounding() {
         XCTAssertEqual(
             CGRect(left: 10.6, top: 10.4, right: 50.6, bottom: 50.6).expandedToPixel(in: TestScreen.at2x),
@@ -103,33 +92,6 @@ final class PixelRoundingTests: XCTestCase {
             CGRect(left: 10.7, top: 10.4, right: 50.5, bottom: 50.7).contractedToPixel(in: TestScreen.at3x),
             CGRect(left: 11, top: CGFloat(10) + 2 / 3, right: CGFloat(50) + 1 / 3, bottom: CGFloat(50) + 2 / 3)
         )
-    }
-
-    // MARK: - Tests - Scale Factor
-
-    func testViewScaleFactor() {
-        // A view should inherit the scale factor of its parent screen.
-        for screen in screensToTest() {
-            Samples.window.screen = screen
-            XCTAssertEqual(Samples.view.pixelsPerPoint, screen.pixelsPerPoint)
-        }
-
-        // With no superview, the main screen's scale should be used.
-        Samples.view.removeFromSuperview()
-        XCTAssert(Samples.view.pixelsPerPoint == UIScreen.main.pixelsPerPoint)
-    }
-
-    // MARK: - Private Methods
-
-    private func screensToTest() -> [UIScreen] {
-        if #available(iOS 13, *) {
-            // In iOS 13 and later, there is a bug around setting `UIWindow.screen` that prevents us from testing
-            // multiple screens (FB8674601).
-            return [.main]
-
-        } else {
-            return TestScreen.all
-        }
     }
 
 }

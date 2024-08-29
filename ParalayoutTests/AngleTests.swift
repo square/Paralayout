@@ -20,6 +20,7 @@ import XCTest
 
 final class AngleTests: XCTestCase {
 
+    @MainActor
     func testConstants() {
         XCTAssertEqual(Angle.zero.radians, 0)
         XCTAssertEqual(Angle.right.degrees, 90, accuracy: 1e-4)
@@ -27,6 +28,7 @@ final class AngleTests: XCTestCase {
         XCTAssertEqual(Angle.fullCircle.degrees, 360, accuracy: 1e-4)
     }
 
+    @MainActor
     func testValueInitializers() {
         func assertRadianInitPreservesValue(_ radians: CGFloat) {
             XCTAssertEqual(Angle(radians: radians).radians, radians)
@@ -45,6 +47,7 @@ final class AngleTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testPointInitializer() {
         let rect = CGRect(x: -1, y: -1, width: 2, height: 2)
         let centerPoint = Position.center.point(in: rect, layoutDirection: .leftToRight)
@@ -94,6 +97,7 @@ final class AngleTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testPointAtDistance() {
         let rect = CGRect(x: -1, y: -1, width: 2, height: 2)
         let diagonalUnit: CGFloat = sqrt(2)
@@ -151,6 +155,7 @@ final class AngleTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testPositiveNormalization() {
         // In the range [0,2π), the angle should be unmutated.
         XCTAssertEqual(Angle.zero.normalizedPositive.radians, Angle.zero.radians)
@@ -168,6 +173,7 @@ final class AngleTests: XCTestCase {
         XCTAssertEqual(Angle(radians: -.pi / 2).normalizedPositive.radians, 1.5 * .pi, accuracy: 1e-4)
     }
 
+    @MainActor
     func testHalfCircleNormalization() {
         // In the range [-180º,180º), the angle should be unmutated.
         XCTAssertEqual(Angle.zero.normalizedHalfCircle.radians, Angle.zero.radians, accuracy: 1e-4)

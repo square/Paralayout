@@ -21,7 +21,7 @@ extension UIView {
     // MARK: - Public Types
 
     /// Constraints on the result of a call to `sizeThatFits(_:)`.
-    public struct SizingConstraints: OptionSet {
+    public struct SizingConstraints: OptionSet, Sendable {
 
         // MARK: - Life Cycle
 

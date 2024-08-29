@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-import SnapshotTesting
+@preconcurrency import SnapshotTesting
 import XCTest
 
 class SnapshotTestCase: XCTestCase {
@@ -31,6 +31,7 @@ class SnapshotTestCase: XCTestCase {
 
         // MARK: - Public Methods
 
+        @MainActor
         func matchesCurrentDevice() -> Bool {
             let device = UIDevice.current
             let screen = UIScreen.main
@@ -46,28 +47,31 @@ class SnapshotTestCase: XCTestCase {
 
     private static let testedDevices = [
 
-        // iPhone 12 Pro (14.4)
-        TestDeviceConfig(systemVersion: "14.4", screenSize: CGSize(width: 390, height: 844), screenScale: 3),
+        // iPhone 15 Pro - iOS 17.5
+        TestDeviceConfig(systemVersion: "17.5", screenSize: CGSize(width: 393, height: 852), screenScale: 3),
 
-        // iPhone 11 Pro (13.7)
-        TestDeviceConfig(systemVersion: "13.7", screenSize: CGSize(width: 375, height: 812), screenScale: 3),
+        // iPad (10th Generation) - iPadOS 17.5
+        TestDeviceConfig(systemVersion: "17.5", screenSize: CGSize(width: 820, height: 1180), screenScale: 2),
 
     ]
 
     // MARK: - XCTestCase
 
-    override class func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        guard SnapshotTestCase.testedDevices.contains(where: { $0.matchesCurrentDevice() }) else {
-            fatalError("Attempting to run tests on a device for which we have not collected test data")
-        }
+        await Task { @MainActor in
+            guard SnapshotTestCase.testedDevices.contains(where: { $0.matchesCurrentDevice() }) else {
+                fatalError("Attempting to run tests on a device for which we have not collected test data")
+            }
 
-        isRecording = false
+            isRecording = false
+        }.value
     }
 
     // MARK: - Public Methods
 
+    @MainActor
     func nameForSnapshot(with parameters: [String?]) -> String {
         let size = UIScreen.main.bounds.size
         let scale = UIScreen.main.scale

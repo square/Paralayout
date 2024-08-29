@@ -22,6 +22,7 @@ final class GeometryAdditionsTests: XCTestCase {
 
     // MARK: - Tests - Operators
     
+    @MainActor
     func testOffsetOperators() {
         // Combine offsets.
         XCTAssertEqual(
@@ -66,6 +67,7 @@ final class GeometryAdditionsTests: XCTestCase {
 
     // MARK: - Tests - CGPoint Extensions
 
+    @MainActor
     func testMidpoint() {
         // The midpoint between two of the same point should be that point.
         XCTAssertEqual(CGPoint(midpointBetween: .zero, and: .zero), .zero)
@@ -85,6 +87,7 @@ final class GeometryAdditionsTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testDistanceBetweenPoints() {
         // A point's distance from itself is always zero.
         XCTAssertEqual(CGPoint.zero.distance(to: .zero), 0)
@@ -102,12 +105,14 @@ final class GeometryAdditionsTests: XCTestCase {
 
     // MARK: - Tests - CGSize Extensions
 
+    @MainActor
     func testSizeOfGreatestFiniteMagnitude() {
         let size = CGSize.greatestFiniteMagnitude
         XCTAssertEqual(size.width, .greatestFiniteMagnitude)
         XCTAssertEqual(size.height, .greatestFiniteMagnitude)
     }
 
+    @MainActor
     func testScalingSize() {
         // A zero size scaled by anything should still be zero.
         XCTAssertEqual(CGSize.zero * 100, .zero)
@@ -124,11 +129,13 @@ final class GeometryAdditionsTests: XCTestCase {
 
     // MARK: - Tests - CGRect Extensions
     
+    @MainActor
     func testCGRectCreation() {
         XCTAssertEqual(CGRect(left: 10, top: 10, right: 50, bottom: 50), CGRect(x: 10, y: 10, width: 40, height: 40))
         XCTAssertEqual(CGRect(left: 50, top: 50, right: 10, bottom: 10), CGRect(x: 10, y: 10, width: 40, height: 40))
     }
 
+    @MainActor
     func testCGRectInset() {
         // CGRect.insetBy(left:top:right:bottom:)
         XCTAssertEqual(
@@ -165,6 +172,7 @@ final class GeometryAdditionsTests: XCTestCase {
         )
     }
     
+    @MainActor
     func testCGRectSlice() {
         // CGRect.zero tests
         XCTAssert(CGRect.zero.slice(from: .minXEdge, amount: 0) == (.zero, .zero))
@@ -201,11 +209,13 @@ final class GeometryAdditionsTests: XCTestCase {
 
     // MARK: - Tests - UIEdgeInsets Extensions
 
+    @MainActor
     func testCreateUniformInsets() {
         XCTAssertEqual(UIEdgeInsets(uniform: 20), UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         XCTAssertEqual(UIEdgeInsets(uniformOutset: 20), UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20))
     }
 
+    @MainActor
     func testCreateInsetsByAxis() {
         XCTAssertEqual(
             UIEdgeInsets(vertical: 10, horizontal: 20),
@@ -213,6 +223,7 @@ final class GeometryAdditionsTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testInsetAmountOnAxis() {
         XCTAssertEqual(UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40).horizontalAmount, 60)
         XCTAssertEqual(UIEdgeInsets(top: 10, left: 20, bottom: 15, right: 40).verticalAmount, 25)
@@ -223,6 +234,7 @@ final class GeometryAdditionsTests: XCTestCase {
 
     // MARK: - Tests - NSDirectionalEdgeInsets Extensions
 
+    @MainActor
     func testCreateUniformDirectionalInsets() {
         XCTAssertEqual(
             NSDirectionalEdgeInsets(uniform: 20),
@@ -234,6 +246,7 @@ final class GeometryAdditionsTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testCreateDirectionalInsetsByAxis() {
         XCTAssertEqual(
             NSDirectionalEdgeInsets(vertical: 10, horizontal: 20),
@@ -241,6 +254,7 @@ final class GeometryAdditionsTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testDirectionalInsetAmountOnAxis() {
         XCTAssertEqual(NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 30, trailing: 40).horizontalAmount, 60)
         XCTAssertEqual(NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 40).verticalAmount, 25)

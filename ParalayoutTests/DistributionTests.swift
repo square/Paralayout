@@ -22,6 +22,7 @@ final class DistributionTests: XCTestCase {
 
     // MARK: - Tests - Orthogonal Alignment
 
+    @MainActor
     func testOrthogonalAlignmentInHorizontalDistribution() {
         // The layout direction shouldn't affect the orthogonal alignment in a horizontal distribution.
         for forcedLayoutDirection in [UISemanticContentAttribute.forceLeftToRight, .forceRightToLeft] {
@@ -87,6 +88,7 @@ final class DistributionTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testOrthogonalAlignmentInVerticalDistribution_leftToRightLayout() {
         let container = UIView(frame: .init(x: 0, y: 0, width: 200, height: 1000))
         container.semanticContentAttribute = .forceLeftToRight
@@ -149,6 +151,7 @@ final class DistributionTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testOrthogonalAlignmentInVerticalDistribution_rightToLeftLayout() {
         let container = UIView(frame: .init(x: 0, y: 0, width: 200, height: 1000))
         container.semanticContentAttribute = .forceRightToLeft
