@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-import SnapshotTesting
+@preconcurrency import SnapshotTesting
 import XCTest
 
 class SnapshotTestCase: XCTestCase {
@@ -31,6 +31,7 @@ class SnapshotTestCase: XCTestCase {
 
         // MARK: - Public Methods
 
+        @MainActor
         func matchesCurrentDevice() -> Bool {
             let device = UIDevice.current
             let screen = UIScreen.main
@@ -56,18 +57,21 @@ class SnapshotTestCase: XCTestCase {
 
     // MARK: - XCTestCase
 
-    override class func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        guard SnapshotTestCase.testedDevices.contains(where: { $0.matchesCurrentDevice() }) else {
-            fatalError("Attempting to run tests on a device for which we have not collected test data")
-        }
+        await Task { @MainActor in
+            guard SnapshotTestCase.testedDevices.contains(where: { $0.matchesCurrentDevice() }) else {
+                fatalError("Attempting to run tests on a device for which we have not collected test data")
+            }
 
-        isRecording = false
+            isRecording = false
+        }.value
     }
 
     // MARK: - Public Methods
 
+    @MainActor
     func nameForSnapshot(with parameters: [String?]) -> String {
         let size = UIScreen.main.bounds.size
         let scale = UIScreen.main.scale

@@ -30,11 +30,12 @@ final class PixelRoundingTests: XCTestCase {
 
     // MARK: - XCTest
 
-    @MainActor
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        Samples.window.addSubview(Samples.view)
+        await Task { @MainActor in
+            Samples.window.addSubview(Samples.view)
+        }.value
     }
 
     // MARK: - Tests - Pixel Rounding

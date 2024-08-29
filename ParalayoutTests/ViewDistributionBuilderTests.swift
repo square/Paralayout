@@ -201,6 +201,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
 #endif
 
 extension ViewDistributionItem: Equatable {
+    nonisolated
     public static func == (lhs: ViewDistributionItem, rhs: ViewDistributionItem) -> Bool {
         switch (lhs, rhs) {
         case let (.view(lhsView, lhsEdgeInsets), .view(rhsView, rhsEdgeInsets)):
