@@ -27,15 +27,6 @@ internal enum ViewDistributionAxis {
 
     // MARK: - Internal Methods
 
-    internal func amount(of insets: UIEdgeInsets) -> CGFloat {
-        switch self {
-        case .horizontal:
-            return insets.horizontalAmount
-        case .vertical:
-            return insets.verticalAmount
-        }
-    }
-
     internal func size(of rect: CGRect) -> CGFloat {
         switch self {
         case .horizontal:

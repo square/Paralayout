@@ -23,10 +23,16 @@ public enum ViewDistributionItem: ViewDistributionSpecifying, Sendable {
     case view(UIView, UIEdgeInsets)
 
     /// A constant spacer between two other elements.
-    case fixed(CGFloat)
+    case fixed(CGSize)
 
     /// Proportional spacer, a fraction of the space not taken up by UIViews or fixed spacers.
     case flexible(CGFloat)
+
+    // MARK: - Public Static Methods
+
+    public static func fixed(_ dimension: CGFloat) -> ViewDistributionItem {
+        .fixed(.init(width: dimension, height: dimension))
+    }
 
     // MARK: - Public Properties
 
@@ -131,14 +137,20 @@ public enum ViewDistributionItem: ViewDistributionSpecifying, Sendable {
     /// Returns the length of the DistributionItem (`axis` and `multiplier` are relevant only for `.view` and
     /// `.flexible` items, respectively).
     internal func layoutSize(along axis: ViewDistributionAxis, multiplier: CGFloat = 1) -> CGFloat {
-        switch self {
-        case .view(let view, let insets):
-            return axis.size(of: view.untransformedFrame) - axis.amount(of: insets)
+        switch (self, axis) {
+        case let (.view(view, insets), .horizontal):
+            return axis.size(of: view.untransformedFrame) - insets.horizontalAmount
 
-        case .fixed(let margin):
-            return margin
+        case let (.view(view, insets), .vertical):
+            return axis.size(of: view.untransformedFrame) - insets.verticalAmount
 
-        case .flexible(let space):
+        case let (.fixed(size), .horizontal):
+            return size.width
+
+        case let (.fixed(size), .vertical):
+            return size.height
+
+        case let (.flexible(space), _):
             return space * multiplier
         }
     }
