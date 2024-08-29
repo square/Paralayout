@@ -15,6 +15,10 @@ jobs:
         platform: ['iOS_17', 'iPadOS_17']
       fail-fast: false
     steps:
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.4'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -35,6 +39,10 @@ jobs:
     name: Lint Pod
     runs-on: macOS-14
     steps:
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.4'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Bundle Install
@@ -51,6 +59,10 @@ jobs:
         platform: ['iOS_17']
       fail-fast: false
     steps:
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.4'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -61,6 +73,10 @@ jobs:
     name: Bazel
     runs-on: macOS-14
     steps:
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.4'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
