@@ -123,6 +123,80 @@ final class ViewDistributionSnapshotTests: SnapshotTestCase {
         )
     }
 
+    @MainActor
+    func testHorizontalDistributionAlongBaseline() {
+        final class TestView: UIView {
+
+            // MARK: Initialization
+
+            override init(frame: CGRect) {
+                super.init(frame: frame)
+
+                referenceView.backgroundColor = .black.withAlphaComponent(0.1)
+                addSubview(referenceView)
+
+                label1.font = .systemFont(ofSize: 12)
+                label1.text = "Hello worldy"
+                label1.textColor = .black
+                addSubview(label1)
+
+                label2.font = .systemFont(ofSize: 16)
+                label2.text = "Hello worldy"
+                label2.textColor = .black
+                addSubview(label2)
+
+                label3.font = .boldSystemFont(ofSize: 14)
+                label3.text = "Hello worldy"
+                label3.textColor = .black
+                addSubview(label3)
+
+                backgroundColor = .white
+            }
+
+            @available(*, unavailable)
+            required init?(coder: NSCoder) {
+                fatalError("init(coder:) has not been implemented")
+            }
+
+            // MARK: Private
+
+            private let label1: UILabel = .init()
+
+            private let label2: UILabel = .init()
+
+            private let label3: UILabel = .init()
+
+            private let referenceView: UIView = .init()
+
+            // MARK: UIView
+
+            override func layoutSubviews() {
+                label1.sizeToFit()
+                label2.sizeToFit()
+                label3.sizeToFit()
+
+                applyHorizontalSubviewDistribution(
+                    [
+                        label1.distributionItemUsingCapInsets,
+                        label2.distributionItemUsingCapInsets,
+                        label3.distributionItemUsingCapInsets,
+                    ],
+                    inRect: bounds.insetBy(bottom: 8),
+                    orthogonalAlignment: .bottom(inset: 0)
+                )
+
+                referenceView.untransformedFrame = bounds.slice(from: .maxYEdge, amount: 8).slice
+            }
+
+        }
+
+        assertSnapshot(
+            matching: TestView(frame: .init(x: 0, y: 0, width: 400, height: 64)),
+            as: .image,
+            named: nameForSnapshot(with: [])
+        )
+    }
+
 }
 
 // MARK: -

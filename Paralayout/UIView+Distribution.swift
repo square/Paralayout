@@ -478,7 +478,9 @@ extension UIView {
                     fatalError("Unknown user interface layout direction")
                 }
 
+                frame = frame.inset(by: insets)
                 applyOrthogonalAlignment(&frame, layoutBounds)
+                frame = frame.outset(by: insets)
 
                 subview.untransformedFrame = frame
 
