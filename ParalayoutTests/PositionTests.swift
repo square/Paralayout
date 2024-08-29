@@ -20,6 +20,7 @@ import XCTest
 
 final class PositionTests: XCTestCase {
 
+    @MainActor
     func testResolvePositionsInLeftToRightLayout() {
         func resolve(_ position: Position) -> ResolvedPosition {
             return ResolvedPosition(resolving: position, with: .leftToRight)
@@ -45,6 +46,7 @@ final class PositionTests: XCTestCase {
         XCTAssertEqual(resolve(.bottomTrailing), .bottomRight)
     }
 
+    @MainActor
     func testResolvePositionsInRightToLeftLayout() {
         func resolve(_ position: Position) -> ResolvedPosition {
             return ResolvedPosition(resolving: position, with: .rightToLeft)
