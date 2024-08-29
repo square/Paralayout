@@ -214,4 +214,26 @@ final class DistributionTests: XCTestCase {
         }
     }
 
+    // MARK: - Tests - Spacers
+
+    @MainActor
+    func testZeroSizeFixedSpacer() {
+        let container = UIView(frame: .init(x: 0, y: 0, width: 100, height: 400))
+        container.semanticContentAttribute = .forceRightToLeft
+
+        let firstSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
+        container.addSubview(firstSubview)
+        let secondSubview = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
+        container.addSubview(secondSubview)
+
+        container.applyVerticalSubviewDistribution {
+            firstSubview
+            0.fixed
+            secondSubview
+        }
+
+        XCTAssertEqual(firstSubview.frame, .init(x: 0, y: 100, width: 100, height: 100))
+        XCTAssertEqual(secondSubview.frame, .init(x: 0, y: 200, width: 100, height: 100))
+    }
+
 }
