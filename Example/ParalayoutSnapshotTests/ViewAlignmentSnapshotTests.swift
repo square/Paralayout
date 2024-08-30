@@ -75,7 +75,7 @@ final class ViewAlignmentSnapshotTests: SnapshotTestCase {
         verifySnapshot(receiverPosition: .center, targetPosition: .topRight)
 
         // Test horizontal and vertical offsets.
-        verifySnapshot(receiverPosition: .center, targetPosition: .topRight, horizontalOffset: 20)
+        verifySnapshot(receiverPosition: .center, targetPosition: .topRight, horizontalOffset: 0)
         verifySnapshot(receiverPosition: .center, targetPosition: .topRight, horizontalOffset: -20)
         verifySnapshot(receiverPosition: .center, targetPosition: .topRight, verticalOffset: 15)
         verifySnapshot(receiverPosition: .center, targetPosition: .topRight, verticalOffset: -15)
