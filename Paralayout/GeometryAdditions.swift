@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import os
 import UIKit
 
 // MARK: - Operator Overloads
@@ -144,6 +145,8 @@ extension CGRect {
     
     /// Divides the receiver in two.
     ///
+    /// The `slice` will always have a length of the specified `amount` in the perpendicular axis to the `edge`. The `remainder` will have the length remaining along that axis, clamped to zero if the `amount` is longer than the receiver's length.
+    ///
     /// - parameter from: The edge from which the amount is interpreted.
     /// - parameter amount: The size of the slice (absolute).
     /// - returns: A tuple (slice: A rect with a width/height of the `amount`, remainder: A rect with a width/height of
@@ -152,34 +155,42 @@ extension CGRect {
         switch edge {
         case .minXEdge:
             // Left.
-            assert(amount <= width, "Cannot slice rect \(self) at edge \(edge) by \(amount)!")
+            if amount > width {
+                ParalayoutAlertForInvalidSliceDimensions()
+            }
             return (
                 CGRect(x: minX, y: minY, width: amount, height: height),
-                CGRect(x: minX + amount, y: minY, width: width - amount, height: height)
+                CGRect(x: minX + amount, y: minY, width: max(width - amount, 0), height: height)
             )
             
         case .minYEdge:
             // Top.
-            assert(amount <= height, "Cannot slice rect \(self) at edge \(edge) by \(amount)!")
+            if amount > height {
+                ParalayoutAlertForInvalidSliceDimensions()
+            }
             return(
                 CGRect(x: minX, y: minY, width: width, height: amount),
-                CGRect(x: minX, y: minY + amount, width: width, height: height - amount)
+                CGRect(x: minX, y: minY + amount, width: width, height: max(height - amount, 0))
             )
             
         case .maxXEdge:
             // Right.
-            assert(amount <= width, "Cannot slice rect \(self) at edge \(edge) by \(amount)!")
+            if amount > width {
+                ParalayoutAlertForInvalidSliceDimensions()
+            }
             return(
                 CGRect(x: maxX - amount, y: minY, width: amount, height: height),
-                CGRect(x: minX, y: minY, width: width - amount, height: height)
+                CGRect(x: minX, y: minY, width: max(width - amount, 0), height: height)
             )
             
         case .maxYEdge:
             // Bottom.
-            assert(amount <= height, "Cannot slice rect \(self) at edge \(edge) by \(amount)!")
+            if amount > height {
+                ParalayoutAlertForInvalidSliceDimensions()
+            }
             return(
                 CGRect(x: minX, y: maxY - amount, width: width, height: amount),
-                CGRect(x: minX, y: minY, width: width, height: height - amount)
+                CGRect(x: minX, y: minY, width: width, height: max(height - amount, 0))
             )
         }
     }
@@ -281,4 +292,21 @@ extension NSDirectionalEdgeInsets {
         return leading + trailing
     }
 
+}
+
+// MARK: -
+
+nonisolated
+private func ParalayoutAlertForInvalidSliceDimensions() {
+    os_log(
+        "%@",
+        log: ParalayoutLog,
+        type: .default,
+        """
+        Paralayout detected a slice with an `amount` larger than the receiver's length in the specified axis. \
+        Set a symbolic breakpoint for \"ParalayoutAlertForInvalidSliceDimensions\" to debug. \
+        Call stack:
+        \(Thread.callStackSymbols.dropFirst(1).joined(separator: "\n"))
+        """
+    )
 }

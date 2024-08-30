@@ -170,8 +170,6 @@ extension AlignmentContext {
 
 // MARK: -
 
-@MainActor
-private let ParalayoutLog = OSLog(subsystem: "com.squareup.Paralayout", category: "layout")
 
 /// Triggered when an alignment method is called that uses mismatched position types, i.e. aligning a view's leading or
 /// trailing edge to another view's left or right edge, or vice versa. This type of mismatch is likely to look correct
