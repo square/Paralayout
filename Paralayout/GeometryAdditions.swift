@@ -155,6 +155,7 @@ extension CGRect {
     /// - parameter amount: The size of the slice (absolute).
     /// - returns: A tuple (slice: A rect with a width/height of the `amount`, remainder: A rect with a width/height of
     /// the receiver reduced by `amount`).
+    @MainActor
     public func slice(
         from edge: DirectionalEdge,
         amount: CGFloat,
