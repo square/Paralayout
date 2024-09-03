@@ -63,15 +63,22 @@ extension UIFont {
     /// - returns: The insets.
     @MainActor
     public func labelCapInsets(in scaleFactor: ScaleFactorProviding) -> LabelCapInsets {
+        return labelCapInsets(in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// The space above and below the receiver's capHeight and baseline, as displayed in a UILabel.
+    /// - parameter scale: The pixel scale to use (pass `0` to *not* snap to pixel).
+    /// - returns: The insets.
+    public func labelCapInsets(in scale: CGFloatProviding) -> LabelCapInsets {
         // One would expect ceil(ascender) - floor(descender) so that the baseline would land on a pixel boundary, but
         // sadly no--this is what `UILabel.sizeToFit()` does.
-        let lineHeight = (ascender - descender).ceiledToPixel(in: scaleFactor)
-        
+        let lineHeight = (ascender - descender).ceiledToPixel(in: scale)
+
         // Based on experiments with SFUIText and Helvetica Neue, this is how the text is positioned within a label.
-        let bottomInset = lineHeight - ascender.roundedToPixel(in: scaleFactor)
-        let topInset = lineHeight - (bottomInset + capHeight.roundedToPixel(in: scaleFactor))
-        
+        let bottomInset = lineHeight - ascender.roundedToPixel(in: scale)
+        let topInset = lineHeight - (bottomInset + capHeight.roundedToPixel(in: scale))
+
         return LabelCapInsets(top: topInset, bottom: bottomInset)
     }
-    
+
 }
