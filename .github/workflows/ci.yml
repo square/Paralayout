@@ -52,7 +52,7 @@ jobs:
       - name: Lint Podspec
         run: bundle exec pod lib lint --verbose --fail-fast --swift-version=6.0
   spm-5:
-    name: SPM Swift 5 Build
+    name: SPM Build
     runs-on: macOS-14
     strategy:
       matrix:
@@ -70,7 +70,7 @@ jobs:
       - name: Build
         run: Scripts/build.swift spm ${{ matrix.platform }} `which xcpretty`
   spm-6:
-    name: SPM Swift 6 Build
+    name: SPM Build
     runs-on: macOS-16
     strategy:
       matrix:
