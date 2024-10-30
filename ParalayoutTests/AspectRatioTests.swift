@@ -142,7 +142,7 @@ final class AspectRatioTests: XCTestCase {
 
             // An AspectRatio's size that fits a rect of the same aspect ratio should also be the same as the size of
             // that rect.
-            let rectToFit = ratio.rect(toFit: rect, at: position, in: scale, layoutDirection: layoutDirection)
+            let rectToFit = ratio.rect(toFit: rect, at: position, in: ScaleFactorProvider(scale), layoutDirection: layoutDirection)
             XCTAssert(rectToFit.size == ratio.size(toFit: rect.size, in: scale))
 
             // The rect needs to be positioned as requested (within a pixel).
@@ -170,7 +170,7 @@ final class AspectRatioTests: XCTestCase {
             let rectToFill = ratio.rect(
                 toFill: rect,
                 at: position,
-                in: scale,
+                in: ScaleFactorProvider(scale),
                 layoutDirection: layoutDirection
             )
             XCTAssert(rectToFill.size == ratio.size(toFill: rect.size, in: scale))

@@ -39,7 +39,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
 
     /// An inverted representation of the AspectRatio.
     public var inverted: AspectRatio {
-        return AspectRatio(width: ratioHeight, height: ratioWidth)
+        AspectRatio(width: ratioHeight, height: ratioWidth)
     }
 
     // MARK: - Life Cycle
@@ -74,29 +74,29 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     // MARK: - Comparable
 
     public static func == (lhs: AspectRatio, rhs: AspectRatio) -> Bool {
-        return (lhs.ratioWidth * rhs.ratioHeight == lhs.ratioHeight * rhs.ratioWidth)
+        (lhs.ratioWidth * rhs.ratioHeight == lhs.ratioHeight * rhs.ratioWidth)
     }
 
     public static func < (lhs: AspectRatio, rhs: AspectRatio) -> Bool {
-        return (lhs.ratioWidth * rhs.ratioHeight < lhs.ratioHeight * rhs.ratioWidth)
+        (lhs.ratioWidth * rhs.ratioHeight < lhs.ratioHeight * rhs.ratioWidth)
     }
 
     public static func <= (lhs: AspectRatio, rhs: AspectRatio) -> Bool {
-        return (lhs.ratioWidth * rhs.ratioHeight <= lhs.ratioHeight * rhs.ratioWidth)
+        (lhs.ratioWidth * rhs.ratioHeight <= lhs.ratioHeight * rhs.ratioWidth)
     }
 
     public static func >= (lhs: AspectRatio, rhs: AspectRatio) -> Bool {
-        return (lhs.ratioWidth * rhs.ratioHeight >= lhs.ratioHeight * rhs.ratioWidth)
+        (lhs.ratioWidth * rhs.ratioHeight >= lhs.ratioHeight * rhs.ratioWidth)
     }
 
     public static func > (lhs: AspectRatio, rhs: AspectRatio) -> Bool {
-        return (lhs.ratioWidth * rhs.ratioHeight > lhs.ratioHeight * rhs.ratioWidth)
+        (lhs.ratioWidth * rhs.ratioHeight > lhs.ratioHeight * rhs.ratioWidth)
     }
 
     // MARK: - DebugStringConvertible
 
     public var debugDescription: String {
-        return ("AspectRatio<\(ratioWidth):\(ratioHeight)>")
+        ("AspectRatio<\(ratioWidth):\(ratioHeight)>")
     }
 
     // MARK: - Public Methods
@@ -107,7 +107,15 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
     @MainActor
     public func height(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
-        return (ratioHeight * width / ratioWidth).roundedToPixel(in: scaleFactor)
+        self.height(forWidth: width, in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// Returns the height of the aspect ratio for a given `width` rounded to the nearest pixel.
+    ///
+    /// - parameter width: The desired width.
+    /// - parameter scale: The number of pixels per point.
+    public func height(forWidth width: CGFloat, in scale: CGFloat) -> CGFloat {
+        (ratioHeight * width / ratioWidth).roundedToPixel(in: scale)
     }
 
     /// Returns the width of the aspect ratio for a given `height` rounded to the nearest pixel.
@@ -116,7 +124,15 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
     @MainActor
     public func width(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGFloat {
-        return (ratioWidth * height / ratioHeight).roundedToPixel(in: scaleFactor)
+        self.width(forHeight: height, in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// Returns the width of the aspect ratio for a given `height` rounded to the nearest pixel.
+    ///
+    /// - parameter height: The desired height.
+    /// - parameter scale: The number of pixels per point.
+    public func width(forHeight height: CGFloat, in scale: CGFloat) -> CGFloat {
+        (ratioWidth * height / ratioHeight).roundedToPixel(in: scale)
     }
 
     /// Returns a size of the aspect ratio with the specified `width`. The size's `height` will be rounded to the
@@ -126,9 +142,18 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
     @MainActor
     public func size(forWidth width: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
-        return CGSize(
+        self.size(forWidth: width, in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// Returns a size of the aspect ratio with the specified `width`. The size's `height` will be rounded to the
+    /// nearest pixel.
+    ///
+    /// - parameter width: The desired width.
+    /// - parameter scale: The number of pixels per point.
+    public func size(forWidth width: CGFloat, in scale: CGFloat) -> CGSize {
+        CGSize(
             width: width,
-            height: height(forWidth: width, in: scaleFactor)
+            height: height(forWidth: width, in: scale)
         )
     }
 
@@ -139,8 +164,17 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter scaleFactor: The view/window/screen to use for pixel rounding.
     @MainActor
     public func size(forHeight height: CGFloat, in scaleFactor: ScaleFactorProviding) -> CGSize {
-        return CGSize(
-            width: width(forHeight: height, in: scaleFactor),
+        self.size(forHeight: height, in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// Returns a size of the aspect ratio with the specified `height`. The size's `width` will be rounded to the
+    /// nearest pixel.
+    ///
+    /// - parameter height: The desired height.
+    /// - parameter scale: The number of pixels per point.
+    public func size(forHeight height: CGFloat, in scale: CGFloat) -> CGSize {
+        CGSize(
+            width: width(forHeight: height, in: scale),
             height: height
         )
     }
@@ -153,15 +187,29 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - returns: A size with the receiver's aspect ratio, no larger than the bounding size.
     @MainActor
     public func size(toFit size: CGSize, in scaleFactor: ScaleFactorProviding) -> CGSize {
+        self.size(toFit: size, in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// An "aspect-fit" function that determines the largest size of the receiver's aspect ratio that fits within a
+    /// size.
+    ///
+    /// - parameter size: The bounding size.
+    /// - parameter scale: The number of pixels per point.
+    /// - returns: A size with the receiver's aspect ratio, no larger than the bounding size.
+    public func size(toFit size: CGSize, in scale: CGFloat) -> CGSize {
         if size.aspectRatio <= self {
             // Match width, narrow the height.
-            let fitHeight = min(size.height, height(forWidth: size.width, in: scaleFactor))
-            return CGSize(width: size.width, height: fitHeight)
+            CGSize(
+                width: size.width,
+                height: min(size.height, height(forWidth: size.width, in: scale))
+            )
 
         } else {
             // Match height, narrow the width.
-            let fitWidth = min(size.width, width(forHeight: size.height, in: scaleFactor))
-            return CGSize(width: fitWidth, height: size.height)
+            CGSize(
+                width: min(size.width, width(forHeight: size.height, in: scale)),
+                height: size.height
+            )
         }
     }
 
@@ -181,7 +229,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
         in scaleFactor: ScaleFactorProviding,
         layoutDirection: UIUserInterfaceLayoutDirection
     ) -> CGRect {
-        return CGRect(
+        CGRect(
             size: size(toFit: rect.size, in: scaleFactor),
             at: position,
             of: rect,
@@ -205,7 +253,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
         at position: Position,
         in context: (ScaleFactorProviding & LayoutDirectionProviding)
     ) -> CGRect {
-        return self.rect(
+        self.rect(
             toFit: rect,
             at: position,
             in: context,
@@ -221,15 +269,29 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - returns: A size with the receiver's aspect ratio, at least as large as the bounding size.
     @MainActor
     public func size(toFill size: CGSize, in scaleFactor: ScaleFactorProviding) -> CGSize {
+        self.size(toFill: size, in: scaleFactor.pixelsPerPoint)
+    }
+
+    /// An "aspect-fill" function that determines the smallest size of the receiver's aspect ratio that fits a size
+    /// within it.
+    ///
+    /// - parameter size: The bounding size.
+    /// - parameter scale: The number of pixels per point.
+    /// - returns: A size with the receiver's aspect ratio, at least as large as the bounding size.
+    public func size(toFill size: CGSize, in scale: CGFloat) -> CGSize {
         if size.aspectRatio <= self {
             // Match height, expand the width.
-            let fillWidth = width(forHeight: size.height, in: scaleFactor)
-            return CGSize(width: fillWidth, height: size.height)
+            CGSize(
+                width: width(forHeight: size.height, in: scale),
+                height: size.height
+            )
 
         } else {
             // Match width, expand the height.
-            let fillHeight = height(forWidth: size.width, in: scaleFactor)
-            return CGSize(width: size.width, height: fillHeight)
+            CGSize(
+                width: size.width,
+                height: height(forWidth: size.width, in: scale)
+            )
         }
     }
 
@@ -249,7 +311,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
         in scaleFactor: ScaleFactorProviding,
         layoutDirection: UIUserInterfaceLayoutDirection
     ) -> CGRect {
-        return CGRect(
+        CGRect(
             size: size(toFill: rect.size, in: scaleFactor),
             at: position,
             of: rect,
@@ -257,6 +319,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
             layoutDirection: layoutDirection
         )
     }
+
     /// An "aspect-fill" function that determines the smallest rect of the receiver's aspect ratio that fits a rect
     /// within it.
     ///
@@ -272,7 +335,7 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
         at position: Position,
         in context: (ScaleFactorProviding & LayoutDirectionProviding)
     ) -> CGRect {
-        return self.rect(
+        self.rect(
             toFill: rect,
             at: position,
             in: context,
@@ -288,7 +351,7 @@ extension CGSize {
 
     /// The aspect ratio of this size.
     public var aspectRatio: AspectRatio {
-        return AspectRatio(size: self)
+        AspectRatio(size: self)
     }
 
 }
@@ -299,7 +362,7 @@ extension CGRect {
 
     /// The aspect ratio of this rect's size.
     public var aspectRatio: AspectRatio {
-        return AspectRatio(size: size)
+        AspectRatio(size: size)
     }
 
     // MARK: - Life Cycle
