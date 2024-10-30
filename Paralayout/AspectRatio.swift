@@ -244,20 +244,21 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter rect: The bounding rect.
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
     /// be if the aspect ratios do not match perfectly.
-    /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
-    /// which the rect should be positioned.
+    /// - parameter scale: The number of pixels per point.
+    /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
-    @MainActor
     public func rect(
         toFit rect: CGRect,
         at position: Position,
-        in context: (ScaleFactorProviding & LayoutDirectionProviding)
+        in scale: CGFloat,
+        layoutDirection: UIUserInterfaceLayoutDirection
     ) -> CGRect {
-        self.rect(
-            toFit: rect,
+        CGRect(
+            size: size(toFit: rect.size, in: scale),
             at: position,
-            in: context,
-            layoutDirection: context.effectiveUserInterfaceLayoutDirection
+            of: rect,
+            in: scale,
+            layoutDirection: layoutDirection
         )
     }
 
@@ -326,6 +327,30 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter rect: The bounding rect.
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
     /// be if the aspect ratios do not match perfectly.
+    /// - parameter scale: The number of pixels per point.
+    /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
+    /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
+    public func rect(
+        toFill rect: CGRect,
+        at position: Position,
+        in scale: CGFloat,
+        layoutDirection: UIUserInterfaceLayoutDirection
+    ) -> CGRect {
+        CGRect(
+            size: size(toFill: rect.size, in: scale),
+            at: position,
+            of: rect,
+            in: scale,
+            layoutDirection: layoutDirection
+        )
+    }
+
+    /// An "aspect-fill" function that determines the smallest rect of the receiver's aspect ratio that fits a rect
+    /// within it.
+    ///
+    /// - parameter rect: The bounding rect.
+    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
+    /// be if the aspect ratios do not match perfectly.
     /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
     /// which the rect should be positioned.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
@@ -375,6 +400,22 @@ extension CGRect {
         in scaleFactor: ScaleFactorProviding,
         layoutDirection: UIUserInterfaceLayoutDirection
     ) {
+        self.init(
+            size: newSize,
+            at: position,
+            of: alignmentRect,
+            in: scaleFactor.pixelsPerPoint,
+            layoutDirection: layoutDirection
+        )
+    }
+
+    fileprivate init(
+        size newSize: CGSize,
+        at position: Position,
+        of alignmentRect: CGRect,
+        in scale: CGFloat,
+        layoutDirection: UIUserInterfaceLayoutDirection
+    ) {
         let newOrigin: CGPoint
 
         if newSize.width == alignmentRect.width {
@@ -384,7 +425,7 @@ extension CGRect {
             case .topLeft, .topCenter, .topRight:
                 newMinY = alignmentRect.minY
             case .leftCenter, .center, .rightCenter:
-                newMinY = (alignmentRect.midY - newSize.height / 2).roundedToPixel(in: scaleFactor)
+                newMinY = (alignmentRect.midY - newSize.height / 2).roundedToPixel(in: scale)
             case .bottomLeft, .bottomCenter, .bottomRight:
                 newMinY = alignmentRect.maxY - newSize.height
             }
@@ -398,7 +439,7 @@ extension CGRect {
             case .topLeft, .leftCenter, .bottomLeft:
                 newMinX = alignmentRect.minX
             case .topCenter, .center, .bottomCenter:
-                newMinX = (alignmentRect.midX - newSize.width / 2).roundedToPixel(in: scaleFactor)
+                newMinX = (alignmentRect.midX - newSize.width / 2).roundedToPixel(in: scale)
             case .topRight, .rightCenter, .bottomRight:
                 newMinX = alignmentRect.maxX - newSize.width
             }
