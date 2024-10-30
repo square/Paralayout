@@ -114,11 +114,6 @@ extension CGFloat {
 
     // MARK: - Private Methods
 
-    @MainActor
-    private func adjustedToPixel(_ scaleFactor: ScaleFactorProviding, _ adjustment: (CGFloat) -> CGFloat) -> CGFloat {
-        adjustedToPixel(scaleFactor.pixelsPerPoint, adjustment)
-    }
-
     private func adjustedToPixel(_ scale: CGFloat, _ adjustment: (CGFloat) -> CGFloat) -> CGFloat {
         (scale > 0.0) ? (adjustment(self * scale) / scale) : self
     }
