@@ -127,7 +127,7 @@ extension Alignable {
             resolvedPosition.layoutDirectionAgnosticPosition,
             with: superview,
             .topLeft,
-            offset: .init(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.x + verticalOffset)
+            offset: .init(horizontal: superviewPoint.x + horizontalOffset, vertical: superviewPoint.y + verticalOffset)
         )
     }
 
