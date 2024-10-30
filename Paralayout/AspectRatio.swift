@@ -219,22 +219,20 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter rect: The bounding rect.
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
     /// be if the aspect ratios do not match perfectly.
-    /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
-    /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
+    /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
+    /// which the rect should be positioned.
     /// - returns: A rect with the receiver's aspect ratio, strictly within the bounding rect.
     @MainActor
     public func rect(
         toFit rect: CGRect,
         at position: Position,
-        in scaleFactor: ScaleFactorProviding,
-        layoutDirection: UIUserInterfaceLayoutDirection
+        in context: (ScaleFactorProviding & LayoutDirectionProviding)
     ) -> CGRect {
-        CGRect(
-            size: size(toFit: rect.size, in: scaleFactor),
+        self.rect(
+            toFit: rect,
             at: position,
-            of: rect,
-            in: scaleFactor,
-            layoutDirection: layoutDirection
+            in: context.pixelsPerPoint,
+            layoutDirection: context.effectiveUserInterfaceLayoutDirection
         )
     }
 
@@ -302,22 +300,20 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
     /// - parameter rect: The bounding rect.
     /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
     /// be if the aspect ratios do not match perfectly.
-    /// - parameter scaleFactor: The view/window/screen to use for pixel alignment.
-    /// - parameter layoutDirection: The effective layout direction of the view in which the `rect` is defined.
+    /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
+    /// which the rect should be positioned.
     /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
     @MainActor
     public func rect(
         toFill rect: CGRect,
         at position: Position,
-        in scaleFactor: ScaleFactorProviding,
-        layoutDirection: UIUserInterfaceLayoutDirection
+        in context: (ScaleFactorProviding & LayoutDirectionProviding)
     ) -> CGRect {
-        CGRect(
-            size: size(toFill: rect.size, in: scaleFactor),
+        self.rect(
+            toFill: rect,
             at: position,
-            of: rect,
-            in: scaleFactor,
-            layoutDirection: layoutDirection
+            in: context.pixelsPerPoint,
+            layoutDirection: context.effectiveUserInterfaceLayoutDirection
         )
     }
 
@@ -342,29 +338,6 @@ public struct AspectRatio: Comparable, CustomDebugStringConvertible, Sendable {
             of: rect,
             in: scale,
             layoutDirection: layoutDirection
-        )
-    }
-
-    /// An "aspect-fill" function that determines the smallest rect of the receiver's aspect ratio that fits a rect
-    /// within it.
-    ///
-    /// - parameter rect: The bounding rect.
-    /// - parameter position: The location within the bounding rect for the new rect, determining where margin(s) will
-    /// be if the aspect ratios do not match perfectly.
-    /// - parameter context: The view/window/screen that provides the scale factor and effective layout direction in
-    /// which the rect should be positioned.
-    /// - returns: A rect with the receiver's aspect ratio, strictly containing the bounding rect.
-    @MainActor
-    public func rect(
-        toFill rect: CGRect,
-        at position: Position,
-        in context: (ScaleFactorProviding & LayoutDirectionProviding)
-    ) -> CGRect {
-        self.rect(
-            toFill: rect,
-            at: position,
-            in: context,
-            layoutDirection: context.effectiveUserInterfaceLayoutDirection
         )
     }
 
