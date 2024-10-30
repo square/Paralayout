@@ -215,7 +215,7 @@ final class UIViewFrameTests: XCTestCase {
     // MARK: - Private Helper Methods
 
     @MainActor
-    func assertUntransformedFrameIsAccurate(for view: UIView, file: StaticString = #file, line: UInt = #line) {
+    func assertUntransformedFrameIsAccurate(for view: UIView, file: StaticString = #filePath, line: UInt = #line) {
         let actualValue = view.untransformedFrame
 
         let originalTransform = view.layer.transform
@@ -231,7 +231,7 @@ final class UIViewFrameTests: XCTestCase {
         for point: CGPoint,
         in sourceView: UIView,
         convertedTo targetView: UIView,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
         let actualValue = try targetView.untransformedConvert(point, from: sourceView)

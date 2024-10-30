@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:5.9
 
 //
 //  Copyright 2020 Square Inc.
@@ -35,16 +35,14 @@ let package = Package(
 			dependencies: [],
 			path: "Paralayout",
 			swiftSettings: [
-                .swiftLanguageMode(.v6),
+				.enableExperimentalFeature("StrictConcurrency")
 			]
 		),
 		.testTarget(
 			name: "ParalayoutTests",
 			dependencies: ["Paralayout"],
-			path: "ParalayoutTests",
-            swiftSettings: [
-                .swiftLanguageMode(.v6),
-            ]
+			path: "ParalayoutTests"
 		),
-	]
+	],
+	swiftLanguageVersions: [.v5]
 )
