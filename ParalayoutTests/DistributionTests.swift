@@ -15,8 +15,8 @@
 //
 
 import Paralayout
-import XCTest
 import UIKit
+import XCTest
 
 final class DistributionTests: XCTestCase {
 
