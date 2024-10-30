@@ -74,12 +74,12 @@ enum Task: String, CustomStringConvertible {
 	case spm
 	case xcode
 
-	var workspace: String? {
+	var xcodeproj: String? {
 		switch self {
 		case .spm:
 			return nil
 		case .xcode:
-			return "Example/ParalayoutDemo.xcworkspace"
+			return "Example/ParalayoutDemo.xcodeproj"
 		}
 	}
 
@@ -88,7 +88,7 @@ enum Task: String, CustomStringConvertible {
 		case .spm:
 			return "Paralayout"
 		case .xcode:
-			return "ParalayoutDemo"
+			return "Paralayout"
 		}
 	}
 
@@ -126,9 +126,9 @@ guard let platform = Platform(rawValue: rawPlatform) else {
 
 var xcodeBuildArguments: [String] = []
 
-if let workspace = task.workspace {
-	xcodeBuildArguments.append("-workspace")
-	xcodeBuildArguments.append(workspace)
+if let xcodeproj = task.xcodeproj {
+	xcodeBuildArguments.append("-project")
+	xcodeBuildArguments.append(xcodeproj)
 }
 
 if let configuration = task.configuration {

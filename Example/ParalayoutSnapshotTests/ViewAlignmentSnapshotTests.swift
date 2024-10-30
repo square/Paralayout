@@ -16,6 +16,7 @@
 
 import Paralayout
 import SnapshotTesting
+import UIKit
 
 final class ViewAlignmentSnapshotTests: SnapshotTestCase {
 

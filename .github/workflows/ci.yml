@@ -18,15 +18,13 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_15.4.app/Contents/Developer
       - name: Bundle Install
         run: bundle install
-      - name: Pod Install
-        run: bundle exec pod install --project-directory=Example
       - name: Build and Test
         run: Scripts/build.swift xcode ${{ matrix.platform }} `which xcpretty`
       - name: Upload Results
@@ -42,7 +40,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Bundle Install
@@ -62,7 +60,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -80,7 +78,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -94,7 +92,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version

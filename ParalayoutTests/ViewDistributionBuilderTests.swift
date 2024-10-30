@@ -205,16 +205,16 @@ extension ViewDistributionItem: Swift.Equatable { // TODO: `@retroactive Equatab
     public static func == (lhs: ViewDistributionItem, rhs: ViewDistributionItem) -> Bool {
         switch (lhs, rhs) {
         case let (.view(lhsView, lhsEdgeInsets), .view(rhsView, rhsEdgeInsets)):
-            return lhsView === rhsView
+            lhsView === rhsView
             && lhsEdgeInsets == rhsEdgeInsets
         case let (.fixed(lhsFixed), .fixed(rhsFixed)):
-            return lhsFixed == rhsFixed
+            lhsFixed == rhsFixed
         case let (.flexible(lhsFlexible), .flexible(rhsFlexible)):
-            return lhsFlexible == rhsFlexible
+            lhsFlexible == rhsFlexible
         case (.view, _),
             (.fixed, _),
             (.flexible, _):
-            return false
+            false
         }
     }
 }
