@@ -37,7 +37,7 @@ jobs:
           path: .build/derivedData/**/Logs/Test/*.xcresult
   pod-lint:
     name: Lint Pod
-    runs-on: macOS-14
+    runs-on: macOS-15
     steps:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -48,9 +48,9 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_15.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_16.app/Contents/Developer
       - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast
+        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=6.0
   spm-5:
     name: SPM Swift 5 Build
     runs-on: macOS-14
