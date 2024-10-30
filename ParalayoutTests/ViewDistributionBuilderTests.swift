@@ -215,8 +215,6 @@ extension ViewDistributionItem: Swift.Equatable { // TODO: `@retroactive Equatab
             (.fixed, _),
             (.flexible, _):
             false
-        @unknown default:
-            false
         }
     }
 }

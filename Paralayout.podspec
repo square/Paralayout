@@ -9,8 +9,4 @@ Pod::Spec.new do |s|
   s.swift_version = '6.0'
   s.source_files = 'Paralayout/*.{swift}'
   s.ios.deployment_target = '13.0'
-
-  s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'ParalayoutTests/*{.swift}'
-  end
 end
