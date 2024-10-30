@@ -200,7 +200,7 @@ final class ViewDistributionBuilderTests: XCTestCase {
 }
 #endif
 
-extension ViewDistributionItem: Equatable {
+extension ViewDistributionItem: Swift.Equatable { // TODO: `@retroactive Equatable` once we drop Xcode 15 support.
     nonisolated
     public static func == (lhs: ViewDistributionItem, rhs: ViewDistributionItem) -> Bool {
         switch (lhs, rhs) {
