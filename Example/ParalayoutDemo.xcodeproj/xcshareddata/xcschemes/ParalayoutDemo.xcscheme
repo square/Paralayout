@@ -20,20 +20,6 @@
                ReferencedContainer = "container:ParalayoutDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4B818F7D36C29DC78C53B2BF4FF5251F"
-               BuildableName = "Paralayout-Unit-Tests.xctest"
-               BlueprintName = "Paralayout-Unit-Tests"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -50,16 +36,6 @@
                BuildableName = "ParalayoutSnapshotTests.xctest"
                BlueprintName = "ParalayoutSnapshotTests"
                ReferencedContainer = "container:ParalayoutDemo.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4B818F7D36C29DC78C53B2BF4FF5251F"
-               BuildableName = "Paralayout-Unit-Tests.xctest"
-               BlueprintName = "Paralayout-Unit-Tests"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
