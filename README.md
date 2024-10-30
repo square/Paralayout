@@ -28,7 +28,7 @@ To install Paralayout via [Swift Package Manager](https://swift.org/package-mana
 
 ```swift
 dependencies: [
-    .package(name: "Paralayout", url: "https://github.com/square/Paralayout.git", from: "1.0.0"),
+    .package(name: "Paralayout", url: "https://github.com/square/Paralayout.git", from: "2.0.0"),
 ]
 ```
 </details>
@@ -39,7 +39,7 @@ dependencies: [
 To install Paralayout via [Bazel](https://github.com/bazelbuild/bazel), add the following to your `MODULE.bazel`:
 
 ```starlark
-bazel_dep(name = "paralayout", version = "1.0.0")
+bazel_dep(name = "paralayout", version = "2.0.0")
 ```
 </details>
 
