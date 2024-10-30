@@ -18,7 +18,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Bundle Install
@@ -60,7 +60,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -78,7 +78,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
@@ -92,7 +92,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          ruby-version: '3.3.5'
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Select Xcode Version
