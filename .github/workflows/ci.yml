@@ -71,7 +71,7 @@ jobs:
         run: Scripts/build.swift spm ${{ matrix.platform }} `which xcpretty`
   spm-6:
     name: SPM Build
-    runs-on: macOS-16
+    runs-on: macOS-15
     strategy:
       matrix:
         platform: ['iOS_18']
