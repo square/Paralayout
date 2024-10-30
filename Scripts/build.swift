@@ -76,7 +76,7 @@ enum Task: String, CustomStringConvertible {
 		case .spm:
 			return nil
 		case .xcode:
-			return "Example/ParalayoutDemo.xcworkspace"
+			return "Example/ParalayoutDemo.xcodeproj"
 		}
 	}
 
