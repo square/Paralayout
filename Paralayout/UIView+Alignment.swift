@@ -115,6 +115,80 @@ extension Alignable {
         return sourcePoint.offset(to: targetPoint)
     }
 
+    /// Calculates the offset between two views' positions, ignoring any transforms in the view hierarchy.
+    ///
+    /// - precondition: The receiver and `otherView` must be in the same view hierarchy.
+    ///
+    /// - parameter position: The position in the receiving view's untransformed frame.
+    /// - parameter otherView: The other view for the measurement.
+    /// - parameter otherPosition: The position in the `otherView`'s untransformed frame to use for the measurement.
+    /// - returns: The offset from the receiver's `position` to the `otherView`'s `otherPosition`.
+    public func untransformedFrameOrigin(
+        toAlign position: Position,
+        to otherView: Alignable,
+        _ otherPosition: Position,
+        alignmentBehavior: TargetAlignmentBehavior = .automatic
+    ) throws -> CGPoint {
+        let receiverContext = alignmentContext
+        let receiverView = receiverContext.view
+
+        let targetContext = otherView.alignmentContext
+        let targetView = targetContext.view
+
+        // We can't be aligned to another view if we don't have a superview.
+        guard let superview = receiverView.superview else {
+            ParalayoutAlertForInvalidViewHierarchy()
+            return .zero
+        }
+
+        switch position {
+        case .topLeft, .topRight, .leftCenter, .rightCenter, .bottomLeft, .bottomRight:
+            switch otherPosition {
+            case .topLeading, .topTrailing, .leadingCenter, .trailingCenter, .bottomLeading, .bottomTrailing:
+                ParalayoutAlertForMismatchedAlignmentPositionTypes()
+            default:
+                break
+            }
+
+        case .topLeading, .topTrailing, .leadingCenter, .trailingCenter, .bottomLeading, .bottomTrailing:
+            switch otherPosition {
+            case .topLeft, .topRight, .leftCenter, .rightCenter, .bottomLeft, .bottomRight:
+                ParalayoutAlertForMismatchedAlignmentPositionTypes()
+            default:
+                break
+            }
+
+        default:
+            break
+        }
+
+        let targetIsInSourceSuperviewChain = sequence(first: receiverView, next: { $0.superview }).contains(targetView)
+
+        let targetPoint: CGPoint
+        switch alignmentBehavior {
+        case .bounds,
+                .automatic where targetIsInSourceSuperviewChain:
+            targetPoint = try superview.untransformedConvert(
+                targetContext
+                    .pointInBounds(at: otherPosition)
+                    .offset(
+                        by: UIOffset(horizontal: -targetView.bounds.origin.x, vertical: -targetView.bounds.origin.y)
+                    ),
+                from: targetView
+            )
+
+        case .untransformedFrame,
+                .automatic /* where !targetIsInSourceSuperviewChain */:
+            targetPoint = try superview.untransformedConvert(
+                targetContext.pointInBounds(at: otherPosition),
+                from: targetView
+            )
+        }
+
+        let sourcePoint = receiverContext.pointInBounds(at: position)
+        return targetPoint.offset(by: .init(horizontal: -sourcePoint.x, vertical: -sourcePoint.y))
+    }
+
     /// Move the view to align it with another view.
     ///
     /// - precondition: The receiver and the `otherView` must be in the same view hierarchy.
@@ -135,17 +209,14 @@ extension Alignable {
     ) {
         do {
             let receiverView = alignmentContext.view
-            receiverView.untransformedFrame.origin = receiverView.untransformedFrame.origin
-                .offset(
-                    by: try untransformedFrameOffset(
-                        from: position,
-                        to: otherView,
-                        otherPosition,
-                        alignmentBehavior: alignmentBehavior
-                    )
-                )
-                .offset(by: offset)
-                .roundedToPixel(in: receiverView)
+            receiverView.untransformedFrame.origin = try untransformedFrameOrigin(
+                toAlign: position,
+                to: otherView,
+                otherPosition,
+                alignmentBehavior: alignmentBehavior
+            )
+            .offset(by: offset)
+            .roundedToPixel(in: receiverView)
 
         } catch {
             ParalayoutAlertForInvalidViewHierarchy()
