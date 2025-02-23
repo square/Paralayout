@@ -32,7 +32,7 @@ func execute(commandPath: String, arguments: [String], pipedTo pipeProcess: Proc
 
 	try task.run()
 
-	pipeProcess?.launch()
+	try pipeProcess?.run()
 
 	task.waitUntilExit()
 
