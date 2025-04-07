@@ -47,6 +47,14 @@ final class UIViewFrameTests: XCTestCase {
     }
 
     @MainActor
+    func testUntransformedFrameSetter_negativeSize() {
+        let view = UIView()
+
+        view.untransformedFrame = CGRect(x: 80, y: 70, width: -60, height: -50)
+        XCTAssertEqual(view.untransformedFrame, CGRect(x: 20, y: 20, width: 60, height: 50))
+    }
+
+    @MainActor
     func testUntransformedFrameGetter_nonIdentityTransform() {
         let view = UIView(frame: CGRect(x: 10, y: 20, width: 30, height: 40))
 

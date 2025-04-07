@@ -25,6 +25,9 @@ extension UIView {
     ///
     /// This rect is always well-defined, regardless of any transform that has been applied to the view, and so is safe
     /// to use even when `frame` is not.
+    ///
+    /// - Note: Rects will be normalized such that the absolute value of their size is maintained. In other words, setting a size with a negative value on one or
+    /// more dimension will cause your untransformed frame's origin to shift in order to take up the same equivalent rect in space.
     public var untransformedFrame: CGRect {
         get {
             return CGRect(
@@ -36,10 +39,11 @@ extension UIView {
             )
         }
         set {
-            bounds.size = newValue.size
+            let newSize = CGSize(width: abs(newValue.width), height: abs(newValue.height))
+            bounds.size = newSize
             center = CGPoint(
-                x: newValue.minX + newValue.width * layer.anchorPoint.x,
-                y: newValue.minY + newValue.height * layer.anchorPoint.y
+                x: newValue.minX + newSize.width * layer.anchorPoint.x,
+                y: newValue.minY + newSize.height * layer.anchorPoint.y
             )
         }
     }
@@ -95,4 +99,12 @@ extension UIView {
         }
     }
 
+}
+
+// MARK: -
+
+extension CGSize {
+    func clamped(min minSize: CGSize) -> CGSize {
+        CGSize(width: max(width, minSize.width), height: max(height, minSize.height))
+    }
 }
